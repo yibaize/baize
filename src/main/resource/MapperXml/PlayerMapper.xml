@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace:命名空间（包名） -->
+<mapper namespace="org.baize.dao.sqlmapper.PlayerMapper">
+    <select id="selectOneForId" resultType="org.baize.dao.manager.PersistPlayerMapper">
+        select * from player where id = #{id}
+    </select>
+
+    <select id="selectOneForAccount" resultType="org.baize.dao.manager.PersistPlayerMapper" >
+        select * from player where account = #{account}
+    </select>
+    <select id="selectAll" resultType="org.baize.dao.manager.PersistPlayerMapper">
+        select * from player
+    </select>
+    <insert id="insert" parameterType="org.baize.dao.manager.PersistPlayerMapper" useGeneratedKeys="true">
+        insert into player(id,shop,age) values(#{id},#{shop},#{age})
+    </insert>
+    <update id="update" parameterType="org.baize.dao.manager.PersistPlayerMapper">
+        update player set account=#{account},playerInfo=#{playerInfo},wealth=#{wealth} where id=#{id}
+    </update>
+    <delete id="delete">
+        delete from player where id=#{id}
+    </delete>
+    <!--动态传入表名，列名，条件等参数。注：这种方式没有做防注入处理-->
+    <!--更新字段-->
+    <update id="updateField" parameterType="java.util.Map" statementType="STATEMENT">
+       update player set ${k} = ${v} where id = ${id}
+    </update>
+</mapper>

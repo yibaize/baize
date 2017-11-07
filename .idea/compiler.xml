@@ -6,11 +6,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="baize" />
         <module name="netfromework" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="netfromework" target="1.5" />
+      <module name="baize" target="1.8" />
+      <module name="netfromework" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

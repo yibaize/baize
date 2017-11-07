@@ -1,0 +1,16 @@
+1，创建一个ByteArrayOutPutStream字节输出流
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+2，创建一个ObjectOutPutStream对象输出流并将字节输出流嵌套进去
+    ObjectOutputStream obs = new ObjectOutputStream(out);
+3，将对象写入字节输出流
+    obs.writeObect(obj)//obj需要实现java的序列化接口Serializble
+     obs.close();  //关闭
+4，分配内存空间
+    创建一个字节输入流并将序列化好的字节装进去
+    ByteArrayInputStream ios = new ByteArrayInputStream(out.toByteArray());
+5，创建一个对象输入流并将字节输入流装进去
+    ObjectInputStream ois = new ObjectInputStream(ios);
+6，调用objectInputStream的readObject方法将对象反序列化回一个实体对象
+    //返回生成的新对象
+    cloneObj = (T) ois.readObject();
+    ois.close();

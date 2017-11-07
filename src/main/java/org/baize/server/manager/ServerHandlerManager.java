@@ -7,9 +7,8 @@ import org.baize.utils.SpringUtils;
 
 public class ServerHandlerManager extends SimpleChannelInboundHandler<Request>{
 	/**消息分发器*/
-	private final static TcpHandler TCP_HANDLER = SpringUtils.getBean(TcpHandler.class);
 	private void process(Channel channel, Request request){
-		TCP_HANDLER.messageRecieve(channel,request);
+		TcpHandler.messageRecieve(channel,request);
 	}
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
