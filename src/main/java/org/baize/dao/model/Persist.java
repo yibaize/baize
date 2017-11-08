@@ -3,6 +3,7 @@ package org.baize.dao.model;
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.baize.dao.sqlmapper.PlayerMapper;
+import org.baize.error.Error;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +29,7 @@ public abstract class Persist {
         //mapper = springutils.getbean(playermapper.class)
         String str = JSON.toJSONString(this);
         if(this == null || !(this instanceof Persist) || StringUtils.isEmpty(str))
-            return;
+            new Error(this.getClass()).err(1);
         String sql = "'"+str+"'";
         Map<String,String> map = new HashMap<>();
         map.put("k",this.getClass().getSimpleName());

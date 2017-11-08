@@ -89,12 +89,12 @@ public class ExcelUtils {
             }
             serializerFile(objs, beanName);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.warn(e);
         } finally {
             try {
                 book.close();
             } catch (Exception e) {
-                logger.error(e);
+                logger.warn(e);
             }
         }
     }
@@ -117,12 +117,12 @@ public class ExcelUtils {
         try {
             clazz = Class.forName(clazzName);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            logger.warn(e);
         }
         try {
             beanObj = clazz.newInstance();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.warn(e);
         }
         for (int i = 0; i < objs.size(); i++) {
             for (Map.Entry<String,String> e:objs.get(i).entrySet()){
@@ -145,7 +145,7 @@ public class ExcelUtils {
                         beanMap.put(((DataTableMessage) beanObj).id(), beanObj);
                     }
                 }catch (Exception ex){
-                    ex.printStackTrace();
+                    logger.warn(ex);
                 }
             }
         }
@@ -158,7 +158,7 @@ public class ExcelUtils {
             Method method = clazz.getDeclaredMethod(fieldName+"4Init",new Class[]{String.class});
             obj = method.invoke(bean,value);
         } catch (Exception e) {
-            logger.error("没有"+fieldName+"4Init"+"这个方法",e);
+            logger.warn("没有"+fieldName+"4Init"+"这个方法",e);
         }
         return obj;
     }

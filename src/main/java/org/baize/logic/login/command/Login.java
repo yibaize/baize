@@ -1,12 +1,16 @@
 package org.baize.logic.login.command;
 
-import io.netty.channel.Channel;
 import org.baize.EnumType.LoginType;
+import org.baize.dao.dto.PlayerDto;
 import org.baize.dao.manager.PersistPlayerMapper;
 import org.baize.dao.model.CorePlayer;
+import org.baize.dao.model.PersistPlayer;
 import org.baize.dao.model.PlayerEntity;
 import org.baize.dao.sqlmapper.PlayerMapper;
+import org.baize.error.Error;
+import org.baize.logic.login.manager.LoginManager;
 import org.baize.server.message.CommandAb;
+import org.baize.server.message.IProtostuff;
 import org.baize.utils.SpringUtils;
 import org.baize.utils.assemblybean.annon.Protocol;
 
@@ -29,28 +33,11 @@ public class Login extends CommandAb{
 
     @Override
     public void execute() {
-        PlayerMapper mapper = SpringUtils.getBean(PlayerMapper.class);
-        PersistPlayerMapper playerMapper = mapper.selectOneForAccount(account);
-        if(playerMapper == null){
-            if(loginType != LoginType.Account.id()){
-                //注册
-            }else {
-                //账号不存在
-            }
-        }
-        PlayerEntity entity = playerMapper.playerEntity();
-        if(entity == null){
-            //数据异常
-        }
-        if(loginType == LoginType.Account.id()){
-            if(!password.equals(entity.getPlayerInfo().getPassword()))
-                System.out.println("账号不正确");
-        }
-        CorePlayer corePlayer = new CorePlayer();
-        corePlayer.setEntity(entity);
-        corePlayer.setCtx(this.getCtx());
-        corePlayer.setId(entity.getId());
-        //TODO
-        corePlayer.setRoom(null);
+        LoginManager manager = LoginManager.getInstace();
+        IProtostuff dto = null;
+        if(loginType != LoginType.Account.id())
+            dto = manager.account( this.getCtx(),account,password);
+
+       this.responce(dto);
     }
 }

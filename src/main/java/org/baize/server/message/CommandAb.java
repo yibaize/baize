@@ -3,6 +3,8 @@ package org.baize.server.message;
 import io.netty.channel.Channel;
 import org.baize.dao.model.CorePlayer;
 import org.baize.logic.room.IRoom;
+import org.baize.server.manager.Response;
+import org.baize.utils.ProtostuffUtils;
 
 /**
  * 作者： 白泽
@@ -10,6 +12,7 @@ import org.baize.logic.room.IRoom;
  * 描述：
  */
 public abstract class CommandAb implements ICommand {
+    private short cmdId;
     private int scenesId;
     private Channel ctx;
     private CorePlayer corePlayer;
@@ -19,7 +22,8 @@ public abstract class CommandAb implements ICommand {
     public CommandAb() {
     }
 
-    public CommandAb(int scenesId, Channel ctx, CorePlayer corePlayer, IRoom room) {
+    public CommandAb(short cmdId, int scenesId, Channel ctx, CorePlayer corePlayer, IRoom room) {
+        this.cmdId = cmdId;
         this.scenesId = scenesId;
         this.ctx = ctx;
         this.corePlayer = corePlayer;
@@ -45,6 +49,14 @@ public abstract class CommandAb implements ICommand {
         return scenesId;
     }
 
+    public short getCmdId() {
+        return cmdId;
+    }
+
+    public void setCmdId(short cmdId) {
+        this.cmdId = cmdId;
+    }
+
     public void setScenesId(int scenesId) {
         this.scenesId = scenesId;
     }
@@ -64,5 +76,14 @@ public abstract class CommandAb implements ICommand {
     }
     public void run() {
         this.execute();
+    }
+    protected void responce(IProtostuff pro){
+        Response response = new Response();
+        response.setId(this.cmdId);
+        byte[] buf = null;
+        if(pro!=null)
+            buf = ProtostuffUtils.serializer(pro);
+        response.setData(buf);
+        this.ctx.writeAndFlush(response);
     }
 }
