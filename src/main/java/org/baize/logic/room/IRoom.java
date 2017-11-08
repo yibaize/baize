@@ -13,6 +13,12 @@ public interface IRoom {
     long currentTime();
     long endTime();
     long jackpot();
+    void start();
+    void battle();
+    void end();
+    default boolean isEnd(){
+        return endTime() <= currentTime();
+    };
     /**
      * 离开房间
      * @param corePlayer

@@ -10,8 +10,6 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-import io.netty.util.concurrent.DefaultEventExecutorGroup;
-import io.netty.util.concurrent.EventExecutorGroup;
 import org.baize.server.manager.RequestDecoderManager;
 import org.baize.server.manager.ResponseEncoderManager;
 import org.baize.server.manager.ServerHandlerManager;

@@ -14,12 +14,8 @@ import java.util.concurrent.ConcurrentMap;
 public class PersistPlayer {
     private static ConcurrentMap<Channel,CorePlayer> ctxPlayer = new ConcurrentHashMap<>();
     private static ConcurrentMap<Integer,CorePlayer> idPlayer = new ConcurrentHashMap<>();
-    public static boolean putByCtx(Channel ctx,CorePlayer corePlayer){
-        if(!ctxPlayer.containsKey(ctx)){
-            ctxPlayer.put(ctx,corePlayer);
-            return true;
-        }
-        return false;
+    public static void putByCtx(Channel ctx,CorePlayer corePlayer){
+        ctxPlayer.put(ctx,corePlayer);
     }
     public static CorePlayer getByCtx(Channel ctx){
         if(ctxPlayer.containsKey(ctx)){
@@ -27,12 +23,8 @@ public class PersistPlayer {
         }
         return null;
     }
-    public static boolean putById(int id,CorePlayer corePlayer){
-        if(!idPlayer.containsKey(id)){
-            idPlayer.put(id,corePlayer);
-            return true;
-        }
-        return false;
+    public static void putById(int id,CorePlayer corePlayer){
+        idPlayer.put(id,corePlayer);
     }
     public static CorePlayer getById(int id){
         if(idPlayer.containsKey(id)){

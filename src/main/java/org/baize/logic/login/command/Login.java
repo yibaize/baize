@@ -1,17 +1,9 @@
 package org.baize.logic.login.command;
 
 import org.baize.EnumType.LoginType;
-import org.baize.dao.dto.PlayerDto;
-import org.baize.dao.manager.PersistPlayerMapper;
-import org.baize.dao.model.CorePlayer;
-import org.baize.dao.model.PersistPlayer;
-import org.baize.dao.model.PlayerEntity;
-import org.baize.dao.sqlmapper.PlayerMapper;
-import org.baize.error.Error;
 import org.baize.logic.login.manager.LoginManager;
 import org.baize.server.message.CommandAb;
 import org.baize.server.message.IProtostuff;
-import org.baize.utils.SpringUtils;
 import org.baize.utils.assemblybean.annon.Protocol;
 
 /**
@@ -37,7 +29,8 @@ public class Login extends CommandAb{
         IProtostuff dto = null;
         if(loginType != LoginType.Account.id())
             dto = manager.account( this.getCtx(),account,password);
-
+        else
+            dto = manager.rest(this.getCtx(),account);
        this.responce(dto);
     }
 }
