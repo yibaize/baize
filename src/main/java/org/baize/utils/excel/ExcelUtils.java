@@ -12,7 +12,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
 import java.util.*;
 @Service
 public class ExcelUtils {
@@ -129,9 +131,19 @@ public class ExcelUtils {
                     Field modifiersField = Field.class.getDeclaredField("modifiers");
                     modifiersField.setAccessible(true);
                     modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-                    Object valueObj = CheckType.getTypr(field.getClass(),e.getValue());
+                    Object valueObj = null;
+                    //如果是基础数据类型或者string类型
+                    if(field.getType().isPrimitive() || field.getType() == String.class){
+                        valueObj = CheckType.getTypr(field.getClass(),e.getValue());
+                    }else {
+                        //如果是数组或者集合或者其他类型
+                        valueObj = arrs(clazz,beanObj,e.getValue(),e.getValue());
+                    }
                     field.set(beanObj,valueObj);
-                    beanMap.put(((DataTableMessage)beanObj).id(),beanObj);
+                    if(beanMap instanceof DataTableMessage) {
+                        ((DataTableMessage) beanObj).AfterInit();
+                        beanMap.put(((DataTableMessage) beanObj).id(), beanObj);
+                    }
                 }catch (Exception ex){
                     ex.printStackTrace();
                 }
@@ -140,5 +152,14 @@ public class ExcelUtils {
         //添加到所有导表缓存类中
         StaticConfigMessage.getInstance().put(beanObj.getClass(),beanMap);
     }
-
+    private static Object arrs(Class<?> clazz,Object bean,String fieldName,String value){
+        Object obj = null;
+        try {
+            Method method = clazz.getDeclaredMethod(fieldName+"4Init",new Class[]{String.class});
+            obj = method.invoke(bean,value);
+        } catch (Exception e) {
+            logger.error("没有"+fieldName+"4Init"+"这个方法",e);
+        }
+        return obj;
+    }
 }  

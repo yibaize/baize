@@ -92,7 +92,7 @@ public class ProtocolRecive {
         Iterator<ProtocolModule> iterator2 = protocolModules.iterator();
         while (iterator2.hasNext()){
             ProtocolModule module = iterator2.next();
-            sb.append("\tprivate MessageAb get"+StringUtils.substringAfterLast(module.getClazzName(),".")+"(String[] params){\n");
+            sb.append("\tprivate CommandAb get"+StringUtils.substringAfterLast(module.getClazzName(),".")+"(String[] params){\n");
             int i = 0;
             for (String str:module.getField()){
                 i++;

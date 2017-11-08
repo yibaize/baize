@@ -7,4 +7,5 @@ package org.baize.utils.excel;
 
 public interface DataTableMessage {
     int id();
+    void AfterInit();
 }

@@ -10,6 +10,6 @@ import org.baize.utils.assemblybean.service.SelectAnnotationClass;
  */
 public class CodeGenerator {
     public static void main(String[] args) {
-        SelectAnnotationClass.getIocClazz("org.baize.utils.assemblybean.test");
+        SelectAnnotationClass.getIocClazz("org.baize");
     }
 }

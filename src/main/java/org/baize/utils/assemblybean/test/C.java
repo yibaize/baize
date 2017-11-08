@@ -1,7 +1,7 @@
 package org.baize.utils.assemblybean.test;
 
 
-import org.baize.server.message.MessageAb;
+import org.baize.server.message.CommandAb;
 import org.baize.utils.assemblybean.annon.Protocol;
 
 /**
@@ -10,7 +10,7 @@ import org.baize.utils.assemblybean.annon.Protocol;
  * 描述：
  */
 @Protocol(id = "2")
-public class C extends MessageAb {
+public class C extends CommandAb {
     private int c;
     private final int asd;
 

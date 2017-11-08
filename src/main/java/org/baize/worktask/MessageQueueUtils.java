@@ -1,12 +1,9 @@
 package org.baize.worktask;
 
-import org.baize.server.message.MessageAb;
+import org.baize.server.message.CommandAb;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * 作者： 白泽
@@ -17,7 +14,7 @@ public class MessageQueueUtils {
     //单线程
     private final WorkTaskPoolManager taskPool;
     //消息队列
-    private final ConcurrentLinkedQueue<MessageAb> blockingQueue;
+    private final ConcurrentLinkedQueue<CommandAb> blockingQueue;
     private AtomicBoolean taskCompleted;
     private final LockUtils lock;
     private static MessageQueueUtils instance;
@@ -37,7 +34,7 @@ public class MessageQueueUtils {
         return taskPool;
     }
 
-    public ConcurrentLinkedQueue<MessageAb> getBlockingQueue() {
+    public ConcurrentLinkedQueue<CommandAb> getBlockingQueue() {
         return blockingQueue;
     }
 

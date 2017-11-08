@@ -22,7 +22,6 @@ import org.baize.server.manager.ServerHandlerManager;
  * 描述：
  */
 public class GameServer {
-    private static final EventExecutorGroup EVENT_EXECUTORS = new DefaultEventExecutorGroup(1);
     private static final EventLoopGroup BOSS_GROUP = new NioEventLoopGroup(1);
     private static final EventLoopGroup WORKER_GROUP = new NioEventLoopGroup();
     public static void start(int port){
@@ -32,14 +31,13 @@ public class GameServer {
             b.group(BOSS_GROUP, WORKER_GROUP)
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG,2048)
-                    .childOption(ChannelOption.TCP_NODELAY, true)
+                    .childOption(ChannelOption.SO_KEEPALIVE, true)
                     .handler(new LoggingHandler(LogLevel.INFO))
-
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ch.pipeline().addLast(new RequestDecoderManager());
                             ch.pipeline().addLast(new ResponseEncoderManager());
-                            ch.pipeline().addLast(EVENT_EXECUTORS,new ServerHandlerManager());
+                            ch.pipeline().addLast(new ServerHandlerManager());
                         }
                     });
             //绑定端口

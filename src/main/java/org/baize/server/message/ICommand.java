@@ -5,6 +5,6 @@ package org.baize.server.message;
  * 时间： 2017/11/3.
  * 描述：
  */
-public interface IMessage extends Runnable {
+public interface ICommand extends Runnable {
     void execute();
 }

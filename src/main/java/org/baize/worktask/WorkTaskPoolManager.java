@@ -1,7 +1,6 @@
 package org.baize.worktask;
 
-import org.baize.server.message.IMessage;
-import org.baize.server.message.MessageAb;
+import org.baize.server.message.ICommand;
 
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -13,7 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class WorkTaskPoolManager {
     //消息队列
-    private final ConcurrentLinkedQueue<IMessage> taskQueue;
+    private final ConcurrentLinkedQueue<ICommand> taskQueue;
     private AtomicBoolean taskCompleted;
     private final LockUtils lock;
     private static WorkTaskPoolManager instance;
@@ -40,7 +39,7 @@ public class WorkTaskPoolManager {
     public LockUtils getLock() {
         return lock;
     }
-    public void submit(IMessage ab){
+    public void submit(ICommand ab){
         taskQueue.offer(ab);
         boolean submit = false;
         lock.getLock().writeLock().lock();
@@ -61,7 +60,7 @@ public class WorkTaskPoolManager {
         public void run() {
             while (true) {
                 lock.getLock().writeLock().lock();
-                IMessage msg = null;
+                ICommand msg = null;
                 OK:
                 {
                     try {

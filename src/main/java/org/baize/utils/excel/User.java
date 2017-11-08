@@ -1,6 +1,11 @@
 package org.baize.utils.excel;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 作者： 白泽
@@ -11,10 +16,12 @@ public class User {
     private final String name;
     private final int id;
     private final float age;
+    private final List<User> arr;
     public User() {
-        this.name = new String();
-        this.id = 0;
-        this.age = 0F;
+        this.name = "ewrfaewfdsf";
+        this.id = 10;
+        this.age = 20F;
+        arr = null;
     }
 
     public String getName() {
@@ -29,25 +36,32 @@ public class User {
         return age;
     }
 
+    public List<User> getArr() {
+        return arr;
+    }
+    private List<User> arrs(String s){
+        List<User> a = new ArrayList<>();
+        User t = new User();
+        a.add(t);
+        return a;
+    }
     @Override
     public String toString() {
         return "User{" +
-                "name=" + name +
+                "name='" + name + '\'' +
                 ", id=" + id +
                 ", age=" + age +
+                ", arr=" + arr +
                 '}';
     }
 
     public static void main(String[] args) throws Exception {
         User user = new User();
-        Field field = user.getClass().getDeclaredField("name");
-
-        Class<?> clazz = field.getType();
-        System.out.println(clazz == String.class);
 
         modify(user,"name","asd");
         modify(user,"id","456");
         modify(user,"age","4867");
+        modify(user,"arr","asd");
         System.out.println(user);
     }
 
@@ -65,6 +79,11 @@ public class User {
             modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
             Class<?> clazz = field.getType();
             Object value = null;
+            System.out.println(field.getType() == String.class);
+            if(field.getType().isArray() || (field.getGenericType() instanceof ParameterizedType)){
+                Method method = User.class.getDeclaredMethod("arrs",new Class[]{String.class});
+                value = method.invoke(o,newValue);
+            }
             if(clazz == int.class) {
                 value = Integer.valueOf(newValue);
             }
@@ -77,4 +96,5 @@ public class User {
             e.printStackTrace();
         }
     }
+
 }
