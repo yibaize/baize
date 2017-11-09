@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.baize.dao.model.Persist;
 import org.baize.dao.model.PlayerEntity;
+import org.baize.error.Error;
 
 /**
  * 作者： 白泽
@@ -75,10 +76,15 @@ public class PersistPlayerMapper {
     public Persist persist(Persist p){
         Persist persist = null;
         String str = obj(p);
-        if(StringUtils.isEmpty(str))
-            return null;
+        if(StringUtils.isEmpty(str) || str.equals("{}") || str.equals("null")) {
+            try {
+                persist = p.getClass().newInstance();
+            } catch (Exception e) {
+                new Error(this.getClass()).err(1);
+            }
+        }
         persist = JSON.parseObject(str,p.getClass());
-        persist.setId(id);
+        persist.setEntity(playerEntity());
         return persist;
     }
     public String persistStr(Persist p){
@@ -99,4 +105,5 @@ public class PersistPlayerMapper {
         else
             return null;
     }
+
 }

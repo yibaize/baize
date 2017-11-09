@@ -52,6 +52,9 @@ public class Bottom {
     public void addAllNum(int num){
         allNum.getAndSet(num);
     }
+    public void leave(CorePlayer corePlayer){
+        map.remove(corePlayer);
+    }
 
     /**
      * 需要同步

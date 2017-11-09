@@ -1,5 +1,6 @@
 package org.baize.server.message;
 import io.netty.channel.Channel;
+import org.baize.dao.model.CorePlayer;
 import org.baize.dao.model.PersistPlayer;
 import org.baize.server.manager.Request;
 import org.springframework.stereotype.Component;

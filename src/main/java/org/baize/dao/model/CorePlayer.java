@@ -11,6 +11,7 @@ import org.baize.logic.room.IRoom;
 public class CorePlayer {
     private int id;
     private Channel ctx;
+    private int scenesId;
     private PlayerEntity entity;
     private IRoom room;
     public void respones(Object o){}
@@ -37,6 +38,14 @@ public class CorePlayer {
 
     public void setRoom(IRoom room) {
         this.room = room;
+    }
+
+    public int getScenesId() {
+        return scenesId;
+    }
+
+    public void setScenesId(int scenesId) {
+        this.scenesId = scenesId;
     }
 
     public PlayerEntity getEntity() {

@@ -7,4 +7,5 @@ package org.baize.logic;
  */
 public interface IFactory<T> {
     <T> T getBean(Class<T> clazz);
+    <T> T getBean(int id);
 }

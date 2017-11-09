@@ -30,7 +30,7 @@ public class Login extends CommandAb{
         if(loginType != LoginType.Account.id())
             dto = manager.account( this.getCtx(),account,password);
         else
-            dto = manager.rest(this.getCtx(),account);
+            dto = manager.rest(loginType,this.getCtx(),account);
        this.responce(dto);
     }
 }

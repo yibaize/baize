@@ -1,9 +1,11 @@
 package org.baize.utils.assemblybean.service;
 
 import org.apache.commons.lang3.StringUtils;
+import org.baize.server.message.IProtostuff;
 import org.baize.utils.assemblybean.annon.DataTable;
 import org.baize.utils.assemblybean.annon.Protocol;
 import org.baize.utils.assemblybean.annon.Protostuff;
+import org.baize.utils.excel.DataTableMessage;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -72,7 +74,7 @@ public class SelectAnnotationClass {
                     ProtocolRecive.protocol(model);
                 else {
                     o = model.getClazz().newInstance();
-                    List<String> bean = reflectField(model.getId(), o);
+                    List<String> bean = reflectField(model.getId(), o,ae);
                     AssemblyBean.assemblyBean(o.getClass().getSimpleName(), bean, ae);
                 }
             } catch (Exception e) {
@@ -84,13 +86,29 @@ public class SelectAnnotationClass {
     /**
      * 获取对象属性名并生成协议类（java、C#）
      */
-    private static List<String> reflectField(String id,Object o) {
+    private static List<String> reflectField(String id,Object o,AnnonEnum ae) {
         Field[] fields = o.getClass().getDeclaredFields();
         List<String> sb = new ArrayList<>();
         if (fields.length<=0)
             return null;
         String beanName = o.getClass().getName();
-        sb.add("public class "+o.getClass().getSimpleName()+"{\n");
+        String impl = "";
+        switch (ae){
+            case Protocol:
+                impl = "IComand";
+                break;
+            case DataTable:
+                impl = "DataTableMessage";
+                break;
+            case Protostuff:
+                impl = "IProtostuff";
+        }
+        sb.add("public class "+o.getClass().getSimpleName()+" : "+impl+" {\n");
+        if(ae == AnnonEnum.DataTable) {
+            sb.add("\tpublic int id(){\n\t\treturn Id;\n\t}\n");
+            sb.add("\tpublic static "+o.getClass().getSimpleName()+" get(int id){\n" +
+            "\t\treturn StaticConfigMessage.getInstance().get("+o.getClass().getSimpleName()+".class,id);\n\t}\n");
+        }
         for (int i = 0;i< fields.length;i++){
             Type isType = fields[i].getGenericType();
             String fieldName = fields[i].getName();
@@ -107,13 +125,18 @@ public class SelectAnnotationClass {
                 typestr = CheckType.getArrType(arrFieldType,beanName,fieldName)+"[]";
             }
             else {
-                Type type = fields[i].getType();
-                typestr = CheckType.getType(type.getClass(),beanName,fieldName);
+                Type type = fields[i].getGenericType();
+                typestr = CheckType.getType(type,beanName,fieldName);
             }
             //属性名
             String field = fields[i].getName();
             field = StringUtils.capitalize(field);
-            sb.add("\tpublic "+typestr+" "+field+";"+"\n");
+            String s = "";
+            if(ae == AnnonEnum.DataTable)
+                s = "\tpublic "+typestr+" "+field+"{get;}"+"\n";
+            else
+                s = "\tpublic "+typestr+" "+field+"{get;set;}"+"\n";
+            sb.add(s);
         }
         sb.add("}");
         return sb;

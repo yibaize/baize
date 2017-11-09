@@ -56,28 +56,54 @@ public class CheckType {
         }
         return type;
     }
-
-    public static void main(String[] args) {
-        getType(Integer.class,"asdas","sdfds");
+    public static String getType(Type t,String beanName,String fieldName){
+        String type = "";
+        if(t == String.class)
+            type = "string";
+        else if(t == byte.class)
+            type = "byte";
+        else if(t == char.class)
+            type = "char";
+        else if(t == short.class)
+            type = "string";
+        else if(t == int.class)
+            type = "int";
+        else if(t == boolean.class)
+            type = "bool";
+        else if(t == float.class)
+            type = "float";
+        else if(t == double.class)
+            type = "double";
+        else if(t == long.class)
+            type = "long";
+        else
+            type = t.getClass().getSimpleName();
+        if (StringUtils.isBlank(type)) {
+            type = "Object";
+            System.err.println("对象"+beanName+"的"+fieldName+"变量的类型属性"+t+"不正确：反射数据类型异常将自动转为string类型");
+        }
+        return type;
     }
     public static String getType(Class<?> t,String beanName,String fieldName){
         String type = "";
         if(t == String.class)
             type = "string";
-        if(t == byte.class)
+        else if(t == byte.class)
             type = "byte";
-        if(t == char.class)
+        else if(t == char.class)
             type = "char";
-        if(t == short.class)
+        else if(t == short.class)
             type = "string";
-        if(t == int.class)
+        else if(t == int.class)
             type = "int";
-        if(t == boolean.class)
+        else if(t == boolean.class)
             type = "bool";
-        if(t == float.class)
+        else if(t == float.class)
             type = "float";
-        if(t == double.class)
+        else if(t == double.class)
             type = "double";
+        else if(t == long.class)
+            type = "long";
         else
             type = t.getSimpleName();
         if (StringUtils.isBlank(type)) {

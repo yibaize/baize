@@ -64,6 +64,14 @@ public class ProtocolRecive {
     public static void assembly(){
         checkId();
         StringBuffer sb = new StringBuffer();
+        StringBuffer sb1 = new StringBuffer();
+        StringBuffer sb2 = new StringBuffer();
+
+        sb1.append("package org.baize.server.message;\n");
+        sb1.append("public class CommandCode{\n");
+
+        sb2.append("public class CommandCode{\n");
+
         sb.append("package org.baize.server.message;\n");
         Iterator<ProtocolModule> iterator = protocolModules.iterator();
         while (iterator.hasNext()){
@@ -77,14 +85,19 @@ public class ProtocolRecive {
         sb.append("\t\t\tinstance = new CommandRecive();\n");
         sb.append("\t\treturn instance;\n");
         sb.append("\t}\n");
-        sb.append("\tpublic MessageAb recieve(int id,String[] params){\n");
+        sb.append("\tpublic CommandAb recieve(int id,String[] params){\n");
         sb.append("\t\tswitch (id){\n");
         Iterator<ProtocolModule> iterator1 = protocolModules.iterator();
         while (iterator1.hasNext()){
             ProtocolModule module = iterator1.next();
             sb.append("\t\t\tcase "+module.getClazzId()+":\n");
             sb.append("\t\t\t\treturn get"+StringUtils.substringAfterLast(module.getClazzName(),".")+"(params);\n");
+            sb1.append("\tpublic static final int "+StringUtils.substringAfterLast(module.getClazzName(),".")+" = "+module.getClazzId()+";\n");
+            sb2.append("\tpublic const int "+StringUtils.substringAfterLast(module.getClazzName(),".")+" = "+module.getClazzId()+";\n");
         }
+        sb1.append("}");
+        sb2.append("}");
+
         sb.append("\t\t\tdefault:\n");
         sb.append("\t\t\t\treturn null;\n");
         sb.append("\t\t}\n");
@@ -116,7 +129,8 @@ public class ProtocolRecive {
             sb.append("\t}\n");
         }
         sb.append("}");
-        WriteFile.writeText("CommandRecive.java",sb.toString(),"D:\\github\\netfromework\\src\\main\\java\\org\\baize\\server\\message");
-        System.err.println(sb.toString());
+        WriteFile.writeText("CommandRecive.java",sb.toString(),"E:\\baize\\src\\main\\java\\org\\baize\\server\\message");
+        WriteFile.writeText("CommandCode.java",sb1.toString(),"E:\\baize\\src\\main\\java\\org\\baize\\server\\message");
+        WriteFile.writeText("CommandCode.cs",sb2.toString(),"E:\\cs");
     }
 }

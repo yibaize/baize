@@ -13,30 +13,18 @@ import org.baize.utils.ProtostuffUtils;
  */
 public abstract class CommandAb implements ICommand {
     private short cmdId;
-    private int scenesId;
     private Channel ctx;
     private CorePlayer corePlayer;
-    private IRoom room;
-
-
     public CommandAb() {
     }
 
-    public CommandAb(short cmdId, int scenesId, Channel ctx, CorePlayer corePlayer, IRoom room) {
+    public CommandAb(short cmdId, Channel ctx, CorePlayer corePlayer) {
         this.cmdId = cmdId;
-        this.scenesId = scenesId;
         this.ctx = ctx;
         this.corePlayer = corePlayer;
-        this.room = room;
     }
 
-    public IRoom getRoom() {
-        return room;
-    }
 
-    public void setRoom(IRoom room) {
-        this.room = room;
-    }
 
     public CorePlayer getCorePlayer() {
         return corePlayer;
@@ -44,9 +32,6 @@ public abstract class CommandAb implements ICommand {
 
     public void setCorePlayer(CorePlayer corePlayer) {
         this.corePlayer = corePlayer;
-    }
-    public int getScenesId() {
-        return scenesId;
     }
 
     public short getCmdId() {
@@ -57,22 +42,14 @@ public abstract class CommandAb implements ICommand {
         this.cmdId = cmdId;
     }
 
-    public void setScenesId(int scenesId) {
-        this.scenesId = scenesId;
-    }
-
     public Channel getCtx() {
         return ctx;
     }
-
     public void setCtx(Channel ctx) {
         this.ctx = ctx;
     }
     public CorePlayer player(){
         return this.corePlayer;
-    }
-    public IRoom room(){
-        return this.room;
     }
     public void run() {
         this.execute();

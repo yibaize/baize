@@ -1,4 +1,6 @@
-package org.baize.dao.model;
+package org.baize.logic.mainroom.shop.module;
+
+import org.baize.dao.model.Persist;
 
 /**
  * 作者： 白泽
