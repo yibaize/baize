@@ -1,6 +1,8 @@
 package org.baize.worktask;
 
 import org.baize.server.message.ICommand;
+import org.baize.utils.SpringUtils;
+import org.springframework.stereotype.Service;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -11,16 +13,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * 时间： 2017/11/3.
  * 描述：
  */
-public class WorkTaskPoolManager {
+@Service
+public final class WorkTaskPoolManager {
     //消息队列
     private final ConcurrentLinkedQueue<ICommand> taskQueue;
     private AtomicBoolean taskCompleted;
     private final LockUtils lock;
-    private static WorkTaskPoolManager instance;
     public static WorkTaskPoolManager getInstance(){
-        if(instance == null)
-            instance = new WorkTaskPoolManager();
-        return instance;
+        return SpringUtils.getBean(WorkTaskPoolManager.class);
     }
 //    /**定时器*/
 //    public static ScheduledExecutorService timerTask;
@@ -31,6 +31,7 @@ public class WorkTaskPoolManager {
         taskQueue = new ConcurrentLinkedQueue<>();
         taskCompleted = new AtomicBoolean(false);
         lock = LockUtils.getInstance();
+        System.err.println((System.currentTimeMillis()+":----------------------业务线程启动成功----------------------"));
     }
 
     public AtomicBoolean getTaskCompleted() {
@@ -40,7 +41,7 @@ public class WorkTaskPoolManager {
     public LockUtils getLock() {
         return lock;
     }
-    public void submit(ICommand ab){
+    public final void submit(ICommand ab){
         taskQueue.offer(ab);
         boolean submit = false;
         lock.getLock().writeLock().lock();

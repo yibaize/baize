@@ -29,7 +29,6 @@ public class PlayerDataTable implements DataTableMessage{
     /**描述*/
     private final String discibe; //
     private final int weekDay;
-    private final int vip;
     private final long gold;
     private final int diamond;
     public PlayerDataTable() {
@@ -43,7 +42,6 @@ public class PlayerDataTable implements DataTableMessage{
         this.head = 1;
         this.discibe = "";
         this.weekDay = 0;
-        this.vip = 0;
         this.gold = 0;
         this.diamond = 0;
     }
@@ -88,10 +86,6 @@ public class PlayerDataTable implements DataTableMessage{
 
     public int getWeekDay() {
         return weekDay;
-    }
-
-    public int getVip() {
-        return vip;
     }
 
     public long getGold() {

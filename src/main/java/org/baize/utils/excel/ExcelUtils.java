@@ -31,6 +31,8 @@ public class ExcelUtils {
         File file = new File(path);
         String[] beanNames = file.list();
         File[] files = file.listFiles();
+        if(files == null)
+            return new HashMap<>(0);
         for (int i = 0;i<files.length;i++){
             String beanName = StringUtils.substringBeforeLast(beanNames[i],".");
             beanName = StringUtils.substringAfter(beanName,"_");

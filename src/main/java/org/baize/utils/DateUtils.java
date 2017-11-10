@@ -46,6 +46,14 @@ public class DateUtils {
         c.set(Calendar.DAY_OF_YEAR,c.get(Calendar.DAY_OF_YEAR)+7);
         return c;
     }
+    /**
+     * 今天是星期几
+     * @return
+     */
+    public static int getTodayOnWeek(){
+        Calendar c = Calendar.getInstance();
+        return c.get(Calendar.DAY_OF_WEEK)-1;
+    }
     public static int week(){
         Date date = weekEndCalendar().getTime();
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
@@ -106,16 +114,7 @@ public class DateUtils {
         return c.getTimeInMillis();
     }
 
-    /**
-     * 今天是星期几
-     * @return
-     */
-    public static int getTodayOnWeek(){
-        Calendar c = Calendar.getInstance();
-        return c.get(Calendar.DAY_OF_WEEK)-1;
-    }
     public static void main(String[] args) {
-        Calendar c = Calendar.getInstance();
-        System.out.println(c.get(Calendar.DAY_OF_WEEK)-1);
+        System.out.println("xxx");
     }
 }

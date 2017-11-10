@@ -17,6 +17,7 @@ public class Buy_1 extends ShopImpAdapter{
     @Override
     public void buy(CorePlayer corePlayer, ShopDataTable dataTable,int count) {
         ExChangeDataTable exChangeDataTable = ExChangeDataTable.get(1);
+
         if(exChangeDataTable == null)
             new Error(this.getClass(),corePlayer.getCtx()).debug(1);
         Weath weath = corePlayer.entity().getWeath();

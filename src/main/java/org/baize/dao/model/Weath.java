@@ -6,28 +6,36 @@ package org.baize.dao.model;
  * 描述：
  */
 public class Weath extends Persist {
-    /**vip*/
-    private int vip; // vip
     /**金幣*/
     private long gold; // 金币
     /**鑽石*/
     private int diamond; // 钻石
-
+    /**是否已经购买摇钱树*/
+    private boolean hasTree;
+    /**上次领取时间*/
+    private long lastDrawTime;
     public Weath() {
     }
 
-    public Weath(int vip, long gold, int diamond) {
-        this.vip = vip;
+    public Weath(long gold, int diamond) {
         this.gold = gold;
         this.diamond = diamond;
     }
 
-    public int getVip() {
-        return vip;
+    public boolean isHasTree() {
+        return hasTree;
     }
 
-    public void setVip(int vip) {
-        this.vip = vip;
+    public void setHasTree(boolean hasTree) {
+        this.hasTree = hasTree;
+    }
+
+    public long getLastDrawTime() {
+        return lastDrawTime;
+    }
+
+    public void setLastDrawTime(long lastDrawTime) {
+        this.lastDrawTime = lastDrawTime;
     }
 
     public long getGold() {
@@ -56,11 +64,5 @@ public class Weath extends Persist {
     }
     public void decreaseDiamond(int num){
         diamond -= num;
-    }
-    public void increaseVip(int num){
-        vip += num;
-    }
-    public void decreaseVip(int num){
-        vip -= num;
     }
 }

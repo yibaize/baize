@@ -7,7 +7,7 @@ package org.baize.utils.createid;
  */
 public class IdModule {
     private int id;
-    private int timer;
+    private long timer;
 
     public IdModule() {
     }
@@ -25,11 +25,11 @@ public class IdModule {
         this.id = id;
     }
 
-    public int getTimer() {
+    public long getTimer() {
         return timer;
     }
 
-    public void setTimer(int timer) {
+    public void setTimer(long timer) {
         this.timer = timer;
     }
 

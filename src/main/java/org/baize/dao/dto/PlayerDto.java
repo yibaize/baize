@@ -28,10 +28,6 @@ public class PlayerDto implements IProtostuff{
      */
     private int loginType; // 账号类型（QQ,WX）
     /**
-     * vip
-     */
-    private int vip; // vip
-    /**
      * 排名
      */
     private int rank; // 排名
@@ -115,14 +111,6 @@ public class PlayerDto implements IProtostuff{
 
     public void setLoginType(int loginType) {
         this.loginType = loginType;
-    }
-
-    public int getVip() {
-        return vip;
-    }
-
-    public void setVip(int vip) {
-        this.vip = vip;
     }
 
     public int getRank() {

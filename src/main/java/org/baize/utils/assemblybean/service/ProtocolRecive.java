@@ -13,7 +13,7 @@ import java.util.*;
 
 public class ProtocolRecive {
 
-    public static Set<ProtocolModule> protocolModules = new HashSet<>();
+    public static List<ProtocolModule> protocolModules = new ArrayList<>();
 
     public static void protocol(CodeModel model){
         Class c = model.getClazz();
@@ -73,6 +73,7 @@ public class ProtocolRecive {
         sb2.append("public class CommandCode{\n");
 
         sb.append("package org.baize.server.message;\n");
+        Collections.sort(protocolModules);
         Iterator<ProtocolModule> iterator = protocolModules.iterator();
         while (iterator.hasNext()){
             ProtocolModule module = iterator.next();

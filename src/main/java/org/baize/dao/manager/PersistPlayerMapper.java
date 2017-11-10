@@ -1,11 +1,9 @@
 package org.baize.dao.manager;
-
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.baize.dao.model.Persist;
 import org.baize.dao.model.PlayerEntity;
 import org.baize.error.Error;
-
 /**
  * 作者： 白泽
  * 时间： 2017/11/6.
@@ -17,6 +15,8 @@ public class PersistPlayerMapper {
     private String playerInfo;
     private String weath;
     private String shop;
+    private String signIn;
+    private String friends;
     public PersistPlayerMapper() {
     }
 
@@ -26,6 +26,8 @@ public class PersistPlayerMapper {
         this.playerInfo = JSON.toJSONString(entity.getPlayerInfo());
         this.weath = JSON.toJSONString(entity.getWeath());
         this.shop = JSON.toJSONString(entity.getShop());
+        this.signIn = JSON.toJSONString(entity.getSignIn());
+        this.friends = JSON.toJSONString(entity.getFriends());
     }
     public int getId() {
         return id;
@@ -34,40 +36,6 @@ public class PersistPlayerMapper {
     public void setId(int id) {
         this.id = id;
     }
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
-    }
-
-    public String getPlayerInfo() {
-        return playerInfo;
-    }
-
-    public void setPlayerInfo(String playerInfo) {
-        this.playerInfo = playerInfo;
-    }
-
-    public String getWeath() {
-        return weath;
-    }
-
-    public void setWeath(String weath) {
-        this.weath = weath;
-    }
-
-    public String getShop() {
-        return shop;
-    }
-
-    public void setShop(String shop) {
-        this.shop = shop;
-    }
-
-
 
     public PlayerEntity playerEntity(){
         return new PlayerEntity(this);
@@ -84,15 +52,8 @@ public class PersistPlayerMapper {
             }
         }
         persist = JSON.parseObject(str,p.getClass());
-        persist.setEntity(playerEntity());
+        persist.setId(id);
         return persist;
-    }
-    public String persistStr(Persist p){
-        String perSrt = "{}";
-        if(p == null)
-            return perSrt;
-        perSrt = JSON.toJSONString(p);
-        return perSrt;
     }
     private String obj(Persist p){
         String beanName = p.getClass().getSimpleName();
@@ -102,8 +63,15 @@ public class PersistPlayerMapper {
             return this.weath;
         else if(StringUtils.equalsIgnoreCase(beanName,"shop"))
             return this.shop;
+        else if(StringUtils.equalsIgnoreCase(beanName,"signIn"))
+            return this.signIn;
+        else if(StringUtils.equalsIgnoreCase(beanName,"friends"))
+            return this.friends;
         else
             return null;
     }
 
+    public static void main(String[] args) {
+        System.out.println("xxxxx");
+    }
 }

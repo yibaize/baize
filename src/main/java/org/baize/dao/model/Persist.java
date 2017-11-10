@@ -14,15 +14,15 @@ import java.util.Map;
  * 描述：
  */
 public abstract class Persist {
-    private transient PlayerEntity entity;
+    private transient int id;
     private PlayerMapper mapper;
 
-    public PlayerEntity getEntity() {
-        return entity;
+    public int getId() {
+        return id;
     }
 
-    public void setEntity(PlayerEntity entity) {
-        this.entity = entity;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public PlayerMapper getMapper() {
@@ -36,7 +36,7 @@ public abstract class Persist {
     public void update(){
         //提交消息队列，线程调用submit方法
     }
-    private void submit(){
+    public void submit(){
         //mapper = springutils.getbean(playermapper.class)
         String str = JSON.toJSONString(this);
         if(this == null || !(this instanceof Persist) || StringUtils.isEmpty(str))
@@ -45,7 +45,7 @@ public abstract class Persist {
         Map<String,String> map = new HashMap<>();
         map.put("k",this.getClass().getSimpleName());
         map.put("v",sql);
-        map.put("id",entity.getId()+"");
+        map.put("id",id+"");
         mapper.updateField(map);
     }
 }

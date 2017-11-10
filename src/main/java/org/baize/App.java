@@ -1,7 +1,9 @@
 package org.baize;
 
 import org.baize.server.GameServer;
+import org.baize.utils.SpringUtils;
 import org.baize.worktask.WorkTaskPoolManager;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * Hello world!
@@ -11,8 +13,9 @@ public class App
 {
     public static void main( String[] args )
     {
-        GameServer.start(7788);
+        SpringUtils.ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
         WorkTaskPoolManager.getInstance();
+        GameServer.start();
         System.out.println( "Hello World!" );
     }
 }

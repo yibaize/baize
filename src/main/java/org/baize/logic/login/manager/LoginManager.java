@@ -106,7 +106,7 @@ public class LoginManager {
         PlayerEntity entity = new PlayerEntity();
         entity.setPlayerInfo(info);
         entity.setWeath(weath);
-        entity.setId(entity,id);
+        entity.setId(id);
         return entity;
     }
 }

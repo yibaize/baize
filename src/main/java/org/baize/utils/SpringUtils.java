@@ -11,9 +11,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class SpringUtils {
     public static ApplicationContext ctx = null;
 
-    static {
-        ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
-    }
+//    static {
+//        ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+//    }
 
     public static <T> T getBean(final Class<T> clazz) {
         System.out.println(clazz);

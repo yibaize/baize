@@ -29,6 +29,9 @@ public class Error {
         this.response(id);
         throw new RuntimeException(getMsg(id));
     }
+    public void debug(String msg){
+        logger.error(msg);
+    }
     public void debug(int id,Throwable t){
         this.response(id);
         throwException(id,t);

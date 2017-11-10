@@ -14,8 +14,8 @@ import java.io.*;
 public class CreateIdUtils {
     public static synchronized int id(){
         IdModule module = readId();
-        if(module.getTimer() != DateUtils.currentDay()) {
-            module.setTimer(DateUtils.currentDay());
+        if(module.getTimer() <= DateUtils.currentTime()) {
+            module.setTimer(DateUtils.monthEndMllis());
             module.setId(0);
         }
         int id = module.getId();
@@ -28,7 +28,6 @@ public class CreateIdUtils {
             time += id;
         module.setId(id);
         writeId(module);
-        System.out.println(module);
         return Integer.parseInt(time);
     }
     private static IdModule readId(){

@@ -1,6 +1,8 @@
 package org.baize.logic.mainroom.signin.module;
 
 import org.baize.dao.model.Persist;
+import org.baize.dao.model.PlayerEntity;
+import org.baize.dao.model.Weath;
 import org.baize.logic.mainroom.signin.data.SignInDataTable;
 import org.baize.utils.DateUtils;
 
@@ -16,6 +18,19 @@ public class SignIn extends Persist {
     private boolean draw;
     private int week;
     private List<Integer> weekDay;
+    private transient PlayerEntity player;
+
+    public SignIn() {
+    }
+
+    public PlayerEntity player() {
+        return player;
+    }
+
+    public void player(PlayerEntity player) {
+        this.player = player;
+    }
+
 
     public boolean isDraw() {
         return draw;
@@ -55,7 +70,9 @@ public class SignIn extends Persist {
         if(signInDataTable == null)
             return false;
         int award = signInDataTable.getDraw();
-        this.getEntity().getWeath().increaseGold(award);
+        Weath weath = player().getWeath();
+        weath.increaseGold(award);
+        weath.update();
         weekDay().add(teday);
         return true;
     }

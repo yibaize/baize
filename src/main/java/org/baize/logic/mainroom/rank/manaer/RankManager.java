@@ -1,9 +1,7 @@
 package org.baize.logic.mainroom.rank.manaer;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.baize.dao.manager.PersistPlayerMapper;
 import org.baize.dao.model.PlayerEntity;
-import org.baize.dao.model.PlayerInfo;
 import org.baize.dao.sqlmapper.PlayerMapper;
 import org.baize.logic.mainroom.friends.Dto.OtherInfoDto;
 import org.baize.utils.SpringUtils;
@@ -50,9 +48,7 @@ public class RankManager {
         dto.setPhon(entity.getPlayerInfo().getPhon());
         dto.setRank(entity.getPlayerInfo().getRank());
 
-        dto.setVip(entity.getWeath().getVip());
         dto.setGold(entity.getWeath().getGold());
-        dto.setVip(entity.getWeath().getVip());
         return dto;
     }
 }

@@ -7,7 +7,7 @@ import java.util.List;
  * 时间： 2017/11/3.
  * 描述：
  */
-public class ProtocolModule {
+public class ProtocolModule implements Comparable<ProtocolModule>{
     private int clazzId;
     private String clazzName;
     private List<String> field;
@@ -37,5 +37,10 @@ public class ProtocolModule {
 
     public void setField(List<String> field) {
         this.field = field;
+    }
+
+    @Override
+    public int compareTo(ProtocolModule o) {
+        return clazzId - o.getClazzId();
     }
 }

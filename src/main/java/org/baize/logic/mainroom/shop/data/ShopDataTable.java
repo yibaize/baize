@@ -16,12 +16,14 @@ public class ShopDataTable implements DataTableMessage {
     private final int sellingPrice;
     private final String name;
     private final int shopId;
+    private final int goodsNum;
 
     public ShopDataTable() {
         this.id = 0;
         this.sellingPrice = 0;
         this.name = "";
         this.shopId = 0;
+        this.goodsNum = 0;
     }
     public static ShopDataTable get(int id){
         return StaticConfigMessage.getInstance().get(ShopDataTable.class,id);
@@ -40,6 +42,10 @@ public class ShopDataTable implements DataTableMessage {
 
     public int getShopId() {
         return shopId;
+    }
+
+    public int getGoodsNum() {
+        return goodsNum;
     }
 
     @Override

@@ -21,26 +21,27 @@ public class PlayerEntity implements Comparable<PlayerEntity>{
     }
 
     public PlayerEntity(PersistPlayerMapper mapper){
-        this.id = mapper.getId();
+        this.setId(mapper.getId());
         this.playerInfo = (PlayerInfo) mapper.persist(new PlayerInfo());
         this.weath = (Weath) mapper.persist(new Weath());
         this.shop = (Shop) mapper.persist(new Shop());
         this.friends = (Friends)mapper.persist(new Friends());
         this.signIn = (SignIn)mapper.persist(new SignIn());
-    }
-    public int getId() {
-        return id;
+        signIn.player(this);
     }
 
-    public void setId(PlayerEntity entity,int id) {
-        this.shop.setEntity(entity);
-        this.weath.setEntity(entity);
-        this.signIn.setEntity(entity);
-        this.playerInfo.setEntity(entity);
-        this.friends.setEntity(entity);
+    public void setId(int id) {
+        this.shop.setId(id);
+        this.weath.setId(id);
+        this.signIn.setId(id);
+        this.playerInfo.setId(id);
+        this.friends.setId(id);
         this.id = id;
     }
 
+    public int getId() {
+        return id;
+    }
     public SignIn getSignIn() {
         return signIn;
     }
