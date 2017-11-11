@@ -1,14 +1,9 @@
 package org.baize.error;
 
-import com.sun.xml.internal.bind.v2.model.core.ID;
 import io.netty.channel.Channel;
 import org.apache.log4j.Logger;
 import org.baize.server.manager.Response;
 import org.baize.utils.ProtostuffUtils;
-import org.baize.utils.excel.User;
-
-import javax.management.RuntimeErrorException;
-import java.lang.reflect.Field;
 
 /**
  * 作者： 白泽
@@ -47,7 +42,7 @@ public class Error {
         throw new RuntimeException();
     }
     private String getMsg(int id){
-        ErrorCode code = ErrorCode.get(id);
+        AppErrorCode code = AppErrorCode.get(id);
         return code.getMsg();
     }
     private void throwException(int id,Throwable t){

@@ -3,6 +3,8 @@ package org.baize.utils.excel;
 import org.apache.log4j.Logger;
 import org.baize.error.Error;
 import org.baize.server.message.CommandAb;
+import org.baize.utils.assemblybean.annon.ExcelInversion;
+import org.baize.utils.assemblybean.annon.ExcelValue;
 
 import java.lang.reflect.Field;
 
@@ -11,18 +13,15 @@ import java.lang.reflect.Field;
  * 时间： 2017/11/3.
  * 描述：
  */
+@ExcelInversion
 public class Test{
-    public static void main(String[] args) {
-//        User u = new User();
-//        try {
-//            Field field = u.getClass().getDeclaredField("ar");
-//        } catch (NoSuchFieldException e) {
-//            new Error(Test.class).err("asdasdvsdf",e);
-//        }
-//        try {
-//            Field modifiersField = Field.class.getDeclaredField("modifiers");
-//        } catch (NoSuchFieldException e) {
-//            e.printStackTrace();
-//        }
-    }
+    @ExcelValue(value = "奥术大师多")
+    public static final int ASD = 1;
+    public static final int SAD = 2;
+    @ExcelValue(value = "体育空压机")
+    public static final int FGH = 3;
+    @ExcelValue(value = "weygrewtfwef")
+    public static final int FDG = 4;
+    @ExcelValue(value = "一天里访问")
+    public static final int TYU = 5;
 }

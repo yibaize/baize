@@ -2,13 +2,14 @@ package org.baize.dao.dto;
 
 import org.baize.server.message.IProtostuff;
 import org.baize.utils.assemblybean.annon.Protocol;
+import org.baize.utils.assemblybean.annon.Protostuff;
 
 /**
  * 作者： 白泽
  * 时间： 2017/11/11.
  * 描述：
  */
-@Protocol
+@Protostuff
 public class WeathDto implements IProtostuff {
     /**金幣*/
     private long gold; // 金币
