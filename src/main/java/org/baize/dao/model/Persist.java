@@ -2,6 +2,7 @@ package org.baize.dao.model;
 
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
+import org.baize.dao.manager.Submit;
 import org.baize.dao.sqlmapper.PlayerMapper;
 import org.baize.error.Error;
 
@@ -13,7 +14,7 @@ import java.util.Map;
  * 时间： 2017/11/6.
  * 描述：
  */
-public abstract class Persist {
+public abstract class Persist implements Runnable{
     private transient int id;
     private PlayerMapper mapper;
 
@@ -35,6 +36,7 @@ public abstract class Persist {
 
     public void update(){
         //提交消息队列，线程调用submit方法
+        Submit.getInstance().put(this.getClass(),this);
     }
     public void submit(){
         //mapper = springutils.getbean(playermapper.class)
@@ -47,5 +49,10 @@ public abstract class Persist {
         map.put("v",sql);
         map.put("id",id+"");
         mapper.updateField(map);
+    }
+
+    @Override
+    public void run() {
+        submit();
     }
 }

@@ -34,8 +34,8 @@ public final class GameServer {
                     .handler(new LoggingHandler(LogLevel.INFO))
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         protected void initChannel(SocketChannel ch) throws Exception {
-                            ch.pipeline().addLast(new RequestDecoderManager());
                             ch.pipeline().addLast(new ResponseEncoderManager());
+                            ch.pipeline().addLast(new RequestDecoderManager());
                             ch.pipeline().addLast(new ServerHandlerManager());
                         }
                     });

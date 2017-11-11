@@ -15,6 +15,7 @@ public abstract class CommandAb implements ICommand {
     private short cmdId;
     private Channel ctx;
     private CorePlayer corePlayer;
+    private boolean hasSend = false;
     public CommandAb() {
     }
 
@@ -53,14 +54,15 @@ public abstract class CommandAb implements ICommand {
     }
     public void run() {
         this.execute();
+        this.sendSucceed();
     }
     protected void responce(IProtostuff pro){
-        Response response = new Response();
-        response.setId(this.cmdId);
-        byte[] buf = null;
-        if(pro!=null)
-            buf = ProtostuffUtils.serializer(pro);
-        response.setData(buf);
-        this.ctx.writeAndFlush(response);
+        corePlayer.respones(pro);
+        hasSend = true;
+    }
+    private void sendSucceed(){
+        if(hasSend) return;
+        corePlayer.respones(null);
+        hasSend = false;
     }
 }

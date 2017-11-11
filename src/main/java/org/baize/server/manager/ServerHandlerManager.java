@@ -3,6 +3,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.baize.server.message.TcpHandler;
+import org.baize.utils.ProtostuffUtils;
 import org.baize.utils.SpringUtils;
 
 public class ServerHandlerManager extends SimpleChannelInboundHandler<Request>{
@@ -14,6 +15,13 @@ public class ServerHandlerManager extends SimpleChannelInboundHandler<Request>{
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		//客户端在
 		System.err.println("用户上线"+ctx.channel().remoteAddress());
+		Response response = new Response();
+		String s = "asdasdasdasdasdasdsa";
+		byte[] buf = ProtostuffUtils.serializer(s);
+		response.setData(buf);
+		response.setId((short) 1);
+		ctx.writeAndFlush(response);
+
 	}
 
 	@Override

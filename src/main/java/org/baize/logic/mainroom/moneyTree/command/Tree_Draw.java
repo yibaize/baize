@@ -20,7 +20,7 @@ public class Tree_Draw extends CommandAb {
         long currentTime = DateUtils.currentTime();
         long lastTime = weath.getLastDrawTime();
         long distanceTime = currentTime - lastTime;
-        distanceTime = distanceTime/1000/60/60;
+        distanceTime = distanceTime/3600000;
         if(distanceTime<=0)
             new Error(this.getClass(),this.getCtx()).debug(1);
         distanceTime = distanceTime > 24 ? 24 : distanceTime;

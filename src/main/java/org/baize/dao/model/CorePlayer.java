@@ -2,6 +2,9 @@ package org.baize.dao.model;
 
 import io.netty.channel.Channel;
 import org.baize.logic.room.IRoom;
+import org.baize.server.manager.Response;
+import org.baize.server.message.IProtostuff;
+import org.baize.utils.ProtostuffUtils;
 
 /**
  * 作者： 白泽
@@ -14,7 +17,6 @@ public class CorePlayer {
     private int scenesId;
     private PlayerEntity entity;
     private IRoom room;
-    public void respones(Object o){}
 
     public int getId() {
         return id;
@@ -56,5 +58,14 @@ public class CorePlayer {
     }
     public void setEntity(PlayerEntity entity) {
         this.entity = entity;
+    }
+    public void respones(IProtostuff o){
+        Response response = new Response();
+        response.setId((short) id);
+        byte[] buf = null;
+        if(o != null)
+            buf = ProtostuffUtils.serializer(o);
+        response.setData(buf);
+        ctx.writeAndFlush(response);
     }
 }

@@ -98,6 +98,8 @@ public class LoginManager {
     private PlayerEntity entity(int type,String account){
         PlayerInfo info = new PlayerInfo();
         PlayerDataTable dataTable = PlayerDataTable.get(1);
+        if(dataTable == null)
+            return null;
         BeanUtils.copyProperties(dataTable,info);
         info.setLoginType(type);
         Weath weath = new Weath();

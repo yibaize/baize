@@ -1,5 +1,6 @@
 package org.baize.server.manager;
 
+import java.util.Arrays;
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
@@ -17,7 +18,7 @@ public class RequestDecoderManager extends ByteToMessageDecoder {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) throws Exception {
-
+        System.out.println("渠道消息");
         if (buffer.readableBytes() >= BASE_LENGTH) {
             //第一个可读数据包的起始位
             int beginIndex;
@@ -46,11 +47,19 @@ public class RequestDecoderManager extends ByteToMessageDecoder {
             String msg = ProtostuffUtils.deserializer(data,String.class);
             if(StringUtils.isEmpty(msg))
                 System.err.println("解决粘包分包时数据异常");
-            String[] m = StringUtils.split(msg);
+            String[] m = StringUtils.split(msg,",");
             Request message = new Request(m);
             out.add(message);
         }
         //数据不完整，等待完整的数据包
         return;
+    }
+
+    public static void main(String[] args) {
+        String str = "1,1,3133213,645645?";
+        if(StringUtils.isEmpty(str))
+            System.err.println("解决粘包分包时数据异常");
+        String[] s = StringUtils.split(str);
+        System.out.println(Arrays.toString(s));
     }
 }

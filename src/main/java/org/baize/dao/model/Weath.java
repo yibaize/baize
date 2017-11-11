@@ -1,5 +1,7 @@
 package org.baize.dao.model;
 
+import org.baize.dao.dto.WeathDto;
+
 /**
  * 作者： 白泽
  * 时间： 2017/11/6.
@@ -64,5 +66,14 @@ public class Weath extends Persist {
     }
     public void decreaseDiamond(int num){
         diamond -= num;
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        CorePlayer corePlayer = PersistPlayer.getById(getId());
+        if(corePlayer == null)
+            return;
+        corePlayer.respones(new WeathDto(gold,diamond));
     }
 }
