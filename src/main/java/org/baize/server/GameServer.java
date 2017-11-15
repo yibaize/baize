@@ -29,8 +29,8 @@ public final class GameServer {
             ServerBootstrap b = new ServerBootstrap();
             b.group(BOSS_GROUP, WORKER_GROUP)
                     .channel(NioServerSocketChannel.class)
-                    .option(ChannelOption.SO_BACKLOG,1024)
-                    .childOption(ChannelOption.SO_KEEPALIVE, true)
+                    .option(ChannelOption.SO_BACKLOG,100)
+                    .childOption(ChannelOption.SO_KEEPALIVE, false)
                     .handler(new LoggingHandler(LogLevel.INFO))
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         protected void initChannel(SocketChannel ch) throws Exception {

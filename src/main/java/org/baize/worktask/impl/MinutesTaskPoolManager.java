@@ -1,8 +1,11 @@
 package org.baize.worktask.impl;
 
 import org.baize.utils.SpringUtils;
+import org.baize.worktask.IMinutesTimer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -12,10 +15,17 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 public final class MinutesTaskPoolManager extends TimerTaskPoolManager {
+    @Autowired(required = false)
+    private Set<IMinutesTimer> set;
     public static MinutesTaskPoolManager getInstance(){
         return SpringUtils.getBean(MinutesTaskPoolManager.class);
     }
     private MinutesTaskPoolManager(){
         super(new Delay(1,1,TimeUnit.MINUTES));
+        submit(() -> {
+            for (IMinutesTimer minutesTimer:set){
+                minutesTimer.executor();
+            }
+        });
     }
 }

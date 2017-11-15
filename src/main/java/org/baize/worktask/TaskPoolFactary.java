@@ -19,5 +19,4 @@ public class TaskPoolFactary {
     public SecondTaskPoolManager getSecondExecutor(){return SecondTaskPoolManager.getInstance();}
     public MinutesTaskPoolManager getMinutesExecutor(){return MinutesTaskPoolManager.getInstance();}
     public DailyTaskPoolManager getDailyExecutor(){return DailyTaskPoolManager.getInstance();}
-    public PersistTaskPoolManager getPersistExecutor(){return PersistTaskPoolManager.getInstance();}
 }

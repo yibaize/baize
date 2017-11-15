@@ -21,10 +21,8 @@ public final class WorkTaskPoolManager extends TaskPoolManagerAbstract {
         return SpringUtils.getBean(WorkTaskPoolManager.class);
     }
     /**单线程线程池*/
-    private final ExecutorService threadTask;
     private WorkTaskPoolManager() {
         super();
-        this.threadTask = Executors.newSingleThreadExecutor();
         taskQueue = new ConcurrentLinkedQueue<>();
         System.err.println((System.currentTimeMillis()+":----------------------业务线程启动成功----------------------"));
     }
@@ -34,8 +32,4 @@ public final class WorkTaskPoolManager extends TaskPoolManagerAbstract {
         return taskQueue;
     }
 
-    @Override
-    public void execute(Runnable runnable) {
-        threadTask.execute(runnable);
-    }
 }

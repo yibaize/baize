@@ -3,6 +3,8 @@ package org.baize.worktask;
 import org.baize.server.message.ICommand;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -13,27 +15,28 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public abstract class TaskPoolManagerAbstract {
     private AtomicBoolean taskCompleted;
     private final LockUtils lock;
-
+    private final ExecutorService threadTask;
     protected TaskPoolManagerAbstract() {
+        this.threadTask = Executors.newSingleThreadExecutor();
         this.taskCompleted = new AtomicBoolean(false);
         this.lock = LockUtils.getInstance();
     }
 
     public void submit(Runnable msg){
-            getQueue().offer(msg);
-            boolean submit = false;
+        getQueue().offer(msg);
         lock.getLock().writeLock().lock();
-            try {
-                if(taskCompleted.get());{
-                    taskCompleted.compareAndSet(true,false);
-                    submit = true;
-                }
-            }finally {
-                lock.getLock().writeLock().unlock();
+        boolean submit = false;
+        try {
+            if(taskCompleted.get());{
+                taskCompleted.compareAndSet(true,false);
+                submit = true;
             }
-            //提交线程
-            if(submit)
-                execute(taskRun);
+        }finally {
+            lock.getLock().writeLock().unlock();
+        }
+        //提交线程
+        if(submit)
+            execute(taskRun);
     }
     private Runnable taskRun = new Runnable() {
         @Override
@@ -58,5 +61,7 @@ public abstract class TaskPoolManagerAbstract {
         }
     };
     protected abstract ConcurrentLinkedQueue getQueue();
-    public abstract void execute(Runnable runnable);
+    private void execute(Runnable runnable){
+        threadTask.execute(runnable);
+    }
 }

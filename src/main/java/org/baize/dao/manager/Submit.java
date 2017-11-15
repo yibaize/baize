@@ -2,12 +2,14 @@ package org.baize.dao.manager;
 
 import org.baize.dao.model.Persist;
 import org.baize.utils.SpringUtils;
+import org.baize.worktask.ISecondTimer;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
@@ -16,14 +18,16 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * 描述：
  */
 @Service
-public final class Submit {
+public final class Submit implements ISecondTimer{
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private final Map<Class<? extends Persist>,Map<Integer,Persist>> taskQueue = new HashMap<>();
+    private final AtomicInteger submitCount = new AtomicInteger(0);
     public static Submit getInstance(){
         return SpringUtils.getBean(Submit.class);
     }
     public void put(Class<? extends Persist> clazz,Persist persist){
         lock.writeLock().lock();
+        submitCount.incrementAndGet();
         Map<Integer,Persist> con;
         try {
             if(!taskQueue.containsKey(clazz)) {
@@ -40,9 +44,11 @@ public final class Submit {
             lock.writeLock().unlock();
         }
     }
-    public void update(){
-        //System.err.println("sdfsdfsdf");
+
+    @Override
+    public void executor() {
         lock.writeLock().lock();
+        if(submitCount.get() <= 3) return;
         try {
             if(taskQueue.size() <=0 )return;
             System.err.println("会儿答复");
@@ -53,6 +59,7 @@ public final class Submit {
                     e.getValue().submit();
                 }
             }
+            submitCount.set(0);
         }finally {
             lock.writeLock().unlock();
         }

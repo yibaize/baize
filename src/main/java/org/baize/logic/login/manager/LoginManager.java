@@ -53,7 +53,10 @@ public class LoginManager {
         if(playerMapper == null){
             //注册
             entity = entity(type,account);
-            mapper.insert(new PersistPlayerMapper(entity));
+            playerMapper = new PersistPlayerMapper(entity);
+            mapper.insert(playerMapper);
+            entity = playerMapper.playerEntity();
+
         }else {
             entity = playerMapper.playerEntity();
         }

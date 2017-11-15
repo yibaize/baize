@@ -1,8 +1,11 @@
 package org.baize.worktask.impl;
 
 import org.baize.utils.SpringUtils;
+import org.baize.worktask.ISecondTimer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -12,10 +15,17 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 public class SecondTaskPoolManager extends TimerTaskPoolManager {
+    @Autowired
+    private static Set<ISecondTimer> secondTimer;
     public static SecondTaskPoolManager getInstance(){
         return SpringUtils.getBean(SecondTaskPoolManager.class);
     }
     protected SecondTaskPoolManager(){
         super(new Delay(1,1,TimeUnit.SECONDS));
+        submit(() -> {
+            for (ISecondTimer timer:secondTimer){
+                timer.executor();
+            }
+        });
     }
 }

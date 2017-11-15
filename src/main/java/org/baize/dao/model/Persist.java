@@ -14,7 +14,7 @@ import java.util.Map;
  * 时间： 2017/11/6.
  * 描述：
  */
-public abstract class Persist implements Runnable{
+public abstract class Persist{
     private transient int id;
     private PlayerMapper mapper;
 
@@ -49,10 +49,5 @@ public abstract class Persist implements Runnable{
         map.put("v",sql);
         map.put("id",id+"");
         mapper.updateField(map);
-    }
-
-    @Override
-    public void run() {
-        submit();
     }
 }

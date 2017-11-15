@@ -1,16 +1,17 @@
 package org.baize.logic.room.impl;
 
 import org.baize.dao.model.CorePlayer;
-import org.baize.logic.card.Card;
+import org.baize.dao.model.Weath;
+import org.baize.logic.BombFlower.dto.OpeningDto;
+import org.baize.logic.card.data.Card;
+import org.baize.logic.card.data.PersistCard;
+import org.baize.logic.card.manager.CardManager;
 import org.baize.logic.room.Bottom;
 import org.baize.logic.room.IRoom;
 import org.baize.server.manager.Response;
-import org.baize.server.message.IProtostuff;
 import org.baize.utils.DateUtils;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
@@ -35,14 +36,20 @@ public abstract class CardRoomImpl implements IRoom{
             playerSet = new HashSet<>();
     }
 
+    public Set<Card> getCardSet() {
+        return cardSet;
+    }
+
+    public void setCardSet(Set<Card> cardSet) {
+        this.cardSet = cardSet;
+    }
+
     @Override
     public int getId() {
         return id;
     }
 
-    public long endTime() {
-        return DateUtils.getFutureTimeMillis();
-    }
+
 
     public long jackpot() {
         return 0;
@@ -72,13 +79,6 @@ public abstract class CardRoomImpl implements IRoom{
             return true;
         }
         return false;
-    }
-    @Override
-    public boolean into(CorePlayer corePlayer){
-        if(playerSet.contains(corePlayer))
-            return false;
-        playerSet.add(corePlayer);
-        return true;
     }
     public void clear(){
         bottom.clear();
@@ -128,8 +128,10 @@ public abstract class CardRoomImpl implements IRoom{
     /**
      * 洗牌
      */
-    public void shuffle(){
-
+    public List<PersistCard> shuffle(){
+        List<PersistCard> cards = CardManager.getInstance().getCardPool();
+        Collections.shuffle(cards);
+        return cards;
     }
 
     /**
@@ -149,5 +151,25 @@ public abstract class CardRoomImpl implements IRoom{
         }
         //TODO 下发各个牌堆的金币和自己在哪下了多少
         notifyAllx((short)1,null);
+    }
+    protected void start(int type){
+        OpeningDto dto = new OpeningDto(type);
+        notifyAllx((short)1,dto);
+    }
+    protected void settleAccounts(){
+        Iterator<Card> iterator = getCardSet().iterator();
+        while (iterator.hasNext()){
+            Card card = iterator.next();
+            if(card.isResult()){
+                Bottom b = bottom.getOrDefault(card.getId(),null);
+                if(b == null)
+                    return;
+                for (Map.Entry<CorePlayer,Integer> e:b.getMap().entrySet()){
+                    Weath w = e.getKey().entity().getWeath();
+                    w.increaseGold(e.getValue() * card.getType());
+                    w.update();
+                }
+            }
+        }
     }
 }

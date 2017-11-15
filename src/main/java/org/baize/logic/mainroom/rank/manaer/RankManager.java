@@ -5,6 +5,7 @@ import org.baize.dao.model.PlayerEntity;
 import org.baize.dao.sqlmapper.PlayerMapper;
 import org.baize.logic.mainroom.friends.Dto.OtherInfoDto;
 import org.baize.utils.SpringUtils;
+import org.baize.worktask.IDailyTimer;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,12 +18,12 @@ import java.util.List;
  * 描述：
  */
 @Service
-public class RankManager {
+public class RankManager implements IDailyTimer{
     public static RankManager getInstance(){
         return SpringUtils.getBean(RankManager.class);
     }
     private List<OtherInfoDto> ranks = new ArrayList<>(20);
-    public synchronized void shor(){
+    private synchronized void shor(){
         PlayerMapper mapper = SpringUtils.getBean(PlayerMapper.class);
         List<PersistPlayerMapper> allPlayer = mapper.selectAll();
         List<PlayerEntity> entities = new ArrayList<>();
@@ -36,7 +37,7 @@ public class RankManager {
         }
     }
 
-    public List<OtherInfoDto> getRanks() {
+    public synchronized List<OtherInfoDto> getRanks() {
         return ranks;
     }
     public OtherInfoDto assembly(PlayerEntity entity){
@@ -50,5 +51,10 @@ public class RankManager {
 
         dto.setGold(entity.getWeath().getGold());
         return dto;
+    }
+
+    @Override
+    public void executor() {
+        shor();
     }
 }

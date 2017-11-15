@@ -3,7 +3,13 @@ import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.baize.dao.model.Persist;
 import org.baize.dao.model.PlayerEntity;
+import org.baize.dao.model.PlayerInfo;
+import org.baize.dao.model.Weath;
 import org.baize.error.Error;
+import org.baize.logic.mainroom.friends.module.Friends;
+import org.baize.logic.mainroom.shop.module.Shop;
+import org.baize.logic.mainroom.signin.module.SignIn;
+
 /**
  * 作者： 白泽
  * 时间： 2017/11/6.
@@ -38,7 +44,15 @@ public class PersistPlayerMapper {
     }
 
     public PlayerEntity playerEntity(){
-        return new PlayerEntity(this);
+        PlayerEntity entity = new PlayerEntity();
+        entity.setId(this.getId());
+        entity.setPlayerInfo((PlayerInfo) this.persist(new PlayerInfo()));
+        entity.setWeath((Weath) this.persist(new Weath()));
+        entity.setShop((Shop) this.persist(new Shop()));
+        entity.setFriends((Friends)this.persist(new Friends()));
+        entity.setSignIn((SignIn)this.persist(new SignIn()));
+        entity.getSignIn().player(entity);
+        return entity;
     }
 
     public Persist persist(Persist p){

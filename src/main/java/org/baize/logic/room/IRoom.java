@@ -19,15 +19,24 @@ public interface IRoom extends ILogic{
     int getId();
     default long currentTime(){
         return DateUtils.currentTime();
-    };
+    }
+    default long endTime() {
+        return DateUtils.getFutureTimeMillis();
+    }
     /**
-     * 离开房间
+     *
+     * 进入房间
      * @param corePlayer
      * @return
      */
-    boolean into(CorePlayer corePlayer);
+    default boolean into(CorePlayer corePlayer){
+        if(getSet().contains(corePlayer))
+            return false;
+        getSet().add(corePlayer);
+        return true;
+    }
     /**
-     * 进入房间
+     * 离开房间
      * @return
      */
     boolean leave(CorePlayer corePlayer);
@@ -43,7 +52,7 @@ public interface IRoom extends ILogic{
                 iterator.next().respones(pro);
             }
         }
-    };
+    }
     /**
      * 通知处自己之外的玩家
      * @param corePlayer
@@ -62,6 +71,6 @@ public interface IRoom extends ILogic{
                 iterator.next().respones(pro);
             }
         }
-    };
+    }
     Set<CorePlayer> getSet();
 }

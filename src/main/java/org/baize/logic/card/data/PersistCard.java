@@ -1,4 +1,4 @@
-package org.baize.logic.card;
+package org.baize.logic.card.data;
 
 import org.baize.utils.excel.DataTableMessage;
 

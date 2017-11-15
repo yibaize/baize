@@ -3,8 +3,7 @@ package org.baize.utils.excel;
 import org.baize.utils.SpringUtils;
 import org.springframework.stereotype.Service;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 作者：---->泡泡大湿<-----
@@ -34,10 +33,15 @@ public class StaticConfigMessage {
      * @param <T>
      * @return
      */
-    public <T>T get(Class<T> clazz, Serializable id){
+    public <T> T get(Class<T> clazz, Serializable id){
         Map<Serializable,Object> map = allData.get(clazz);
         if(map == null)
             return null;
         return (T) map.get(id);
+    }
+    public Map<Serializable,Object> getMap(Class<?> clazz){
+        if(!allData.containsKey(clazz))
+            return new HashMap<>();
+        return allData.get(clazz);
     }
 }

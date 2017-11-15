@@ -26,6 +26,7 @@ public abstract class TimerTaskPoolManager{
     /**单线程线程池*/
     protected TimerTaskPoolManager(Delay delay) {
         this.delay = delay;
+        if(timerTask != null) return;
         this.timerTask = Executors.newScheduledThreadPool(1);
         System.err.println((System.currentTimeMillis()+":----------------------定时任务线程启动成功----------------------"));
     }

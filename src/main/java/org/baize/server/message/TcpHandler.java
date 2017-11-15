@@ -19,8 +19,8 @@ public class TcpHandler {
             System.out.println("协议数据接收错误");
         msg.setCtx(cxt);
         msg.setCmdId((short) id);
-//        if(PersistPlayer.getByCtx(cxt) != null)
-//            msg.setCorePlayer(PersistPlayer.getByCtx(cxt));
+        if(PersistPlayer.getByCtx(cxt) != null)
+            msg.setCorePlayer(PersistPlayer.getByCtx(cxt));
         //用户量少不用业务线程
         msg.run();
        // WorkTaskPoolManager.getInstance().submit(msg);

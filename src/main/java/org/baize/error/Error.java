@@ -42,8 +42,8 @@ public class Error {
         throw new RuntimeException();
     }
     private String getMsg(int id){
-        AppErrorCode code = AppErrorCode.get(id);
-        return code.getMsg();
+        AppErrorDataTable code = AppErrorDataTable.get(id);
+        return code.getValue();
     }
     private void throwException(int id,Throwable t){
         throw new RuntimeException(getMsg(id),t);
