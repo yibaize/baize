@@ -17,8 +17,7 @@ public class LineStateManager {
         CorePlayer corePlayer = PersistPlayer.getByCtx(ctx);
         if(corePlayer != null){
             PersistPlayer.putOffLinePlayer(corePlayer);
-            PersistPlayer.removeByCtx(ctx);
-            PersistPlayer.removeById(corePlayer.getId());
+            PersistPlayer.removePlayer(corePlayer);
             notifyx(ctx,401,null);
         }
     }
@@ -36,8 +35,7 @@ public class LineStateManager {
     public static void onLine(int id){
         CorePlayer corePlayer = PersistPlayer.getOffLinePlayer(id);
         if(corePlayer != null){
-            PersistPlayer.putById(corePlayer.getId(),corePlayer);
-            PersistPlayer.putByCtx(corePlayer.getCtx(),corePlayer);
+            PersistPlayer.putPlayer(corePlayer);
             PersistPlayer.removeOffLinePlayer(corePlayer);
         }
     }

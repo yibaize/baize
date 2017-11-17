@@ -19,6 +19,9 @@ public class Error {
         this.response(id);
         throw new RuntimeException();
     }
+    public void debug(int id){
+        this.response(id);
+    }
     private String getMsg(int id){
         AppErrorDataTable code = AppErrorDataTable.get(id);
         return code.getValue();

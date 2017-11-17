@@ -31,7 +31,6 @@ public class ServerHandlerManager extends SimpleChannelInboundHandler<Request>{
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, Request request) throws Exception {
 		//将消息发送到消息分发
-		System.out.println(System.currentTimeMillis());
 		process(ctx.channel(), request);
 	}
 }

@@ -2,6 +2,7 @@ package org.baize.logic.mainroom.shop.manager.logic;
 
 import org.baize.dao.model.CorePlayer;
 import org.baize.dao.model.Weath;
+import org.baize.error.AppErrorCode;
 import org.baize.error.Error;
 import org.baize.logic.mainroom.shop.data.ExChangeDataTable;
 import org.baize.logic.mainroom.shop.data.ShopDataTable;
@@ -19,7 +20,7 @@ public class Buy_1 extends ShopImpAdapter{
         ExChangeDataTable exChangeDataTable = ExChangeDataTable.get(1);
 
         if(exChangeDataTable == null)
-            new Error(corePlayer.getCtx()).err(1);
+            new Error(corePlayer.getCtx()).err(AppErrorCode.DATA_ERR);
         Weath weath = corePlayer.entity().weath();
         int changeCount = exChangeDataTable.getDiamond()*count;
         weath.increaseDiamond(changeCount);

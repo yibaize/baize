@@ -48,11 +48,13 @@ public class BombRoom extends CardRoomImpl implements ISecondTimer{
     private int timer = 0;
     @Override
     public void executor() {
+        bottomNotify();
         if(timer == 2){
             start(1);//开局
             perflop();
         }
         if(timer == 15){
+            //发送本剧开牌结果
             CardResultsDto dtos = new CardResultsDto();
             List<CardResultDto> list = new ArrayList<>(5);
             Iterator<Card> iterator = getCardSet().iterator();
@@ -62,9 +64,10 @@ public class BombRoom extends CardRoomImpl implements ISecondTimer{
                 list.add(dto);
             }
             dtos.setCardResultDtos(list);
-            notifyAllx((short)2,dtos);
+            notifyAllx((short)106,dtos);
         }
         if(timer == 17){
+            //结算
             settleAccounts();
         }
         if(timer == 20){

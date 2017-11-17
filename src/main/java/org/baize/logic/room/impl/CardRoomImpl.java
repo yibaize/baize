@@ -1,20 +1,22 @@
 package org.baize.logic.room.impl;
 
+import org.apache.ibatis.jdbc.Null;
 import org.baize.dao.model.CorePlayer;
 import org.baize.dao.model.Weath;
 import org.baize.logic.BombFlower.dto.OpeningDto;
 import org.baize.logic.card.data.Card;
 import org.baize.logic.card.data.PersistCard;
 import org.baize.logic.card.manager.CardManager;
-import org.baize.logic.room.Bottom;
+import org.baize.logic.room.RoomBottom;
+import org.baize.logic.room.RoomBottomDto;
 import org.baize.logic.room.IRoom;
-import org.baize.server.manager.Response;
-import org.baize.utils.DateUtils;
+import org.baize.worktask.ISecondTimer;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -28,7 +30,7 @@ public abstract class CardRoomImpl implements IRoom{
     private Set<CorePlayer> playerSet;//所有房间玩家
     private Set<Card> cardSet;//牌堆
     private ConcurrentLinkedQueue<CorePlayer> bankerLineUp;//上庄列表
-    private ConcurrentMap<Integer,Bottom> bottom;
+    private ConcurrentMap<Integer,RoomBottom> bottom;
 
     public CardRoomImpl(int id) {
         this.id = id;
@@ -72,10 +74,10 @@ public abstract class CardRoomImpl implements IRoom{
                 bankerLineUp.remove(corePlayer);
             //TODO 下发人数减少
             //移除下注
-            Bottom b = bottom.get(getId());
+            RoomBottom b = bottom.get(getId());
             b.leave(corePlayer);
 
-            notifyAllx((short)1,corePlayer,null);
+            notifyAllx((short)101,corePlayer,null);
             return true;
         }
         return false;
@@ -91,6 +93,8 @@ public abstract class CardRoomImpl implements IRoom{
      * @return
      */
     public boolean bankerLineUp(CorePlayer corePlayer){
+        if(bankerLineUp == null)
+            bankerLineUp = new ConcurrentLinkedQueue<>();
         if(bankerLineUp.contains(corePlayer)){
             bankerLineUp.offer(corePlayer);
             return true;
@@ -110,7 +114,7 @@ public abstract class CardRoomImpl implements IRoom{
             if (checkBanker() && bankerLineUp != null || bankerLineUp.size() > 0) {
                 banker = bankerLineUp.poll();
                 //TODO 通知换换庄
-                notifyAllx((short)1,null);
+                notifyAllx((short)103,null);
                 return true;
             }
             return false;
@@ -138,30 +142,32 @@ public abstract class CardRoomImpl implements IRoom{
      * 发牌
      */
     public abstract void perflop();
-
+    @Override
     public void bottom(int position,int num,CorePlayer corePlayer){
-        Bottom b = bottom.getOrDefault(position,null);
+        RoomBottom b = bottom.getOrDefault(position,null);
         if(b == null){
             ConcurrentMap<CorePlayer,Integer> map = new ConcurrentHashMap<>();
             map.put(corePlayer,num);
-            b = new Bottom(position,map,new AtomicInteger(num));
+            b = new RoomBottom(position,map,new AtomicInteger(num));
             bottom.put(position,b);
         }else {
             b.addCorePlayerBottom(num,corePlayer);
         }
-        //TODO 下发各个牌堆的金币和自己在哪下了多少
-        notifyAllx((short)1,null);
+        if(!hasBottom.get());{
+            hasBottom.compareAndSet(false,true);
+        }
     }
     protected void start(int type){
         OpeningDto dto = new OpeningDto(type);
-        notifyAllx((short)1,dto);
+        notifyAllx((short)105,dto);
     }
-    protected void settleAccounts(){
+    @Override
+    public void settleAccounts(){
         Iterator<Card> iterator = getCardSet().iterator();
         while (iterator.hasNext()){
             Card card = iterator.next();
             if(card.isResult()){
-                Bottom b = bottom.getOrDefault(card.getId(),null);
+                RoomBottom b = bottom.getOrDefault(card.getId(),null);
                 if(b == null)
                     return;
                 for (Map.Entry<CorePlayer,Integer> e:b.getMap().entrySet()){
@@ -171,5 +177,37 @@ public abstract class CardRoomImpl implements IRoom{
                 }
             }
         }
+    }
+    private AtomicBoolean hasBottom = new AtomicBoolean(false);
+    //TODO 下发各个牌堆的金币和自己在哪下了多少
+    protected RoomBottomDto bottomNotify(){
+        if(!hasBottom.get()) return null;
+        Map<Integer,Integer> money = new HashMap<>(4);
+        for (Map.Entry<Integer,RoomBottom> e:bottom.entrySet()){
+            money.put(e.getKey(),e.getValue().allNum());
+        }
+        RoomBottomDto dto = new RoomBottomDto(money);
+        notifyAllx((short)104,dto);
+        return dto;
+    }
+
+    @Override
+    public CorePlayer banker() {
+        return banker;
+    }
+
+    @Override
+    public List<CorePlayer> bankerUpList() {
+        List<CorePlayer> bankers = new ArrayList<>(bankerLineUp.size());
+        Iterator<CorePlayer> iterator = bankerLineUp.iterator();
+        while (iterator.hasNext()){
+            bankers.add(iterator.next());
+        }
+        return bankers;
+    }
+
+    @Override
+    public RoomBottomDto roomBottom() {
+        return bottomNotify();
     }
 }

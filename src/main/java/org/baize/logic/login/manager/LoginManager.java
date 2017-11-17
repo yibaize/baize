@@ -6,6 +6,7 @@ import org.baize.dao.dto.PlayerDto;
 import org.baize.dao.manager.PersistPlayerMapper;
 import org.baize.dao.model.*;
 import org.baize.dao.sqlmapper.PlayerMapper;
+import org.baize.error.AppErrorCode;
 import org.baize.error.Error;
 import org.baize.logic.IFactory;
 import org.baize.logic.room.IRoom;
@@ -14,7 +15,6 @@ import org.baize.server.message.IProtostuff;
 import org.baize.utils.LoggerUtils;
 import org.baize.utils.createid.CreateIdUtils;
 import org.baize.utils.SpringUtils;
-import org.baize.utils.excel.ExcelUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -29,24 +29,40 @@ public class LoginManager {
         return SpringUtils.getBean(LoginManager.class);
     }
     public IProtostuff account(Channel ctx, String account,String password){
-        PlayerMapper mapper = SpringUtils.getBean(PlayerMapper.class);
-        PersistPlayerMapper playerMapper = mapper.selectOneForId(Integer.parseInt(account));
-        if(playerMapper == null)
-            new Error(ctx).err(1);
-        PlayerEntity entity = playerMapper.playerEntity();
-        if(entity == null)
-            new Error(ctx).err(1);
-        if(!password.equals(entity.playerInfo().getPassword()))
-            new Error(ctx).err(1);
-
-        CorePlayer loginPlayer = PersistPlayer.getById(entity.getId());
-        if(loginPlayer != null){
-            //账号在别的地方登陆将替换登陆老账号下线
-            loginPlayer.getCtx().writeAndFlush(null);
-            loginPlayer.getCtx().closeFuture();
+        CorePlayer p =  checkOnline(ctx,account,password);
+        PlayerEntity entity = null;
+        if(p == null){
+            PlayerMapper mapper = SpringUtils.getBean(PlayerMapper.class);
+            PersistPlayerMapper playerMapper = mapper.selectOneForId(Integer.parseInt(account));
+            if(playerMapper == null)
+                new Error(ctx).err(AppErrorCode.DATA_ERR);
+            entity = playerMapper.playerEntity();
+            if(entity == null)
+                new Error(ctx).err(AppErrorCode.DATA_ERR);
+            if(!password.equals(entity.playerInfo().getPassword()))
+                new Error(ctx).err(AppErrorCode.DATA_ERR);
         }
         putCache(ctx,entity);
         return dto(entity);
+    }
+    private CorePlayer checkOnline(Channel ctx, String account,String password){
+        PlayerEntity entity = null;
+        CorePlayer p = PersistPlayer.getById(Integer.parseInt(account));
+        if(p != null){
+            entity = p.entity();
+            if(entity.playerInfo().getPassword().equals(password))
+                new Error(ctx).err(AppErrorCode.PASSWORD_ERR);
+            forceLogin(p.getCtx());
+        }else {
+            p = PersistPlayer.getOffLinePlayer(Integer.parseInt(account));
+            if(p != null){
+                entity = p.entity();
+                if(entity.playerInfo().getPassword().equals(password))
+                    new Error(ctx).err(AppErrorCode.PASSWORD_ERR);
+                forceLogin(p.getCtx());
+            }
+        }
+        return p;
     }
     public IProtostuff rest(int type,Channel ctx,String account){
         PlayerMapper mapper = SpringUtils.getBean(PlayerMapper.class);
@@ -55,11 +71,13 @@ public class LoginManager {
         if(playerMapper == null){
             //注册
             entity = entity(type,account);
+            if(entity == null)
+                new Error(ctx).err(AppErrorCode.DATA_ERR);
             playerMapper = new PersistPlayerMapper(entity);
             try {
                 mapper.insert(playerMapper);
             }catch (Exception e){
-                LoggerUtils.getLogicLog().error("注册执行sql语句时出现异常");
+                LoggerUtils.getLogicLog().error("注册执行sql语句时出现异常",e);
             }
             entity = playerMapper.playerEntity();
 
@@ -69,11 +87,14 @@ public class LoginManager {
         CorePlayer loginPlayer = PersistPlayer.getById(entity.getId());
         if(loginPlayer != null){
             //账号在别的地方登陆将替换登陆老账号下线
-            loginPlayer.getCtx().writeAndFlush(null);
-            loginPlayer.getCtx().closeFuture();
+           forceLogin(loginPlayer.getCtx());
         }
         putCache(ctx,entity);
         return dto(entity);
+    }
+    private void forceLogin(Channel ctx){
+        new Error(ctx).debug(AppErrorCode.ACCOUNT_ERR);
+        ctx.closeFuture();
     }
     private void putCache(Channel channel,PlayerEntity entity){
         CorePlayer corePlayer = new CorePlayer();
@@ -84,14 +105,13 @@ public class LoginManager {
         IFactory factory = RoomFactory.getInstance();
         IRoom room = (IRoom) factory.getBean(ScenesType.Mian.id());
         if(room == null)
-            new Error(channel).err(1);
-        room.into(corePlayer);
+            new Error(channel).err(AppErrorCode.DATA_ERR);
 
+        room.into(corePlayer);
         corePlayer.setRoom(room);
         corePlayer.setScenesId(ScenesType.Mian.id());
 
-        PersistPlayer.putByCtx(channel,corePlayer);
-        PersistPlayer.putById(corePlayer.getId(),corePlayer);
+        PersistPlayer.putPlayer(corePlayer);
     }
     private PlayerDto dto(PlayerEntity entity){
         PlayerInfo info = entity.playerInfo();

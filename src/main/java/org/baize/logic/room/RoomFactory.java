@@ -2,6 +2,7 @@ package org.baize.logic.room;
 
 import org.apache.log4j.Logger;
 import org.baize.dao.model.CorePlayer;
+import org.baize.dao.model.PersistPlayer;
 import org.baize.error.Error;
 import org.baize.logic.IFactory;
 import org.baize.utils.SpringUtils;
@@ -61,6 +62,9 @@ public class RoomFactory implements IFactory<IRoom>{
     public void notifyOfferLine(CorePlayer corePlayer){
         for (Map.Entry<Integer,IRoom> e:room.entrySet()){
             e.getValue().leave(corePlayer);
+            PersistPlayer.removePlayer(corePlayer);
+            //添加下线列表
+            PersistPlayer.putOffLinePlayer(corePlayer);
         }
     }
 }

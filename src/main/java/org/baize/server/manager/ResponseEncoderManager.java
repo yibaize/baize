@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import org.baize.utils.LoggerUtils;
+import org.baize.utils.encryption.DES;
 
 public class ResponseEncoderManager extends MessageToByteEncoder<Response> {
     @Override

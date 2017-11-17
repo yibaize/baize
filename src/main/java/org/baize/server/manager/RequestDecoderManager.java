@@ -9,6 +9,7 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 import org.apache.commons.lang3.StringUtils;
 import org.baize.utils.LoggerUtils;
 import org.baize.utils.ProtostuffUtils;
+import org.baize.utils.encryption.DES;
 
 public class RequestDecoderManager extends ByteToMessageDecoder {
     /**

@@ -1,5 +1,6 @@
 package org.baize.logic.mainroom.signin.command;
 
+import org.baize.error.AppErrorCode;
 import org.baize.error.Error;
 import org.baize.logic.mainroom.signin.dto.SignInDto;
 import org.baize.logic.mainroom.signin.module.SignIn;
@@ -18,7 +19,7 @@ public class SignIn_Award extends CommandAb {
         SignIn signIn = player().entity().signIn();
         boolean draw = signIn.draw();
         if(!draw)
-            new Error(this.getCtx()).err(1);
+            new Error(this.getCtx()).err(AppErrorCode.SIGNIN_ERR);
         responce(new SignInDto(draw));
     }
 }

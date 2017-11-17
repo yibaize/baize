@@ -19,16 +19,22 @@ import java.util.concurrent.atomic.AtomicLong;
 @Component
 public class TcpHandler {
     public static void messageRecieve(Channel cxt, Request request){
-        int id = Integer.parseInt(request.getData()[0]);
-        CommandAb msg = CommandRecive.getInstance().recieve(id,request.getData());
-        if(msg == null)
-            LoggerUtils.getLogicLog().debug("数据接收错误");
-        msg.setCtx(cxt);
-        msg.setCmdId((short) id);
-        if(PersistPlayer.getByCtx(cxt) != null)
-            msg.setCorePlayer(PersistPlayer.getByCtx(cxt));
-        //用户量少不用业务线程
-        msg.run();
-        //WorkTaskPoolManager.getInstance().submit(msg);
+        try {
+            int id = Integer.parseInt(request.getData()[0]);
+            CommandAb msg = CommandRecive.getInstance().recieve(id,request.getData());
+            if(msg == null){
+                LoggerUtils.getLogicLog().debug("数据接收错误");
+                return;
+            }
+            msg.setCtx(cxt);
+            msg.setCmdId((short) id);
+            if(PersistPlayer.getByCtx(cxt) != null)
+                msg.setCorePlayer(PersistPlayer.getByCtx(cxt));
+            //用户量少不用业务线程
+            msg.run();
+            //WorkTaskPoolManager.getInstance().submit(msg);
+        }catch (Exception e){
+            LoggerUtils.getLogicLog().debug("数据接收错误",e);
+        }
     }
 }

@@ -33,7 +33,7 @@ public class CreateIdUtils {
     }
     private static IdModule readId(){
         try { // 防止文件建立或读取失败，用catch捕捉错误并打印，也可以throw
-            File filename = new File(CreateIdUtils.class.getResource("/id.txt").getFile()); // 要读取以上路径的input。txt文件
+            File filename = new File("files/id.txt"); // 要读取以上路径的input。txt文件
            // File filename = new File("/log4j.properties");
             InputStreamReader reader = new InputStreamReader(
                     new FileInputStream(filename)); // 建立一个输入流对象reader
@@ -50,7 +50,7 @@ public class CreateIdUtils {
     private static void writeId(IdModule module){
         String json = JSON.toJSONString(module);
         try {
-            File writename = new File(CreateIdUtils.class.getResource("/id.txt").getFile()); // 相对路径，如果没有则要建立一个新的output。txt文件
+            File writename = new File("files/id.txt"); // 相对路径，如果没有则要建立一个新的output。txt文件
             writename.createNewFile(); // 创建新文件
             BufferedWriter out = new BufferedWriter(new FileWriter(writename));
             out.write(json); // \r\n即为换行
@@ -61,4 +61,7 @@ public class CreateIdUtils {
         }
     }
 
+    public static void main(String[] args) {
+        id();
+    }
 }

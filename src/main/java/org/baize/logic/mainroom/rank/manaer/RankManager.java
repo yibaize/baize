@@ -1,9 +1,12 @@
 package org.baize.logic.mainroom.rank.manaer;
 
 import org.baize.dao.manager.PersistPlayerMapper;
+import org.baize.dao.model.CorePlayer;
+import org.baize.dao.model.PersistPlayer;
 import org.baize.dao.model.PlayerEntity;
 import org.baize.dao.sqlmapper.PlayerMapper;
 import org.baize.logic.mainroom.friends.Dto.OtherInfoDto;
+import org.baize.logic.mainroom.rank.dto.RankDto;
 import org.baize.utils.SpringUtils;
 import org.baize.worktask.IDailyTimer;
 import org.springframework.stereotype.Service;
@@ -38,6 +41,8 @@ public class RankManager implements IDailyTimer{
     }
 
     public synchronized List<OtherInfoDto> getRanks() {
+        if(ranks == null)
+            ranks = new ArrayList<>();
         return ranks;
     }
     public OtherInfoDto assembly(PlayerEntity entity){
@@ -52,9 +57,15 @@ public class RankManager implements IDailyTimer{
         dto.setGold(entity.weath().getGold());
         return dto;
     }
-
+    private void notifyAllx(){
+        RankDto rankDto = new RankDto(ranks);
+        for (CorePlayer player: PersistPlayer.ctxPlayer()){
+            player.respones((short)107,rankDto);
+        }
+    }
     @Override
     public void executor() {
         shor();
+        notifyAllx();
     }
 }

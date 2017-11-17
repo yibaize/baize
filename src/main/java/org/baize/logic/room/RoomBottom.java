@@ -11,18 +11,18 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 时间： 2017/11/6.
  * 描述：
  */
-public class Bottom {
+public class RoomBottom {
     private int id;
     private ConcurrentMap<CorePlayer,Integer> map;
     private AtomicInteger allNum;
 
-    public Bottom(int id, ConcurrentMap<CorePlayer, Integer> corePlayer, AtomicInteger allNum) {
+    public RoomBottom(int id, ConcurrentMap<CorePlayer, Integer> corePlayer, AtomicInteger allNum) {
         this.id = id;
         this.map = corePlayer;
         this.allNum = allNum;
     }
 
-    public Bottom() {
+    public RoomBottom() {
     }
 
     public int getId() {
@@ -44,7 +44,9 @@ public class Bottom {
     public AtomicInteger getAllNum() {
         return allNum;
     }
-
+    public int allNum(){
+        return allNum.get();
+    }
     public void setAllNum(AtomicInteger allNum) {
         this.allNum = allNum;
     }
@@ -53,7 +55,8 @@ public class Bottom {
         allNum.getAndSet(num);
     }
     public void leave(CorePlayer corePlayer){
-        map.remove(corePlayer);
+        if(map.containsKey(corePlayer))
+            map.remove(corePlayer);
     }
 
     /**

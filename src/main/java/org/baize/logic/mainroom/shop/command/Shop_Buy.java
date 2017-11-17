@@ -1,5 +1,6 @@
 package org.baize.logic.mainroom.shop.command;
 
+import org.baize.error.AppErrorCode;
 import org.baize.error.Error;
 import org.baize.logic.mainroom.shop.data.ShopDataTable;
 import org.baize.server.message.CommandAb;
@@ -26,6 +27,6 @@ public class Shop_Buy extends CommandAb {
     public void execute() {
         ShopDataTable dataTable = ShopDataTable.get(goodsId);
         if(dataTable == null)
-            new Error(this.getCtx()).err(1);
+            new Error(this.getCtx()).err(AppErrorCode.DATA_ERR);
     }
 }

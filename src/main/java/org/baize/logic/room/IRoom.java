@@ -8,6 +8,7 @@ import org.baize.utils.DateUtils;
 import org.baize.utils.ProtostuffUtils;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -23,6 +24,9 @@ public interface IRoom extends ILogic{
     default long endTime() {
         return DateUtils.getFutureTimeMillis();
     }
+    CorePlayer banker();
+    List<CorePlayer> bankerUpList();
+    RoomBottomDto roomBottom();
     /**
      *
      * 进入房间
@@ -33,6 +37,7 @@ public interface IRoom extends ILogic{
         if(getSet().contains(corePlayer))
             return false;
         getSet().add(corePlayer);
+        notifyAllx((short) 102,corePlayer,null);
         return true;
     }
     /**
@@ -43,13 +48,9 @@ public interface IRoom extends ILogic{
     default void notifyAllx(short id,IProtostuff pro){
         if(getSet() != null) {
             Iterator<CorePlayer> iterator = getSet().iterator();
-            Response response = new Response();
-            response.setId(id);
-            byte[] buf = ProtostuffUtils.serializer(pro);
-            response.setData(buf);
             while (iterator.hasNext()) {
                 //发送消息
-                iterator.next().respones((short)30,pro);
+                iterator.next().respones(id,pro);
             }
         }
     }
@@ -61,16 +62,14 @@ public interface IRoom extends ILogic{
     default void notifyAllx(short id,CorePlayer corePlayer,IProtostuff pro){
         if(getSet() != null) {
             Iterator<CorePlayer> iterator = getSet().iterator();
-            Response response = new Response();
-            response.setId(id);
-            byte[] buf = ProtostuffUtils.serializer(pro);
-            response.setData(buf);
             while (iterator.hasNext()) {
                 if (iterator.next().equals(corePlayer)) continue;
                 //发送消息
-                iterator.next().respones((short)100,pro);
+                iterator.next().respones(id,pro);
             }
         }
     }
     Set<CorePlayer> getSet();
+    void settleAccounts();
+    void bottom(int position,int num,CorePlayer corePlayer);
 }
