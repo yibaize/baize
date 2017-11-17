@@ -57,7 +57,7 @@ public class ExcelInversion {
 
         //第六步将生成excel文件保存到指定路径下
         try {
-            FileOutputStream fout = new FileOutputStream("E:\\cs\\"+ StringUtils.uncapitalize(o.getClass().getSimpleName())+"_"+o.getClass().getName()+".xls");
+            FileOutputStream fout = new FileOutputStream("E:\\cs\\"+ StringUtils.uncapitalize(o.getClass().getSimpleName())+"_"+o.getClass().getName()+".xlsx");
             wb.write(fout);
             fout.close();
         } catch (IOException e) {
@@ -99,7 +99,7 @@ public class ExcelInversion {
                 ExcelValue ev = (ExcelValue) ann;
                 value =  ev.value();
             }
-            modules.add(new ExcelErrorCodeModule(id,name,value));
+            modules.add(new ExcelErrorCodeModule(Integer.parseInt(id),name,value));
         }
         inversion(o,modules);
     }

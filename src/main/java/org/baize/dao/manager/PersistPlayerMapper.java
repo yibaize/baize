@@ -5,10 +5,10 @@ import org.baize.dao.model.Persist;
 import org.baize.dao.model.PlayerEntity;
 import org.baize.dao.model.PlayerInfo;
 import org.baize.dao.model.Weath;
-import org.baize.error.Error;
 import org.baize.logic.mainroom.friends.module.Friends;
 import org.baize.logic.mainroom.shop.module.Shop;
 import org.baize.logic.mainroom.signin.module.SignIn;
+import org.baize.utils.LoggerUtils;
 
 /**
  * 作者： 白泽
@@ -28,12 +28,12 @@ public class PersistPlayerMapper {
 
     public PersistPlayerMapper(PlayerEntity entity){
         this.id = entity.getId();
-        this.account = entity.getPlayerInfo().getAccount();
-        this.playerInfo = JSON.toJSONString(entity.getPlayerInfo());
-        this.weath = JSON.toJSONString(entity.getWeath());
-        this.shop = JSON.toJSONString(entity.getShop());
-        this.signIn = JSON.toJSONString(entity.getSignIn());
-        this.friends = JSON.toJSONString(entity.getFriends());
+        this.account = entity.playerInfo().getAccount();
+        this.playerInfo = JSON.toJSONString(entity.playerInfo());
+        this.weath = JSON.toJSONString(entity.weath());
+        this.shop = JSON.toJSONString(entity.shop());
+        this.signIn = JSON.toJSONString(entity.signIn());
+        this.friends = JSON.toJSONString(entity.friends());
     }
     public int getId() {
         return id;
@@ -51,7 +51,7 @@ public class PersistPlayerMapper {
         entity.setShop((Shop) this.persist(new Shop()));
         entity.setFriends((Friends)this.persist(new Friends()));
         entity.setSignIn((SignIn)this.persist(new SignIn()));
-        entity.getSignIn().player(entity);
+        entity.signIn().player(entity);
         return entity;
     }
 
@@ -62,7 +62,7 @@ public class PersistPlayerMapper {
             try {
                 persist = p.getClass().newInstance();
             } catch (Exception e) {
-                new Error(this.getClass()).err(1);
+                LoggerUtils.getLogicLog().error("从数据库获取数据实例化时异常",e);
             }
         }
         persist = JSON.parseObject(str,p.getClass());
@@ -85,7 +85,51 @@ public class PersistPlayerMapper {
             return null;
     }
 
-    public static void main(String[] args) {
-        System.out.println("xxxxx");
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public String getPlayerInfo() {
+        return playerInfo;
+    }
+
+    public void setPlayerInfo(String playerInfo) {
+        this.playerInfo = playerInfo;
+    }
+
+    public String getWeath() {
+        return weath;
+    }
+
+    public void setWeath(String weath) {
+        this.weath = weath;
+    }
+
+    public String getShop() {
+        return shop;
+    }
+
+    public void setShop(String shop) {
+        this.shop = shop;
+    }
+
+    public String getSignIn() {
+        return signIn;
+    }
+
+    public void setSignIn(String signIn) {
+        this.signIn = signIn;
+    }
+
+    public String getFriends() {
+        return friends;
+    }
+
+    public void setFriends(String friends) {
+        this.friends = friends;
     }
 }

@@ -1,6 +1,7 @@
 package org.baize.worktask.impl;
 
 import org.baize.server.message.ICommand;
+import org.baize.utils.LoggerUtils;
 import org.baize.utils.SpringUtils;
 import org.baize.worktask.TaskPoolManagerAbstract;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public abstract class TimerTaskPoolManager{
         this.delay = delay;
         if(timerTask != null) return;
         this.timerTask = Executors.newScheduledThreadPool(1);
-        System.err.println((System.currentTimeMillis()+":----------------------定时任务线程启动成功----------------------"));
+        LoggerUtils.getLogicLog().error("----------------------定时任务线程启动成功----------------------");
     }
 
     public void submit(Runnable runnable){

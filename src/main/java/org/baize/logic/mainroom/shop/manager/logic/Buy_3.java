@@ -15,9 +15,9 @@ import org.springframework.stereotype.Service;
 public class Buy_3 extends ShopImpAdapter{
     @Override
     public void buy(CorePlayer corePlayer, ShopDataTable dataTable, int count) {
-        Weath weath = corePlayer.entity().getWeath();
+        Weath weath = corePlayer.entity().weath();
         if(weath.isHasTree())
-            new Error(this.getClass(),corePlayer.getCtx()).debug(1);
+            new Error(corePlayer.getCtx()).err(1);
         weath.setHasTree(true);
         weath.update();
     }

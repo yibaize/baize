@@ -14,14 +14,7 @@ public class ServerHandlerManager extends SimpleChannelInboundHandler<Request>{
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		//客户端在
-		System.err.println("用户上线"+ctx.channel().remoteAddress());
-		Response response = new Response();
-		String s = "asdasdasdasdasdasdsa";
-		byte[] buf = ProtostuffUtils.serializer(s);
-		response.setData(buf);
-		response.setId((short) 1);
-		ctx.writeAndFlush(response);
-
+		System.err.println("用户上线"+ctx.channel());
 	}
 
 	@Override
@@ -38,6 +31,7 @@ public class ServerHandlerManager extends SimpleChannelInboundHandler<Request>{
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, Request request) throws Exception {
 		//将消息发送到消息分发
+		System.out.println(System.currentTimeMillis());
 		process(ctx.channel(), request);
 	}
 }

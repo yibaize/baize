@@ -26,6 +26,6 @@ public class Shop_Buy extends CommandAb {
     public void execute() {
         ShopDataTable dataTable = ShopDataTable.get(goodsId);
         if(dataTable == null)
-            new Error(this.getClass(),this.getCtx()).debug(1);
+            new Error(this.getCtx()).err(1);
     }
 }

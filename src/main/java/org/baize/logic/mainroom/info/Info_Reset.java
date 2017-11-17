@@ -1,6 +1,5 @@
 package org.baize.logic.mainroom.info;
 
-import org.baize.dao.model.PlayerEntity;
 import org.baize.dao.model.PlayerInfo;
 import org.baize.server.message.CommandAb;
 import org.baize.utils.assemblybean.annon.Protocol;
@@ -28,7 +27,7 @@ public class Info_Reset extends CommandAb{
 
     @Override
     public void execute() {
-        PlayerInfo info = this.player().entity().getPlayerInfo();
+        PlayerInfo info = this.player().entity().playerInfo();
         info.setName(name);
         info.setPassword(password);
         info.setHead(head);

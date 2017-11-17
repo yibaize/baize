@@ -43,13 +43,13 @@ public class RankManager implements IDailyTimer{
     public OtherInfoDto assembly(PlayerEntity entity){
         OtherInfoDto dto = new OtherInfoDto();
         dto.setId(entity.getId());
-        dto.setAccount(entity.getPlayerInfo().getAccount());
-        dto.setName(entity.getPlayerInfo().getName());
-        dto.setLoginType(entity.getPlayerInfo().getLoginType());
-        dto.setPhon(entity.getPlayerInfo().getPhon());
-        dto.setRank(entity.getPlayerInfo().getRank());
+        dto.setAccount(entity.playerInfo().getAccount());
+        dto.setName(entity.playerInfo().getName());
+        dto.setLoginType(entity.playerInfo().getLoginType());
+        dto.setPhon(entity.playerInfo().getPhon());
+        dto.setRank(entity.playerInfo().getRank());
 
-        dto.setGold(entity.getWeath().getGold());
+        dto.setGold(entity.weath().getGold());
         return dto;
     }
 

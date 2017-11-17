@@ -25,19 +25,19 @@ public class Friend_Consent extends CommandAb{
 
     @Override
     public void execute() {
-        Friends friends = player().entity().getFriends();
+        Friends friends = player().entity().friends();
         friends.add(id);
         CorePlayer corePlayer = PersistPlayer.getById(id);
         Friends friends1 = null;
         if(corePlayer != null){
-            friends1 = corePlayer.entity().getFriends();
+            friends1 = corePlayer.entity().friends();
         }else {
             PlayerMapper mapper = SpringUtils.getBean(PlayerMapper.class);
             PersistPlayerMapper playerMapper = mapper.selectOneForId(id);
             friends1 = (Friends) playerMapper.persist(friends1);
         }
         if(friends1 == null)
-            new Error(this.getClass(),getCtx()).debug(1);
+            new Error(getCtx()).err(1);
         friends1.add(player().getId());
         friends.update();
         friends1.update();

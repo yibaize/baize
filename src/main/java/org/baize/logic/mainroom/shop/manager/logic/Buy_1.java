@@ -19,8 +19,8 @@ public class Buy_1 extends ShopImpAdapter{
         ExChangeDataTable exChangeDataTable = ExChangeDataTable.get(1);
 
         if(exChangeDataTable == null)
-            new Error(this.getClass(),corePlayer.getCtx()).debug(1);
-        Weath weath = corePlayer.entity().getWeath();
+            new Error(corePlayer.getCtx()).err(1);
+        Weath weath = corePlayer.entity().weath();
         int changeCount = exChangeDataTable.getDiamond()*count;
         weath.increaseDiamond(changeCount);
         weath.update();

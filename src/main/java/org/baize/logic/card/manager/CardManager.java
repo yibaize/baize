@@ -16,9 +16,9 @@ import java.util.Map;
  * 时间： 2017/11/13.
  * 描述：
  */
-@Service
 public class CardManager {
     private static List<PersistCard> cardPool;
+    private static CardManager _instance;
     private CardManager(){
         Map<Serializable,Object> map = StaticConfigMessage.getInstance().getMap(PersistCard.class);
         for (Map.Entry<Serializable,Object> e:map.entrySet()){
@@ -26,7 +26,9 @@ public class CardManager {
         }
     }
     public static CardManager getInstance(){
-        return SpringUtils.getBean(CardManager.class);
+        if(_instance == null)
+            _instance = new CardManager();
+        return _instance;
     }
     public List<PersistCard> getCardPool() {
         return cardPool;

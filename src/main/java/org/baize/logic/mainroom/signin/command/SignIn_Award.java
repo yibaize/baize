@@ -1,6 +1,5 @@
 package org.baize.logic.mainroom.signin.command;
 
-import org.baize.dao.model.PlayerEntity;
 import org.baize.error.Error;
 import org.baize.logic.mainroom.signin.dto.SignInDto;
 import org.baize.logic.mainroom.signin.module.SignIn;
@@ -16,10 +15,10 @@ import org.baize.utils.assemblybean.annon.Protocol;
 public class SignIn_Award extends CommandAb {
     @Override
     public void execute() {
-        SignIn signIn = player().entity().getSignIn();
+        SignIn signIn = player().entity().signIn();
         boolean draw = signIn.draw();
         if(!draw)
-            new Error(this.getClass()).debug(1);
+            new Error(this.getCtx()).err(1);
         responce(new SignInDto(draw));
     }
 }

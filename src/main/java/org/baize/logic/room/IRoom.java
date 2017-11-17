@@ -49,7 +49,7 @@ public interface IRoom extends ILogic{
             response.setData(buf);
             while (iterator.hasNext()) {
                 //发送消息
-                iterator.next().respones(pro);
+                iterator.next().respones((short)30,pro);
             }
         }
     }
@@ -68,7 +68,7 @@ public interface IRoom extends ILogic{
             while (iterator.hasNext()) {
                 if (iterator.next().equals(corePlayer)) continue;
                 //发送消息
-                iterator.next().respones(pro);
+                iterator.next().respones((short)100,pro);
             }
         }
     }

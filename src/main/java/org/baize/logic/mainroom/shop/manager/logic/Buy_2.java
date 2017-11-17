@@ -16,10 +16,10 @@ public class Buy_2 extends ShopImpAdapter {
     public void buy(CorePlayer corePlayer, ShopDataTable dataTable, int count) {
         ExChangeDataTable exChangeDataTable = ExChangeDataTable.get(2);
         if(exChangeDataTable == null)
-            new Error(this.getClass(),corePlayer.getCtx()).debug(1);
-        Weath weath = corePlayer.entity().getWeath();
+            new Error(corePlayer.getCtx()).err(1);
+        Weath weath = corePlayer.entity().weath();
         if(weath.getDiamond()<count)//钻石不足
-            new Error(this.getClass(),corePlayer.getCtx()).debug(1);
+            new Error(corePlayer.getCtx()).err(1);
         weath.decreaseDiamond(count);
         weath.increaseGold(count*exChangeDataTable.getGold());
         weath.update();

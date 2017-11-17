@@ -9,17 +9,23 @@ import org.baize.utils.assemblybean.annon.DataTable;
  */
 @DataTable
 public class ExcelErrorCodeModule implements DataTableMessage{
-    private final String id;
+    private final int id;
     private final String name;
     private final String value;
 
-    public ExcelErrorCodeModule(String id, String name, String value) {
+    public ExcelErrorCodeModule() {
+        this.id = 0;
+        this.name = "";
+        this.value = "";
+    }
+
+    public ExcelErrorCodeModule(int id, String name, String value) {
         this.id = id;
         this.name = name;
         this.value = value;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -33,7 +39,7 @@ public class ExcelErrorCodeModule implements DataTableMessage{
 
     @Override
     public int id() {
-        return Integer.parseInt(id);
+        return id;
     }
 
     @Override

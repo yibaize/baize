@@ -16,13 +16,13 @@ import org.baize.utils.assemblybean.annon.Protocol;
 public class Tree_Draw extends CommandAb {
     @Override
     public void execute() {
-        Weath weath = player().entity().getWeath();
+        Weath weath = player().entity().weath();
         long currentTime = DateUtils.currentTime();
         long lastTime = weath.getLastDrawTime();
         long distanceTime = currentTime - lastTime;
         distanceTime = distanceTime/3600000;
         if(distanceTime<=0)
-            new Error(this.getClass(),this.getCtx()).debug(1);
+            new Error(this.getCtx()).err(1);
         distanceTime = distanceTime > 24 ? 24 : distanceTime;
         MoneyTreeDataTable dataTable = MoneyTreeDataTable.get((int) distanceTime);
         weath.increaseGold(dataTable.getDrawNum());

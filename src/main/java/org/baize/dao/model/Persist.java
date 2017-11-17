@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.baize.dao.manager.Submit;
 import org.baize.dao.sqlmapper.PlayerMapper;
 import org.baize.error.Error;
+import org.baize.utils.LoggerUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,7 +43,7 @@ public abstract class Persist{
         //mapper = springutils.getbean(playermapper.class)
         String str = JSON.toJSONString(this);
         if(this == null || !(this instanceof Persist) || StringUtils.isEmpty(str))
-            new Error(this.getClass()).err(1);
+            LoggerUtils.getLogicLog().error("提交数据库数据异常玩家id："+getId());
         String sql = "'"+str+"'";
         Map<String,String> map = new HashMap<>();
         map.put("k",this.getClass().getSimpleName());

@@ -11,34 +11,12 @@ import org.baize.utils.ProtostuffUtils;
  * 描述：
  */
 public class Error {
-    private static Logger logger;
     private Channel ctx;
-    public Error(Class<?> clazz) {
-        logger = Logger.getLogger(clazz);
-    }
-    public Error(Class<?> clazz,Channel ctx) {
-        logger = Logger.getLogger(clazz);
+    public Error(Channel ctx) {
         this.ctx = ctx;
-    }
-    public void debug(int id){
-        this.response(id);
-        throw new RuntimeException(getMsg(id));
-    }
-    public void debug(String msg){
-        logger.error(msg);
-    }
-    public void debug(int id,Throwable t){
-        this.response(id);
-        throwException(id,t);
     }
     public void err(int id){
         this.response(id);
-        logger.error(getMsg(id));
-        throw new RuntimeException();
-    }
-    public void err(int id,Throwable t){
-        this.response(id);
-        logger.error(getMsg(id),t);
         throw new RuntimeException();
     }
     private String getMsg(int id){

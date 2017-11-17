@@ -8,21 +8,21 @@ package org.baize.utils.excel;
 public class CheckType {
     public static Object getTypr(Class<?> clazz,String value){
         Object type = null;
-        if(type == int.class)
+        if(clazz == int.class)
             type = Integer.valueOf(value);
-        else if(type == float.class)
+        else if(clazz == float.class)
             type = Float.valueOf(value);
-        else if(type == double.class)
+        else if(clazz == double.class)
             type = Double.valueOf(value);
-        else if(type == long.class)
+        else if(clazz == long.class)
             type = Long.valueOf(value);
-        else if(type == boolean.class)
+        else if(clazz == boolean.class)
             type = Boolean.valueOf(value);
-        else if(type == byte.class)
+        else if(clazz == byte.class)
             type = Byte.valueOf(value);
-        else if(type == short.class)
+        else if(clazz == short.class)
             type = Short.valueOf(value);
-        else if(type == String.class)
+        else if(clazz == String.class)
             type = value;
         return type;
     }

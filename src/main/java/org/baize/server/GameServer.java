@@ -14,6 +14,8 @@ import org.baize.server.manager.RequestDecoderManager;
 import org.baize.server.manager.ResponseEncoderManager;
 import org.baize.server.manager.ServerHandlerManager;
 import org.baize.utils.DateUtils;
+import org.baize.utils.LoggerUtils;
+
 /**
  * 作者： 白泽
  * 时间： 2017/11/3.
@@ -41,15 +43,15 @@ public final class GameServer {
                     });
             //绑定端口
             ChannelFuture f = b.bind(PORT).sync();
-            System.err.println(DateUtils.currentTime() + ":---------------服务器启动成功------------------");
-            //new Error(GameServer.class).debug(System.currentTimeMillis() + ":---------------服务器启动成功------------------");
+            LoggerUtils.getLogicLog().error("---------------服务器启动成功------------------");
             f.channel().closeFuture().sync();//等待服务端监听关闭
         }catch (Exception e){
-            //new Error(this.getClass()).debug(System.currentTimeMillis() + ":---------------服务器启动成功------------------");
+            LoggerUtils.getLogicLog().error("---------------服务器启动失败------------------",e);
         }finally {
             //优雅退出线程
             BOSS_GROUP.shutdownGracefully();
             WORKER_GROUP.shutdownGracefully();
+            LoggerUtils.getLogicLog().error("---------------服务器关闭------------------");
         }
     }
 }

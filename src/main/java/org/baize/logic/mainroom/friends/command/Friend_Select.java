@@ -25,7 +25,7 @@ import java.util.List;
 public class Friend_Select extends CommandAb{
     @Override
     public void execute() {
-        Friends friends = player().entity().getFriends();
+        Friends friends = player().entity().friends();
         List<OtherInfoDto> friendList = new ArrayList<>();
         List<OtherInfoDto> applyList = new ArrayList<>();
         for (int id:friends.friendIds()){

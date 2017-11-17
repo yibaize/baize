@@ -11,8 +11,10 @@ import org.baize.logic.IFactory;
 import org.baize.logic.room.IRoom;
 import org.baize.logic.room.RoomFactory;
 import org.baize.server.message.IProtostuff;
+import org.baize.utils.LoggerUtils;
 import org.baize.utils.createid.CreateIdUtils;
 import org.baize.utils.SpringUtils;
+import org.baize.utils.excel.ExcelUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -30,12 +32,12 @@ public class LoginManager {
         PlayerMapper mapper = SpringUtils.getBean(PlayerMapper.class);
         PersistPlayerMapper playerMapper = mapper.selectOneForId(Integer.parseInt(account));
         if(playerMapper == null)
-            new Error(this.getClass(),ctx).debug(1);
+            new Error(ctx).err(1);
         PlayerEntity entity = playerMapper.playerEntity();
         if(entity == null)
-            new Error(this.getClass(),ctx).debug(100);
-        if(!password.equals(entity.getPlayerInfo().getPassword()))
-            new Error(this.getClass(),ctx).debug(2);
+            new Error(ctx).err(1);
+        if(!password.equals(entity.playerInfo().getPassword()))
+            new Error(ctx).err(1);
 
         CorePlayer loginPlayer = PersistPlayer.getById(entity.getId());
         if(loginPlayer != null){
@@ -54,7 +56,11 @@ public class LoginManager {
             //注册
             entity = entity(type,account);
             playerMapper = new PersistPlayerMapper(entity);
-            mapper.insert(playerMapper);
+            try {
+                mapper.insert(playerMapper);
+            }catch (Exception e){
+                LoggerUtils.getLogicLog().error("注册执行sql语句时出现异常");
+            }
             entity = playerMapper.playerEntity();
 
         }else {
@@ -75,10 +81,10 @@ public class LoginManager {
         corePlayer.setCtx(channel);
         corePlayer.setId(entity.getId());
 
-        IFactory factory = new RoomFactory();
+        IFactory factory = RoomFactory.getInstance();
         IRoom room = (IRoom) factory.getBean(ScenesType.Mian.id());
         if(room == null)
-            new Error(this.getClass(),channel).err(100);
+            new Error(channel).err(1);
         room.into(corePlayer);
 
         corePlayer.setRoom(room);
@@ -88,14 +94,14 @@ public class LoginManager {
         PersistPlayer.putById(corePlayer.getId(),corePlayer);
     }
     private PlayerDto dto(PlayerEntity entity){
-        PlayerInfo info = entity.getPlayerInfo();
-        Weath weath = entity.getWeath();
+        PlayerInfo info = entity.playerInfo();
+        Weath weath = entity.weath();
         PlayerDto dto = new PlayerDto();
         BeanUtils.copyProperties(info,dto);
         BeanUtils.copyProperties(weath,dto);
         dto.setId(entity.getId());
-        dto.setHasNewFriend(entity.getFriends().isHasNewFriend());
-        dto.setSignIn(entity.getSignIn().hasDraw());
+        dto.setHasNewFriend(entity.friends().isHasNewFriend());
+        dto.setSignIn(entity.signIn().hasDraw());
         return dto;
     }
     private PlayerEntity entity(int type,String account){

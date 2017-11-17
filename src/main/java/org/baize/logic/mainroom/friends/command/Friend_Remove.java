@@ -19,7 +19,7 @@ public class Friend_Remove extends CommandAb {
 
     @Override
     public void execute() {
-        Friends friends = player().entity().getFriends();
+        Friends friends = player().entity().friends();
         friends.remove(id);
     }
 }

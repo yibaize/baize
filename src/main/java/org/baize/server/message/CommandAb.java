@@ -57,12 +57,12 @@ public abstract class CommandAb implements ICommand {
         this.sendSucceed();
     }
     protected void responce(IProtostuff pro){
-        corePlayer.respones(pro);
+        corePlayer.respones(cmdId,pro);
         hasSend = true;
     }
     private void sendSucceed(){
         if(hasSend) return;
-        corePlayer.respones(null);
+        corePlayer.respones((short) 10,null);
         hasSend = false;
     }
 }

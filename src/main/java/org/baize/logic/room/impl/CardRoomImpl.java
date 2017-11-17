@@ -165,7 +165,7 @@ public abstract class CardRoomImpl implements IRoom{
                 if(b == null)
                     return;
                 for (Map.Entry<CorePlayer,Integer> e:b.getMap().entrySet()){
-                    Weath w = e.getKey().entity().getWeath();
+                    Weath w = e.getKey().entity().weath();
                     w.increaseGold(e.getValue() * card.getType());
                     w.update();
                 }

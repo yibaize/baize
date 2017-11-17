@@ -74,6 +74,6 @@ public class Weath extends Persist {
         CorePlayer corePlayer = PersistPlayer.getById(getId());
         if(corePlayer == null)
             return;
-        corePlayer.respones(new WeathDto(gold,diamond));
+        corePlayer.respones((short)20,new WeathDto(gold,diamond));
     }
 }

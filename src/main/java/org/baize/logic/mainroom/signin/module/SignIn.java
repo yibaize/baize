@@ -70,7 +70,7 @@ public class SignIn extends Persist {
         if(signInDataTable == null)
             return false;
         int award = signInDataTable.getDraw();
-        Weath weath = player().getWeath();
+        Weath weath = player().weath();
         weath.increaseGold(award);
         weath.update();
         weekDay().add(teday);

@@ -1,4 +1,4 @@
-package org.baize.logic;
+package org.baize.logic.linestart;
 
 import org.baize.server.message.IProtostuff;
 
@@ -24,5 +24,4 @@ public class OnOfferlineNotify implements IProtostuff{
     public void setMsg(String msg) {
         this.msg = msg;
     }
-
 }

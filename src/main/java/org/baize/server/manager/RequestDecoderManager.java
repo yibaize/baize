@@ -7,6 +7,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import org.apache.commons.lang3.StringUtils;
+import org.baize.utils.LoggerUtils;
 import org.baize.utils.ProtostuffUtils;
 
 public class RequestDecoderManager extends ByteToMessageDecoder {
@@ -18,7 +19,6 @@ public class RequestDecoderManager extends ByteToMessageDecoder {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) throws Exception {
-        System.out.println("渠道消息");
         if (buffer.readableBytes() >= BASE_LENGTH) {
             //第一个可读数据包的起始位
             int beginIndex;
@@ -46,7 +46,7 @@ public class RequestDecoderManager extends ByteToMessageDecoder {
             buffer.readBytes(data);
             String msg = ProtostuffUtils.deserializer(data,String.class);
             if(StringUtils.isEmpty(msg))
-                System.err.println("解决粘包分包时数据异常");
+                LoggerUtils.getLogicLog().debug("解决粘包分包时数据异常");
             String[] m = StringUtils.split(msg,",");
             Request message = new Request(m);
             out.add(message);

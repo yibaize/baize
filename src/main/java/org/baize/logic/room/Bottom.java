@@ -69,7 +69,8 @@ public class Bottom {
                 num += money;
             }
             map.put(corePlayer, num);
-            Weath weath = corePlayer.entity().getWeath();
+            Weath weath = corePlayer.entity().weath();
+            weath.decreaseDiamond(num);
             //减少金币
             weath.update();
         }

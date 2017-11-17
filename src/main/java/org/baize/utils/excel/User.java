@@ -1,4 +1,6 @@
 package org.baize.utils.excel;
+import org.baize.dao.model.PlayerDataTable;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -56,13 +58,9 @@ public class User {
     }
 
     public static void main(String[] args) throws Exception {
-        User user = new User();
-
-        modify(user,"name","asd");
-        modify(user,"id","456");
-        modify(user,"age","4867");
-        modify(user,"arr","asd");
-        System.out.println(user);
+        PlayerDataTable dataTable = new PlayerDataTable();
+        modify(dataTable,"name","asd");
+        modify(dataTable,"id","456");
     }
 
     /**
@@ -74,6 +72,7 @@ public class User {
     private static void modify(Object o, String fieldName, String newValue){
         try {
             Field field = o.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
             Field modifiersField = Field.class.getDeclaredField("modifiers");
             modifiersField.setAccessible(true);
             modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);

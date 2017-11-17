@@ -15,7 +15,7 @@
         select * from player
     </select>
     <insert id="insert" parameterType="org.baize.dao.manager.PersistPlayerMapper" useGeneratedKeys="true">
-        insert into player(id,shop,age) values(#{id},#{shop},#{age})
+        insert into player(id,account,playerinfo,shop,signIn,weath,friends) values(#{id},#{account},#{playerInfo},#{shop},#{signIn},#{weath},#{friends})
     </insert>
     <update id="update" parameterType="org.baize.dao.manager.PersistPlayerMapper">
         update player set account=#{account},playerInfo=#{playerInfo},wealth=#{wealth} where id=#{id}

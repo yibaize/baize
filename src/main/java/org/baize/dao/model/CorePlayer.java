@@ -59,9 +59,9 @@ public class CorePlayer {
     public void setEntity(PlayerEntity entity) {
         this.entity = entity;
     }
-    public void respones(IProtostuff o){
+    public void respones(short poroId,IProtostuff o){
         Response response = new Response();
-        response.setId((short) id);
+        response.setId(poroId);
         byte[] buf = null;
         if(o != null)
             buf = ProtostuffUtils.serializer(o);

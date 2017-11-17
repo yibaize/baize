@@ -1,6 +1,5 @@
 package org.baize.dao.model;
 
-import org.baize.dao.manager.PersistPlayerMapper;
 import org.baize.logic.mainroom.friends.module.Friends;
 import org.baize.logic.mainroom.shop.module.Shop;
 import org.baize.logic.mainroom.signin.module.SignIn;
@@ -25,14 +24,18 @@ public class PlayerEntity implements Comparable<PlayerEntity>{
     public int getId() {
         return id;
     }
-    public SignIn getSignIn() {
+    public SignIn signIn() {
+        if(signIn == null)
+            signIn = new SignIn();
         return signIn;
     }
 
     public void setSignIn(SignIn signIn) {
         this.signIn = signIn;
     }
-    public PlayerInfo getPlayerInfo() {
+    public PlayerInfo playerInfo() {
+        if(playerInfo == null)
+            playerInfo = new PlayerInfo();
         return playerInfo;
     }
 
@@ -40,15 +43,20 @@ public class PlayerEntity implements Comparable<PlayerEntity>{
         this.playerInfo = playerInfo;
     }
 
-    public Weath getWeath() {
+    public Weath weath() {
+        if(weath == null)
+            weath = new Weath();
         return weath;
     }
+
 
     public void setWeath(Weath weath) {
         this.weath = weath;
     }
 
-    public Shop getShop() {
+    public Shop shop() {
+        if(shop == null)
+            shop = new Shop();
         return shop;
     }
 
@@ -56,7 +64,9 @@ public class PlayerEntity implements Comparable<PlayerEntity>{
         this.shop = shop;
     }
 
-    public Friends getFriends() {
+    public Friends friends() {
+        if(friends == null)
+            friends = new Friends();
         return friends;
     }
 
@@ -66,6 +76,6 @@ public class PlayerEntity implements Comparable<PlayerEntity>{
 
     @Override
     public int compareTo(PlayerEntity o) {
-        return playerInfo.getRank() - o.getPlayerInfo().getRank();
+        return playerInfo.getRank() - o.playerInfo().getRank();
     }
 }

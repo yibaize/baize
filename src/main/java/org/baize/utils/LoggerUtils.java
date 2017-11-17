@@ -4,6 +4,10 @@ import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.baize.worktask.IDailyTimer;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -11,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 时间： 2017/11/15.
  * 描述：
  */
-public class LoggerUtils {
+public class LoggerUtils{
     private static Logger platformLog = null;
     private static Logger logicLog = null;
     private static final ConcurrentHashMap<String, Logger> logMap = new ConcurrentHashMap();
@@ -54,11 +58,12 @@ public class LoggerUtils {
         log.setLevel(Level.ERROR);
     }
 
+
     static {
-        LOG4J_CONFIG_XML_PATH = "log4j.properties";
-        PropertyConfigurator.configure(LOG4J_CONFIG_XML_PATH);
+        LOG4J_CONFIG_XML_PATH = "/log4j.properties";
+        File filename = new File(LoggerUtils.class.getResource(LOG4J_CONFIG_XML_PATH).getFile());
+        PropertyConfigurator.configure(filename.getPath());
         platformLog = LogManager.getLogger("platformlogs");
         logicLog = LogManager.getLogger("logiclogs");
     }
-
 }
