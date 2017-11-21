@@ -5,6 +5,7 @@ import org.baize.worktask.IDailyTimer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -22,6 +23,9 @@ public final class DailyTaskPoolManager extends TimerTaskPoolManager {
     }
     private DailyTaskPoolManager(){
         super(new Delay(0,1,TimeUnit.DAYS));
+    }
+    @PostConstruct
+    private void init(){
         submit(() -> {
             for (IDailyTimer dailyTimer:set){
                 dailyTimer.executor();

@@ -124,7 +124,7 @@ public class LoginManager {
         dto.setSignIn(entity.signIn().hasDraw());
         return dto;
     }
-    private PlayerEntity entity(int type,String account){
+    public PlayerEntity entity(int type,String account){
         PlayerInfo info = new PlayerInfo();
         PlayerDataTable dataTable = PlayerDataTable.get(1);
         if(dataTable == null)

@@ -16,22 +16,12 @@ public class ChangerRoomDto implements IProtostuff{
     private int timer;
     private int online;
     private OtherInfoDto banker;
-    private List<OtherInfoDto> bankerList;
-
     public OtherInfoDto getBanker() {
         return banker;
     }
 
     public void setBanker(OtherInfoDto banker) {
         this.banker = banker;
-    }
-
-    public List<OtherInfoDto> getBankerList() {
-        return bankerList;
-    }
-
-    public void setBankerList(List<OtherInfoDto> bankerList) {
-        this.bankerList = bankerList;
     }
 
     public int getTimer() {

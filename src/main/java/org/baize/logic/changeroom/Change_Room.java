@@ -36,17 +36,11 @@ public class Change_Room extends CommandAb{
         int timer = (int) (room.endTime() - room.currentTime())/1000;
         int online = room.getSet().size();
         CorePlayer banker = room.banker();
-        List<CorePlayer> corePlayers = room.bankerUpList();
-        List<OtherInfoDto> bankerList = new ArrayList<>(corePlayers.size());
         OtherInfoDto bankerInfo = RankManager.getInstance().assembly(banker.entity());
-        for (CorePlayer corePlayer:corePlayers){
-            bankerList.add(RankManager.getInstance().assembly(corePlayer.entity()));
-        }
         ChangerRoomDto dto = new ChangerRoomDto();
         dto.setTimer(timer);
         dto.setOnline(online);
         dto.setBanker(bankerInfo);
-        dto.setBankerList(bankerList);
         this.responce(dto);
         room.into(this.player());
     }

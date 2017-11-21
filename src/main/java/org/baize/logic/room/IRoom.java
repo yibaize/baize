@@ -72,4 +72,8 @@ public interface IRoom extends ILogic{
     Set<CorePlayer> getSet();
     void settleAccounts();
     void bottom(int position,int num,CorePlayer corePlayer);
+    /**
+     * 发牌
+     */
+    default void perflop(){}
 }

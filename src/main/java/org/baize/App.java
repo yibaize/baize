@@ -9,6 +9,8 @@ import org.baize.logic.card.manager.CardManager;
 import org.baize.logic.mainroom.friends.module.Friends;
 import org.baize.logic.mainroom.shop.module.Shop;
 import org.baize.logic.mainroom.signin.module.SignIn;
+import org.baize.logic.room.IRoom;
+import org.baize.logic.room.RoomFactory;
 import org.baize.server.GameServer;
 import org.baize.utils.LoggerUtils;
 import org.baize.utils.SpringUtils;
@@ -38,6 +40,8 @@ public class App
 //        playerMapper.setFriends(JSON.toJSONString(new Friends()));
 //        mapper.insert(playerMapper);
         ExcelUtils.init();
+        IRoom room = RoomFactory.getInstance().getBean(3);
+        room.perflop();
        GameServer.start();
     }
 }

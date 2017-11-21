@@ -12,16 +12,11 @@ public class PersistCard implements DataTableMessage{
     private final int cardNum;
     private final int cardType;
     private final String name;
-    private final int[] both;
-    private final int[] bomb;
-
     public PersistCard() {
         this.id = 0;
         this.cardNum = 0;
         this.cardType = 0;
         this.name = "";
-        this.both = null;
-        this.bomb = null;
     }
 
     public int getId() {
@@ -40,21 +35,16 @@ public class PersistCard implements DataTableMessage{
         return name;
     }
 
-    public int[] getBoth() {
-        return both;
+    @Override
+    public String toString() {
+        return "PersistCard{" +
+                "id=" + id +
+                ", cardNum=" + cardNum +
+                ", cardType=" + cardType +
+                ", name='" + name + '\'' +
+                '}';
     }
 
-    public int[] getBomb() {
-        return bomb;
-    }
-    private int[] both4Init(String value){
-        int[] arr = new int[3];
-        return arr;
-    }
-    private int[] bomb4Init(String value){
-        int[] arr = new int[3];
-        return arr;
-    }
     @Override
     public int id() {
         return id;

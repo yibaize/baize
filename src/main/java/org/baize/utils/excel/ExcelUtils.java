@@ -112,12 +112,13 @@ public class ExcelUtils {
         } catch (ClassNotFoundException e) {
             LoggerUtils.getLogicLog().error("excel表在反射"+clazzName+"文件时出现异常，不存在这个类路径",e);
         }
-        try {
-            beanObj = clazz.newInstance();
-        } catch (Exception e) {
-            LoggerUtils.getLogicLog().error("excel表在反射初始化"+clazz+"对象时出现异常，",e);
-        }
+
         for (int i = 0; i < objs.size(); i++) {
+            try {
+                beanObj = clazz.newInstance();
+            } catch (Exception e) {
+                LoggerUtils.getLogicLog().error("excel表在反射初始化"+clazz+"对象时出现异常，",e);
+            }
             for (Map.Entry<String,String> e:objs.get(i).entrySet()){
                 try {
                     Field field = beanObj.getClass().getDeclaredField(e.getKey());
@@ -136,14 +137,13 @@ public class ExcelUtils {
                     if(valueObj == null)
                         LoggerUtils.getLogicLog().error("excel表在反射初始化"+clazz+"类时出现异常,没有"+field+"的"+valueObj+"这个类型");
                     field.set(beanObj,valueObj);
-
                 }catch (Exception ex){
                     LoggerUtils.getLogicLog().error("excel表在反射初始化"+clazz+"类时出现异常",ex);
                 }
             }
             if(beanObj instanceof DataTableMessage) {
-                ((DataTableMessage) beanObj).AfterInit();
                 beanMap.put(((DataTableMessage) beanObj).id(), beanObj);
+                ((DataTableMessage) beanObj).AfterInit();
             }
         }
         //添加到所有导表缓存类中

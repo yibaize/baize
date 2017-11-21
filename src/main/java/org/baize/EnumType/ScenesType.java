@@ -11,7 +11,9 @@ import java.util.Map;
 public enum ScenesType {
     Login(0),
     Mian(1),
-    Flower(2);
+    Flower(2),
+    BoxerRoom(3),
+    LotteryRoom(4);
     private int id;
     private ScenesType(int id) {
         this.id = id;

@@ -5,6 +5,7 @@ import org.baize.worktask.ISecondTimer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -14,14 +15,18 @@ import java.util.concurrent.TimeUnit;
  * 描述：
  */
 @Service
-public class SecondTaskPoolManager extends TimerTaskPoolManager {
+public final class SecondTaskPoolManager extends TimerTaskPoolManager {
     @Autowired
-    private static Set<ISecondTimer> secondTimer;
+    private Set<ISecondTimer> secondTimer;
     public static SecondTaskPoolManager getInstance(){
         return SpringUtils.getBean(SecondTaskPoolManager.class);
     }
     protected SecondTaskPoolManager(){
         super(new Delay(1,1,TimeUnit.SECONDS));
+
+    }
+    @PostConstruct
+    private void init(){
         submit(() -> {
             for (ISecondTimer timer:secondTimer){
                 timer.executor();

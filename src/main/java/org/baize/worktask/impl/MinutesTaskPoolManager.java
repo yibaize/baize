@@ -5,6 +5,7 @@ import org.baize.worktask.IMinutesTimer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -22,9 +23,12 @@ public final class MinutesTaskPoolManager extends TimerTaskPoolManager {
     }
     private MinutesTaskPoolManager(){
         super(new Delay(1,1,TimeUnit.MINUTES));
+    }
+    @PostConstruct
+    private void init(){
         submit(() -> {
-            for (IMinutesTimer minutesTimer:set){
-                minutesTimer.executor();
+            for (IMinutesTimer timer:set){
+                timer.executor();
             }
         });
     }

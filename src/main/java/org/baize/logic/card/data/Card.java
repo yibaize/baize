@@ -5,9 +5,9 @@ package org.baize.logic.card.data;
  * 时间： 2017/11/6.
  * 描述：牌堆
  */
-public class Card {
+public class Card implements Comparable<Card>{
     private int id;//牌堆
-    private boolean result;//输赢
+    private int result;//输赢
     private int type;//散、对、顺子...
     private int[] cardType;//梅花、方块、红桃、黑桃
     private int[] cardId;//1-52
@@ -21,11 +21,11 @@ public class Card {
         this.id = id;
     }
 
-    public boolean isResult() {
+    public int getResult() {
         return result;
     }
 
-    public void setResult(boolean result) {
+    public void setResult(int result) {
         this.result = result;
     }
 
@@ -59,5 +59,10 @@ public class Card {
 
     public void setCardNum(int[] cardNum) {
         this.cardNum = cardNum;
+    }
+
+    @Override
+    public int compareTo(Card o) {
+        return id - o.getId();
     }
 }
