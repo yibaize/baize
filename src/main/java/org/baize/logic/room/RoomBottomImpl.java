@@ -2,8 +2,10 @@ package org.baize.logic.room;
 
 import org.baize.dao.model.CorePlayer;
 import org.baize.logic.room.impl.BottomPosition;
+import org.baize.server.GameServer;
 import org.baize.server.message.IProtostuff;
 import org.baize.worktask.ISecondTimer;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,11 +26,6 @@ public class RoomBottomImpl implements IBottom,ISecondTimer{
     private ConcurrentMap<Integer,BottomPosition> map;
     private AtomicBoolean hasBtoom = new AtomicBoolean(false);
     private Set<CorePlayer> players;
-
-    public void setPlayers(Set<CorePlayer> players) {
-        this.players = players;
-    }
-
     @Override
     public void leave(CorePlayer corePlayer){
         for (Map.Entry<Integer,BottomPosition> e:map.entrySet()){
@@ -95,11 +92,7 @@ public class RoomBottomImpl implements IBottom,ISecondTimer{
     public void executor() {
         if(hasBtoom.get()){
             RoomBottomDto dto = (RoomBottomDto) bottomInfo();
-            Iterator<CorePlayer> iterator = players.iterator();
-            while (iterator.hasNext()){
-                CorePlayer corePlayer = iterator.next();
-                corePlayer.respones((short)104,dto);
-            }
+            GameServer.notifyAllx(players,(short)104,dto);
             hasBtoom.compareAndSet(true,false);
         }
     }

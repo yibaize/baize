@@ -3,7 +3,6 @@ package org.baize.logic.room;
 import org.apache.log4j.Logger;
 import org.baize.dao.model.CorePlayer;
 import org.baize.dao.model.PersistPlayer;
-import org.baize.error.Error;
 import org.baize.logic.IFactory;
 import org.baize.utils.SpringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +20,14 @@ import java.util.Set;
  * 描述：
  */
 @Service
-public class RoomFactory implements IFactory<IRoom>{
+public class RoomFactory implements IFactory<RoomAbstract>{
     public static RoomFactory getInstance(){
         return SpringUtils.getBean(RoomFactory.class);
     }
-    private Map<Integer,IRoom> room = new HashMap<>(5);
+    private Map<Integer,RoomAbstract> room = new HashMap<>(5);
     private static Logger logger = Logger.getLogger(RoomFactory.class);
     @Autowired
-    private Set<IRoom> set;
+    private Set<RoomAbstract> set;
     @Override
     public <T> T getBean(Class<T> clazz) {
         if(room.containsKey(clazz))
@@ -46,10 +45,10 @@ public class RoomFactory implements IFactory<IRoom>{
     @PostConstruct
     private void  init(){
         if(set != null){
-            Iterator<IRoom> iterator = set.iterator();
+            Iterator<RoomAbstract> iterator = set.iterator();
             while (iterator.hasNext()){
-                IRoom iRoom = iterator.next();
-                room.put(iRoom.getId(),iRoom);
+                RoomAbstract iRoom = iterator.next();
+                room.put(iRoom.getRoomId(),iRoom);
             }
         }
         set.clear();
@@ -60,8 +59,8 @@ public class RoomFactory implements IFactory<IRoom>{
      * @param corePlayer
      */
     public void notifyOfferLine(CorePlayer corePlayer){
-        for (Map.Entry<Integer,IRoom> e:room.entrySet()){
-            e.getValue().leave(corePlayer);
+        for (Map.Entry<Integer,RoomAbstract> e:room.entrySet()){
+            e.getValue().leaveRoom(corePlayer);
             PersistPlayer.removePlayer(corePlayer);
             //添加下线列表
             PersistPlayer.putOffLinePlayer(corePlayer);

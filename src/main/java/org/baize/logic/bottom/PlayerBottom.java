@@ -1,6 +1,5 @@
 package org.baize.logic.bottom;
 
-import org.baize.logic.room.IRoom;
 import org.baize.server.message.CommandAb;
 import org.baize.utils.assemblybean.annon.Protocol;
 

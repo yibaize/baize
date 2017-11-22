@@ -1,18 +1,13 @@
 package org.baize.logic.changeroom;
 
 import org.baize.dao.model.CorePlayer;
-import org.baize.dao.model.PlayerEntity;
 import org.baize.error.AppErrorCode;
 import org.baize.error.Error;
 import org.baize.logic.mainroom.friends.Dto.OtherInfoDto;
 import org.baize.logic.mainroom.rank.manaer.RankManager;
-import org.baize.logic.room.IRoom;
 import org.baize.logic.room.RoomFactory;
 import org.baize.server.message.CommandAb;
 import org.baize.utils.assemblybean.annon.Protocol;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 作者： 白泽

@@ -1,10 +1,8 @@
 package org.baize.dao.model;
 
 import io.netty.channel.Channel;
-import org.baize.logic.room.IRoom;
-import org.baize.server.manager.Response;
+import org.baize.server.GameServer;
 import org.baize.server.message.IProtostuff;
-import org.baize.utils.ProtostuffUtils;
 
 /**
  * 作者： 白泽
@@ -60,12 +58,6 @@ public class CorePlayer {
         this.entity = entity;
     }
     public void respones(short poroId,IProtostuff o){
-        Response response = new Response();
-        response.setId(poroId);
-        byte[] buf = null;
-        if(o != null)
-            buf = ProtostuffUtils.serializer(o);
-        response.setData(buf);
-        ctx.writeAndFlush(response);
+        GameServer.response(ctx,poroId,o);
     }
 }

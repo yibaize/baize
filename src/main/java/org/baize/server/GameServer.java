@@ -1,20 +1,24 @@
 package org.baize.server;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import org.baize.dao.model.CorePlayer;
 import org.baize.server.manager.RequestDecoderManager;
+import org.baize.server.manager.Response;
 import org.baize.server.manager.ResponseEncoderManager;
 import org.baize.server.manager.ServerHandlerManager;
+import org.baize.server.message.IProtostuff;
 import org.baize.utils.DateUtils;
 import org.baize.utils.LoggerUtils;
+import org.baize.utils.ProtostuffUtils;
+
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * 作者： 白泽
@@ -53,5 +57,20 @@ public final class GameServer {
             WORKER_GROUP.shutdownGracefully();
             LoggerUtils.getLogicLog().error("---------------服务器关闭------------------");
         }
+    }
+    public static void notifyAllx(Set<CorePlayer> players, short id, IProtostuff msg){
+        Iterator<CorePlayer> iterator = players.iterator();
+        while (iterator.hasNext()){
+            iterator.next().respones(id,msg);
+        }
+    }
+    public static void response(Channel ctx, short poroId, IProtostuff o){
+        Response response = new Response();
+        response.setId(poroId);
+        byte[] buf = null;
+        if(o != null)
+            buf = ProtostuffUtils.serializer(o);
+        response.setData(buf);
+        ctx.writeAndFlush(response);
     }
 }

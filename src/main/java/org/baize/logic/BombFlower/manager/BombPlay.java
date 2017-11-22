@@ -7,13 +7,20 @@ import org.baize.logic.BombFlower.dto.CardResultsDto;
 import org.baize.logic.card.data.Card;
 import org.baize.logic.card.manager.ICompareCardSize;
 import org.baize.logic.login.manager.LoginManager;
+import org.baize.logic.mainroom.friends.Dto.OtherInfoDto;
+import org.baize.logic.mainroom.friends.Dto.OtherInfosDto;
+import org.baize.logic.mainroom.rank.dto.RankDto;
+import org.baize.logic.mainroom.rank.manaer.RankManager;
 import org.baize.logic.room.PlayAbstract;
+import org.baize.server.GameServer;
+import org.baize.server.message.IProtostuff;
 import org.baize.utils.SpringUtils;
 import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -24,7 +31,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class BombPlay extends PlayAbstract {
     private CorePlayer banker;
     private ConcurrentLinkedQueue<CorePlayer> bankerLineUp;
-
+    private Set<CorePlayer> playerSet;
     @Override
     public CardResultsDto end() {
         ICompareCardSize iCompareCardSize = new BombCompareCardSize();
@@ -40,6 +47,12 @@ public class BombPlay extends PlayAbstract {
         dtos.setCardResultDtos(list);
         return dtos;
     }
+
+    @Override
+    public void roomPlayers(Set<CorePlayer> players) {
+        this.playerSet = players;
+    }
+
     /**
      * 上庄申请
      * @param corePlayer
@@ -48,9 +61,8 @@ public class BombPlay extends PlayAbstract {
     public boolean bankerLineUp(CorePlayer corePlayer){
         if(bankerLineUp == null)
             bankerLineUp = new ConcurrentLinkedQueue<>();
-        if(bankerLineUp.contains(corePlayer)){
+        if(!bankerLineUp.contains(corePlayer)){
             bankerLineUp.offer(corePlayer);
-            bankerUp();
             return true;
         }
         return false;
@@ -62,13 +74,19 @@ public class BombPlay extends PlayAbstract {
      * 需要同步
      * @return
      */
-    private boolean bankerUp(){
+    private void bankerUp(){
         synchronized (banker) {
             if (checkBanker() && bankerLineUp != null || bankerLineUp.size() > 0) {
                 banker = bankerLineUp.poll();
-                return true;
+                RankDto dto = new RankDto();
+                List<OtherInfoDto> other = new ArrayList<>(bankerLineUp.size());
+                for (CorePlayer player:bankerLineUp){
+                    OtherInfoDto otherInfoDto = RankManager.getInstance().assembly(player.entity());
+                    other.add(otherInfoDto);
+                }
+                dto.setRank(other);
+                GameServer.notifyAllx(playerSet,(short)109,dto);
             }
-            return false;
         }
     }
     public boolean bankerDown(CorePlayer corePlayer){
@@ -79,5 +97,4 @@ public class BombPlay extends PlayAbstract {
         }
         return false;
     }
-
 }

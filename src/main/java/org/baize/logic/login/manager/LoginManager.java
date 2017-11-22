@@ -9,7 +9,6 @@ import org.baize.dao.sqlmapper.PlayerMapper;
 import org.baize.error.AppErrorCode;
 import org.baize.error.Error;
 import org.baize.logic.IFactory;
-import org.baize.logic.room.IRoom;
 import org.baize.logic.room.RoomFactory;
 import org.baize.server.message.IProtostuff;
 import org.baize.utils.LoggerUtils;

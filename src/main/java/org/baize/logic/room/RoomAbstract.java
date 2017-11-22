@@ -2,9 +2,11 @@ package org.baize.logic.room;
 
 import org.baize.EnumType.ResultType;
 import org.baize.dao.model.CorePlayer;
+import org.baize.dao.model.PersistPlayer;
 import org.baize.logic.BombFlower.dto.OpeningDto;
 import org.baize.logic.card.data.Card;
 import org.baize.logic.room.impl.BottomPosition;
+import org.baize.server.GameServer;
 import org.baize.server.message.IProtostuff;
 import org.baize.utils.DateUtils;
 import org.baize.worktask.ISecondTimer;
@@ -30,11 +32,13 @@ public abstract class RoomAbstract implements ISecondTimer{
     private boolean roomBattleState;
     private final PlayAbstract play;
 
-    public RoomAbstract(int roomId,PlayAbstract play) {
+    public RoomAbstract(int roomId,PlayAbstract play,IBottom roomBottom) {
         this.roomId = roomId;
+        this.roomBottom = roomBottom;
         if(roomPlayers == null)
             roomPlayers = new HashSet<>();
         roomBottom.players(roomPlayers);
+        play.roomPlayers(roomPlayers);
         this.play = play;
     }
 
@@ -52,60 +56,11 @@ public abstract class RoomAbstract implements ISecondTimer{
         return roomBattleState;
     }
     /**
-     * 玩家进入房间
-     * @param player 进入的玩家
-     */
-    public void intoRoom(CorePlayer player){
-        if(roomPlayers == null)
-            roomPlayers = new HashSet<>();
-        if(!roomPlayers.contains(player))
-            roomPlayers.add(player);
-    }
-
-    /**
-     * 玩家离开房间
-     * @param player
-     */
-    public void leaveRoom(CorePlayer player){
-        if(roomPlayers.contains(player))
-            roomPlayers.remove(player);
-        roomBottom.leave(player);
-    }
-
-    /**
      * 房间玩家数量
      * @return
      */
     public int roomPlayerCount(){
         return roomPlayers.size();
-    }
-
-    /**
-     * 开局
-     */
-    public void startBattle(){
-        play.shuffle();
-        roomEndTime = DateUtils.getFutureTimeMillis();
-        roomBattleState = true;
-        ntf(1);
-    }
-
-    /**
-     * 正在局中
-     */
-    public abstract void battling();
-
-    /**
-     * 结束
-     */
-    public void endBattle(){
-        roomBottom.clearBottom();
-        roomEndTime = 0;
-        ntf(2);
-    }
-    private void ntf(int type){
-        OpeningDto dto = new OpeningDto(type);
-        notifyAllx((short)105,dto);
     }
     public IBottom getRoomBottom() {
         return roomBottom;
@@ -130,6 +85,61 @@ public abstract class RoomAbstract implements ISecondTimer{
         roomBottom.bottom(position,num,corePlayer);
     }
 
+    /**
+     * 正在局中
+     */
+    public abstract void battling();
+    /**
+     * 玩家进入房间
+     * @param player 进入的玩家
+     */
+    public void intoRoom(CorePlayer player){
+        if(roomPlayers == null)
+            roomPlayers = new HashSet<>();
+        if(!roomPlayers.contains(player)) {
+            roomPlayers.add(player);
+            Set<CorePlayer> playerSet = PersistPlayer.playerByNotSelf(player,roomPlayers);
+            GameServer.notifyAllx(playerSet,(short)101,null);
+        }
+    }
+
+    /**
+     * 玩家离开房间
+     * @param player
+     */
+    public void leaveRoom(CorePlayer player){
+        if(roomPlayers.contains(player))
+            roomPlayers.remove(player);
+        roomBottom.leave(player);
+        Set<CorePlayer> playerSet = PersistPlayer.playerByNotSelf(player,roomPlayers);
+        GameServer.notifyAllx(playerSet,(short)102,null);
+    }
+
+
+    /**
+     * 开局
+     */
+    public void startBattle(){
+        play.shuffle();
+        roomEndTime = DateUtils.getFutureTimeMillis();
+        roomBattleState = true;
+        ntf(1);
+    }
+
+
+    /**
+     * 结束
+     */
+    public void endBattle(){
+        roomBottom.clearBottom();
+        roomEndTime = 0;
+        ntf(2);
+    }
+    private void ntf(int type){
+        OpeningDto dto = new OpeningDto(type);
+        notifyAllx((short)105,dto);
+    }
+
     protected void settleAccounts(){
         Iterator<Card> iterator = play.getCardSet().iterator();
         while (iterator.hasNext()) {
@@ -141,6 +151,8 @@ public abstract class RoomAbstract implements ISecondTimer{
                 }
             }
         }
+        //结算
+        GameServer.notifyAllx(roomPlayers,(short)108,null);
     }
     private int timer = 0;
     @Override
@@ -152,7 +164,6 @@ public abstract class RoomAbstract implements ISecondTimer{
         if(timer == 15){
             //发送本剧开牌结果
             battling();
-            notifyAllx((short)106,play.end());
         }
         if(timer == 17){
             //结算
@@ -165,13 +176,8 @@ public abstract class RoomAbstract implements ISecondTimer{
         timer++;
     }
     public void notifyAllx(short id,IProtostuff pro){
-        if(roomPlayers != null) {
-            Iterator<CorePlayer> iterator = roomPlayers.iterator();
-            while (iterator.hasNext()) {
-                //发送消息
-                iterator.next().respones(id,pro);
-            }
-        }
+        if(roomPlayers != null)
+            GameServer.notifyAllx(roomPlayers,id,pro);
     }
     /**
      * 通知处自己之外的玩家
@@ -180,12 +186,8 @@ public abstract class RoomAbstract implements ISecondTimer{
      */
     public void notifyAllx(short id,CorePlayer corePlayer,IProtostuff pro){
         if(roomPlayers != null) {
-            Iterator<CorePlayer> iterator = roomPlayers.iterator();
-            while (iterator.hasNext()) {
-                if (iterator.next().equals(corePlayer)) continue;
-                //发送消息
-                iterator.next().respones(id,pro);
-            }
+            Set<CorePlayer> playerByNotSelf = PersistPlayer.playerByNotSelf(corePlayer,roomPlayers);
+            GameServer.notifyAllx(playerByNotSelf,id,pro);
         }
     }
 }

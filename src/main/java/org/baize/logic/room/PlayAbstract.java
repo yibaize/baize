@@ -1,13 +1,12 @@
 package org.baize.logic.room;
 
-import org.baize.EnumType.ResultType;
+import org.baize.dao.model.CorePlayer;
 import org.baize.logic.card.data.Card;
 import org.baize.logic.card.data.PersistCard;
 import org.baize.logic.card.manager.CardManager;
 import org.baize.server.message.IProtostuff;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 作者： 白泽
@@ -44,4 +43,5 @@ public abstract class PlayAbstract {
      * 结算
      */
     public abstract IProtostuff end();
+    public abstract void roomPlayers(Set<CorePlayer> players);
 }

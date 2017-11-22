@@ -2,6 +2,7 @@ package org.baize.logic.BombFlower.manager;
 
 import org.baize.EnumType.ScenesType;
 import org.baize.logic.room.RoomAbstract;
+import org.baize.logic.room.RoomBottomImpl;
 import org.springframework.stereotype.Service;
 /**
  * 作者： 白泽
@@ -11,12 +12,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class BombRoom extends RoomAbstract{
     public BombRoom() {
-        super(ScenesType.Flower.id(),new BombPlay());
+        super(ScenesType.Bomb.id(),new BombPlay(),new RoomBottomImpl());
     }
 
     @Override
     public void battling() {
         setRoomBattleState(false);
         getPlay().perflop(5);
+        notifyAllx((short)106,getPlay().end());
     }
 }

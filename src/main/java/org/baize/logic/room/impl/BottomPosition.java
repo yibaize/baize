@@ -33,10 +33,6 @@ public class BottomPosition {
     public void addAllNum(int num){
         allNum.getAndSet(num);
     }
-    public void leave(CorePlayer corePlayer){
-        if(map.containsKey(corePlayer))
-            map.remove(corePlayer);
-    }
     public void bottom(int num, CorePlayer corePlayer) {
         addAllNum(num);
         synchronized (map) {

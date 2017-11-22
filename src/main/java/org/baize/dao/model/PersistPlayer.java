@@ -2,8 +2,7 @@ package org.baize.dao.model;
 
 import io.netty.channel.Channel;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -82,5 +81,15 @@ public class PersistPlayer {
     }
     public static List<CorePlayer> offLinePlayer(){
         return (List<CorePlayer>) offLinePlayer.values();
+    }
+    public static Set<CorePlayer> playerByNotSelf(CorePlayer corePlayer,Set<CorePlayer> corePlayers){
+        Set<CorePlayer> players = new HashSet<>(corePlayers.size()-1);
+        Iterator<CorePlayer> iterator = corePlayers.iterator();
+        while (iterator.hasNext()){
+            CorePlayer player = iterator.next();
+            if(player.getId() != corePlayer.getId())
+                players.add(player);
+        }
+        return players;
     }
 }

@@ -2,9 +2,6 @@ package org.baize.server.message;
 
 import io.netty.channel.Channel;
 import org.baize.dao.model.CorePlayer;
-import org.baize.logic.room.IRoom;
-import org.baize.server.manager.Response;
-import org.baize.utils.ProtostuffUtils;
 
 /**
  * 作者： 白泽
