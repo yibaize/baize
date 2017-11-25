@@ -17,7 +17,7 @@ public class BombRoom extends RoomAbstract{
 
     @Override
     public void battling() {
-        setRoomBattleState(false);
+        setRoomBattleState(true);
         getPlay().perflop(5);
         notifyAllx((short)106,getPlay().end());
     }

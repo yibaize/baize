@@ -3,6 +3,7 @@ package org.baize.logic.card.data;
 import org.baize.EnumType.CardType;
 import org.baize.EnumType.ResultType;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -10,11 +11,12 @@ import java.util.List;
  * 时间： 2017/11/25.
  * 描述：
  */
-public class Card {
+public class Card implements Comparable<Card>{
     private int position;
     private List<PersistCard> persistCards;
     private int[] cardIds;
     private int[] cardTypes;
+    private int[] id;//牌对应excel的id
     private ResultType result;
     private CardType cardType;
     public Card() {
@@ -79,5 +81,30 @@ public class Card {
                 return p.getCardType();
         }
         return -1;
+    }
+
+    public int[] getId() {
+        return id;
+    }
+
+    public void setId(int[] id) {
+        this.id = id;
+    }
+
+    @Override
+    public int compareTo(Card o) {
+        return position - o.getPosition();
+    }
+
+    @Override
+    public String toString() {
+        return "Card{" +
+                "position=" + position +
+                ", persistCards=" + persistCards +
+                ", cardIds=" + Arrays.toString(cardIds) +
+                ", cardTypes=" + Arrays.toString(cardTypes) +
+                ", result=" + result +
+                ", cardType=" + cardType +
+                '}';
     }
 }

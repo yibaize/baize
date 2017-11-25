@@ -1,7 +1,9 @@
 package org.baize.arithmetic;
 import org.baize.EnumType.CardType;
+import org.baize.EnumType.ResultType;
 import org.baize.logic.card.data.Card;
-import java.util.Arrays;
+
+import java.util.*;
 
 /**
  * 作者： 白泽
@@ -9,7 +11,7 @@ import java.util.Arrays;
  * 描述：扎金花算法
  */
 public class BomFlower {
-    public static CardType checkType(Card card){
+    private static CardType checkType(Card card){
         if(checkAaa(card))
             return CardType.AAA;
         else if(checkBomb(card))
@@ -104,10 +106,27 @@ public class BomFlower {
 
     /**===============================================================================比大小=========================================================================*/
     private static Card banker;
-    public static void compareTo(Card bankerx,Card other){
-        banker = bankerx;
+    private static boolean comSize(Card other){
+        if(banker.getCardType() != other.getCardType())
+            return banker.getCardType().id() < other.getCardType().id();
+        switch (other.getCardType()){
+            case Scattered:
+                return scatteredSize(banker,other);
+            case Both:
+                return bothSize(other);
+            case Staright:
+                return straightSize(other);
+            case AlikeColor:
+                return scatteredSize(banker,other);
+            case AlikeColorAndStaright:
+                return straightSize(other);
+            case Bomb:
+                return bombSize(other);
+            case AAA:
+                default:
+                    return false;
+        }
     }
-
     /**
      * 比较aaa，炸
      * @return
@@ -206,5 +225,21 @@ public class BomFlower {
             }
         }
         return false;
+    }
+    public static void handler(Set<Card> cards){
+        List<Card> c = new ArrayList<>(cards);
+        for (Card cd:c){
+            CardType cardType = checkType(cd);
+            cd.setCardType(cardType);
+        }
+        Collections.sort(c);
+        banker = c.get(0);
+        for(int i = 1;i<c.size();i++){
+            Card card = c.get(i);
+            if(comSize(card))
+                card.setResult(ResultType.Win);
+            else
+                card.setResult(ResultType.Lose);
+        }
     }
 }

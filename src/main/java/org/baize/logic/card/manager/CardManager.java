@@ -35,14 +35,14 @@ public class CardManager {
         Card card = new Card();
         card.setPosition(i+1);
         int[] types = new int[3];
-        int[] ids = new int[3];
+        int[] cardId = new int[3];
         List<PersistCard> cardlist = list.subList(i*3,i*3+3);
         for(int j = 0;j<3;j++) {
             types[j] = cardlist.get(j).getCardType();
-            ids[j] = cardlist.get(j).getCardNum();
+            cardId[j] = cardlist.get(j).getCardNum();
         }
         card.setPersistCards(cardlist);
-        card.setCardIds(ids);
+        card.setCardIds(cardId);
         card.setCardTypes(types);
         return card;
     }

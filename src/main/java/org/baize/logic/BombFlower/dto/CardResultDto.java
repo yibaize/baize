@@ -11,7 +11,7 @@ import org.baize.utils.assemblybean.annon.Protostuff;
 @Protostuff
 public class CardResultDto implements IProtostuff {
     private int id;//牌堆
-    private boolean result;//输赢
+    private int result;//输赢
     private int type;//散、对、顺子...
     private int[] cardId;//1-52
 
@@ -23,11 +23,11 @@ public class CardResultDto implements IProtostuff {
         this.id = id;
     }
 
-    public boolean isResult() {
+    public int getResult() {
         return result;
     }
 
-    public void setResult(boolean result) {
+    public void setResult(int result) {
         this.result = result;
     }
 

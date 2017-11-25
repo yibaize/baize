@@ -1,8 +1,12 @@
 package org.baize.logic.BombFlower.manager;
 
+import org.baize.EnumType.CardType;
+import org.baize.arithmetic.BomFlower;
 import org.baize.dao.model.CorePlayer;
 import org.baize.logic.BombFlower.dto.CardResultDto;
 import org.baize.logic.BombFlower.dto.CardResultsDto;
+import org.baize.logic.card.data.Card;
+import org.baize.logic.card.data.PersistCard;
 import org.baize.logic.mainroom.friends.Dto.OtherInfoDto;
 import org.baize.logic.mainroom.rank.dto.RankDto;
 import org.baize.logic.mainroom.rank.manaer.RankManager;
@@ -27,18 +31,26 @@ public class BombPlay extends PlayAbstract {
     private Set<CorePlayer> playerSet;
     @Override
     public CardResultsDto end() {
-//        ICompareCardSize iCompareCardSize = new BombCompareCardSize();
-//        iCompareCardSize.result(getCardSet());
-//        CardResultsDto dtos = new CardResultsDto();
-//        List<CardResultDto> list = new ArrayList<>(5);
-//        Iterator<Card> iterator = getCardSet().iterator();
-//        while (iterator.hasNext()){
-//            CardResultDto dto = new CardResultDto();
-//            BeanUtils.copyProperties(iterator.next(),dto);
-//            list.add(dto);
-//        }
-//        dtos.setCardResultDtos(list);
-        return null;
+        BomFlower.handler(getCardSet());
+        CardResultsDto dtos = new CardResultsDto();
+        List<CardResultDto> list = new ArrayList<>(5);
+        Iterator<Card> iterator = getCardSet().iterator();
+        while (iterator.hasNext()){
+            Card card = iterator.next();
+            CardResultDto dto = new CardResultDto();
+            int[] ids = new int[3];
+            List<PersistCard> p = card.getPersistCards();
+            for (int i = 0;i<p.size();i++){
+                ids[i] = p.get(i).getId();
+            }
+            dto.setId(card.getPosition());
+            dto.setCardId(ids);
+            dto.setType(card.getCardType().id());
+            dto.setResult(card.getResult().id());
+            list.add(dto);
+        }
+        dtos.setCardResultDtos(list);
+        return dtos;
     }
 
     @Override
