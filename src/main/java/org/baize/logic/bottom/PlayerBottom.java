@@ -20,9 +20,9 @@ public class PlayerBottom extends CommandAb {
 
     @Override
     public void execute() {
-        IRoom room = this.player().getRoom();
-        room.bottom(id,count,this.player());
-        PlayerBottomDto dto = new PlayerBottomDto(id,count);
-        this.responce(dto);
+//        IRoom room = this.player().getRoom();
+//        room.bottom(id,count,this.player());
+//        PlayerBottomDto dto = new PlayerBottomDto(id,count);
+//        this.responce(dto);
     }
 }

@@ -14,8 +14,6 @@ public class CorePlayer {
     private Channel ctx;
     private int scenesId;
     private PlayerEntity entity;
-    private IRoom room;
-
     public int getId() {
         return id;
     }
@@ -31,15 +29,6 @@ public class CorePlayer {
     public void setCtx(Channel ctx) {
         this.ctx = ctx;
     }
-
-    public IRoom getRoom() {
-        return room;
-    }
-
-    public void setRoom(IRoom room) {
-        this.room = room;
-    }
-
     public int getScenesId() {
         return scenesId;
     }

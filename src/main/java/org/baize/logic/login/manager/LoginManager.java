@@ -96,21 +96,21 @@ public class LoginManager {
         ctx.closeFuture();
     }
     private void putCache(Channel channel,PlayerEntity entity){
-        CorePlayer corePlayer = new CorePlayer();
-        corePlayer.setEntity(entity);
-        corePlayer.setCtx(channel);
-        corePlayer.setId(entity.getId());
-
-        IFactory factory = RoomFactory.getInstance();
-        IRoom room = (IRoom) factory.getBean(ScenesType.Mian.id());
-        if(room == null)
-            new Error(channel).err(AppErrorCode.DATA_ERR);
-
-        room.into(corePlayer);
-        corePlayer.setRoom(room);
-        corePlayer.setScenesId(ScenesType.Mian.id());
-
-        PersistPlayer.putPlayer(corePlayer);
+//        CorePlayer corePlayer = new CorePlayer();
+//        corePlayer.setEntity(entity);
+//        corePlayer.setCtx(channel);
+//        corePlayer.setId(entity.getId());
+//
+//        IFactory factory = RoomFactory.getInstance();
+//        IRoom room = (IRoom) factory.getBean(ScenesType.Mian.id());
+//        if(room == null)
+//            new Error(channel).err(AppErrorCode.DATA_ERR);
+//
+//        room.into(corePlayer);
+//        corePlayer.setRoom(room);
+//        corePlayer.setScenesId(ScenesType.Mian.id());
+//
+//        PersistPlayer.putPlayer(corePlayer);
     }
     private PlayerDto dto(PlayerEntity entity){
         PlayerInfo info = entity.playerInfo();

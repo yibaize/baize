@@ -144,10 +144,10 @@ public abstract class RoomAbstract implements ISecondTimer{
         Iterator<Card> iterator = play.getCardSet().iterator();
         while (iterator.hasNext()) {
             Card card = iterator.next();
-            if (card.getResult() == ResultType.Win.id()) {
-                if(roomBottom.bottomMap().containsKey(card.getId())){
+            if (card.getResult() == ResultType.Win) {
+                if(roomBottom.bottomMap().containsKey(card.getPosition())){
                     BottomPosition b = roomBottom.bottomMap().get(card);
-                    b.settleAccounts(card.getType());
+                    b.settleAccounts(card.getCardType().id());
                 }
             }
         }

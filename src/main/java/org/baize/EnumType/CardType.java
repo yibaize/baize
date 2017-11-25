@@ -16,11 +16,11 @@ public enum  CardType {
     /**对子*/
     Both(2),
     /**顺子2*/
-    Obey(3),
+    Staright(3),
     /**同花*/
-    SumeType(4),
+    AlikeColor(4),
     /**同花顺*/
-    ObyeAndSume(5),
+    AlikeColorAndStaright(5),
     /**炸*/
     Bomb(6),
     /**三条A*/

@@ -1,20 +1,13 @@
 package org.baize.logic.BombFlower.manager;
 
 import org.baize.dao.model.CorePlayer;
-import org.baize.dao.model.PlayerEntity;
 import org.baize.logic.BombFlower.dto.CardResultDto;
 import org.baize.logic.BombFlower.dto.CardResultsDto;
-import org.baize.logic.card.data.Card;
-import org.baize.logic.card.manager.ICompareCardSize;
-import org.baize.logic.login.manager.LoginManager;
 import org.baize.logic.mainroom.friends.Dto.OtherInfoDto;
-import org.baize.logic.mainroom.friends.Dto.OtherInfosDto;
 import org.baize.logic.mainroom.rank.dto.RankDto;
 import org.baize.logic.mainroom.rank.manaer.RankManager;
 import org.baize.logic.room.PlayAbstract;
 import org.baize.server.GameServer;
-import org.baize.server.message.IProtostuff;
-import org.baize.utils.SpringUtils;
 import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
@@ -34,18 +27,18 @@ public class BombPlay extends PlayAbstract {
     private Set<CorePlayer> playerSet;
     @Override
     public CardResultsDto end() {
-        ICompareCardSize iCompareCardSize = new BombCompareCardSize();
-        iCompareCardSize.result(getCardSet());
-        CardResultsDto dtos = new CardResultsDto();
-        List<CardResultDto> list = new ArrayList<>(5);
-        Iterator<Card> iterator = getCardSet().iterator();
-        while (iterator.hasNext()){
-            CardResultDto dto = new CardResultDto();
-            BeanUtils.copyProperties(iterator.next(),dto);
-            list.add(dto);
-        }
-        dtos.setCardResultDtos(list);
-        return dtos;
+//        ICompareCardSize iCompareCardSize = new BombCompareCardSize();
+//        iCompareCardSize.result(getCardSet());
+//        CardResultsDto dtos = new CardResultsDto();
+//        List<CardResultDto> list = new ArrayList<>(5);
+//        Iterator<Card> iterator = getCardSet().iterator();
+//        while (iterator.hasNext()){
+//            CardResultDto dto = new CardResultDto();
+//            BeanUtils.copyProperties(iterator.next(),dto);
+//            list.add(dto);
+//        }
+//        dtos.setCardResultDtos(list);
+        return null;
     }
 
     @Override

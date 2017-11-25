@@ -33,19 +33,17 @@ public class CardManager {
     }
     public Card initCard(List<PersistCard> list, int i){
         Card card = new Card();
-        card.setId(i+1);
-        int[] id = new int[3];
-        int[] type = new int[3];
-        int[] num = new int[3];
+        card.setPosition(i+1);
+        int[] types = new int[3];
+        int[] ids = new int[3];
         List<PersistCard> cardlist = list.subList(i*3,i*3+3);
         for(int j = 0;j<3;j++) {
-            id[j] = cardlist.get(j).getId();
-            type[j] = cardlist.get(j).getCardType();
-            num[j] = cardlist.get(j).getCardNum();
+            types[j] = cardlist.get(j).getCardType();
+            ids[j] = cardlist.get(j).getCardNum();
         }
-        card.setCardId(id);
-        card.setCardNum(num);
-        card.setCardType(type);
+        card.setPersistCards(cardlist);
+        card.setCardIds(ids);
+        card.setCardTypes(types);
         return card;
     }
 }

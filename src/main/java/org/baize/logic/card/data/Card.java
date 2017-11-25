@@ -1,68 +1,83 @@
 package org.baize.logic.card.data;
 
+import org.baize.EnumType.CardType;
+import org.baize.EnumType.ResultType;
+
+import java.util.List;
+
 /**
  * 作者： 白泽
- * 时间： 2017/11/6.
- * 描述：牌堆
+ * 时间： 2017/11/25.
+ * 描述：
  */
-public class Card implements Comparable<Card>{
-    private int id;//牌堆
-    private int result;//输赢
-    private int type;//散、对、顺子...
-    private int[] cardType;//梅花、方块、红桃、黑桃
-    private int[] cardId;//1-52
-    private int[] cardNum;//1-13
-
-    public int getId() {
-        return id;
+public class Card {
+    private int position;
+    private List<PersistCard> persistCards;
+    private int[] cardIds;
+    private int[] cardTypes;
+    private ResultType result;
+    private CardType cardType;
+    public Card() {
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getResult() {
+    public ResultType getResult() {
         return result;
     }
 
-    public void setResult(int result) {
+    public void setResult(ResultType result) {
         this.result = result;
     }
 
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public int[] getCardId() {
-        return cardId;
-    }
-
-    public int[] getCardType() {
+    public CardType getCardType() {
         return cardType;
     }
 
-    public void setCardType(int[] cardType) {
+    public void setCardType(CardType cardType) {
         this.cardType = cardType;
     }
 
-    public void setCardId(int[] cardId) {
-        this.cardId = cardId;
+    public int getPosition() {
+        return position;
     }
 
-    public int[] getCardNum() {
-        return cardNum;
+    public void setPosition(int position) {
+        this.position = position;
     }
 
-    public void setCardNum(int[] cardNum) {
-        this.cardNum = cardNum;
+    public List<PersistCard> getPersistCards() {
+        return persistCards;
     }
 
-    @Override
-    public int compareTo(Card o) {
-        return id - o.getId();
+    public void setPersistCards(List<PersistCard> persistCards) {
+        this.persistCards = persistCards;
+    }
+
+    public int[] getCardIds() {
+        return cardIds;
+    }
+
+    public void setCardIds(int[] cardIds) {
+        this.cardIds = cardIds;
+    }
+
+    public int[] getCardTypes() {
+        return cardTypes;
+    }
+
+    public void setCardTypes(int[] cardTypes) {
+        this.cardTypes = cardTypes;
+    }
+
+    /**
+     * 在牌类型相同时要比较花色的时候使用
+     * @param id
+     * @return
+     */
+    public int getTypeById(int id){
+        for (PersistCard p:persistCards){
+            if(p.getCardNum() == id)
+                return p.getCardType();
+        }
+        return -1;
     }
 }
