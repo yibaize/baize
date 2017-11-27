@@ -7,7 +7,8 @@ import org.baize.dao.sqlmapper.PlayerMapper;
 import org.baize.error.AppErrorCode;
 import org.baize.error.Error;
 import org.baize.logic.mainroom.friends.module.Friends;
-import org.baize.server.message.CommandAb;
+import org.baize.server.message.IProtostuff;
+import org.baize.server.message.OperateCommandAbstract;
 import org.baize.utils.SpringUtils;
 import org.baize.utils.assemblybean.annon.Protocol;
 
@@ -17,14 +18,14 @@ import org.baize.utils.assemblybean.annon.Protocol;
  * 描述：
  */
 @Protocol(id = "3")
-public class Friend_Add extends CommandAb{
+public class Friend_Add extends OperateCommandAbstract {
     private final int id;
     public Friend_Add(int id) {
         this.id = id;
     }
 
     @Override
-    public void execute() {
+    public IProtostuff execute() {
         CorePlayer corePlayer = PersistPlayer.getById(id);
         Friends friends1 = null;
         if(corePlayer != null){
@@ -38,5 +39,6 @@ public class Friend_Add extends CommandAb{
             new Error(this.getCtx()).err(AppErrorCode.DATA_ERR);
         friends1.apply(this.player().getId());
         friends1.update();
+        return null;
     }
 }

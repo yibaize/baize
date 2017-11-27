@@ -1,15 +1,10 @@
 package org.baize.worktask.impl;
 
-import org.baize.server.message.ICommand;
 import org.baize.utils.LoggerUtils;
 import org.baize.utils.SpringUtils;
-import org.baize.worktask.TaskPoolManagerAbstract;
-import org.springframework.stereotype.Service;
 
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 作者： 白泽

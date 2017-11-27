@@ -3,7 +3,8 @@ package org.baize.logic.mainroom.shop.command;
 import org.baize.error.AppErrorCode;
 import org.baize.error.Error;
 import org.baize.logic.mainroom.shop.data.ShopDataTable;
-import org.baize.server.message.CommandAb;
+import org.baize.server.message.IProtostuff;
+import org.baize.server.message.OperateCommandAbstract;
 import org.baize.utils.assemblybean.annon.Protocol;
 
 /**
@@ -12,7 +13,7 @@ import org.baize.utils.assemblybean.annon.Protocol;
  * 描述：
  */
 @Protocol(id = "10")
-public class Shop_Buy extends CommandAb {
+public class Shop_Buy extends OperateCommandAbstract {
     /**商品id*/
     private final int goodsId;
     /**数量*/
@@ -24,9 +25,10 @@ public class Shop_Buy extends CommandAb {
     }
 
     @Override
-    public void execute() {
+    public IProtostuff execute() {
         ShopDataTable dataTable = ShopDataTable.get(goodsId);
         if(dataTable == null)
             new Error(this.getCtx()).err(AppErrorCode.DATA_ERR);
+        return null;
     }
 }

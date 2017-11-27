@@ -8,15 +8,15 @@ import org.baize.dao.model.CorePlayer;
  * 时间： 2017/11/3.
  * 描述：
  */
-public abstract class CommandAb implements ICommand {
+public abstract class OperateCommandAbstract implements IOperateCommand {
     private short cmdId;
     private Channel ctx;
     private CorePlayer corePlayer;
     private boolean hasSend = false;
-    public CommandAb() {
+    public OperateCommandAbstract() {
     }
 
-    public CommandAb(short cmdId, Channel ctx, CorePlayer corePlayer) {
+    public OperateCommandAbstract(short cmdId, Channel ctx, CorePlayer corePlayer) {
         this.cmdId = cmdId;
         this.ctx = ctx;
         this.corePlayer = corePlayer;

@@ -9,7 +9,8 @@ import org.baize.logic.mainroom.friends.Dto.OtherInfoDto;
 import org.baize.logic.mainroom.friends.Dto.OtherInfosDto;
 import org.baize.logic.mainroom.friends.module.Friends;
 import org.baize.logic.mainroom.rank.manaer.RankManager;
-import org.baize.server.message.CommandAb;
+import org.baize.server.message.IProtostuff;
+import org.baize.server.message.OperateCommandAbstract;
 import org.baize.utils.SpringUtils;
 import org.baize.utils.assemblybean.annon.Protocol;
 
@@ -22,9 +23,9 @@ import java.util.List;
  * 描述：
  */
 @Protocol(id = "7")
-public class Friend_Select extends CommandAb{
+public class Friend_Select extends OperateCommandAbstract {
     @Override
-    public void execute() {
+    public IProtostuff execute() {
         Friends friends = player().entity().friends();
         List<OtherInfoDto> friendList = new ArrayList<>();
         List<OtherInfoDto> applyList = new ArrayList<>();
@@ -34,7 +35,7 @@ public class Friend_Select extends CommandAb{
         for (int id : friends.apply()){
             applyList.add(RankManager.getInstance().assembly(find(id)));
         }
-        this.responce(new OtherInfosDto(friendList,applyList));
+        return (new OtherInfosDto(friendList,applyList));
     }
     private PlayerEntity find(int id){
         PlayerMapper mapper = SpringUtils.getBean(PlayerMapper.class);

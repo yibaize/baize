@@ -3,7 +3,8 @@ package org.baize.logic.mainroom.rank.command;
 import org.baize.logic.mainroom.friends.Dto.OtherInfoDto;
 import org.baize.logic.mainroom.rank.dto.RankDto;
 import org.baize.logic.mainroom.rank.manaer.RankManager;
-import org.baize.server.message.CommandAb;
+import org.baize.server.message.IProtostuff;
+import org.baize.server.message.OperateCommandAbstract;
 import org.baize.utils.assemblybean.annon.Protocol;
 
 import java.util.List;
@@ -14,10 +15,10 @@ import java.util.List;
  * 描述：
  */
 @Protocol(id = "8")
-public class Rank_Select extends CommandAb{
+public class Rank_Select extends OperateCommandAbstract {
     @Override
-    public void execute() {
+    public IProtostuff execute() {
         List<OtherInfoDto> other = RankManager.getInstance().getRanks();
-        this.responce(new RankDto(other));
+        return new RankDto(other);
     }
 }

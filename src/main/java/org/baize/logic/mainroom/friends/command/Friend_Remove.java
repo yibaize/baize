@@ -1,7 +1,8 @@
 package org.baize.logic.mainroom.friends.command;
 
 import org.baize.logic.mainroom.friends.module.Friends;
-import org.baize.server.message.CommandAb;
+import org.baize.server.message.IProtostuff;
+import org.baize.server.message.OperateCommandAbstract;
 import org.baize.utils.assemblybean.annon.Protocol;
 
 /**
@@ -10,7 +11,7 @@ import org.baize.utils.assemblybean.annon.Protocol;
  * 描述：
  */
 @Protocol(id = "4")
-public class Friend_Remove extends CommandAb {
+public class Friend_Remove extends OperateCommandAbstract {
     private final int id;
 
     public Friend_Remove(int id) {
@@ -18,8 +19,9 @@ public class Friend_Remove extends CommandAb {
     }
 
     @Override
-    public void execute() {
+    public IProtostuff execute() {
         Friends friends = player().entity().friends();
         friends.remove(id);
+        return null;
     }
 }

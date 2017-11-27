@@ -7,7 +7,8 @@ import org.baize.dao.sqlmapper.PlayerMapper;
 import org.baize.error.AppErrorCode;
 import org.baize.error.Error;
 import org.baize.logic.mainroom.friends.module.Friends;
-import org.baize.server.message.CommandAb;
+import org.baize.server.message.IProtostuff;
+import org.baize.server.message.OperateCommandAbstract;
 import org.baize.utils.SpringUtils;
 import org.baize.utils.assemblybean.annon.Protocol;
 
@@ -17,7 +18,7 @@ import org.baize.utils.assemblybean.annon.Protocol;
  * 描述：
  */
 @Protocol(id = "5")
-public class Friend_Consent extends CommandAb{
+public class Friend_Consent extends OperateCommandAbstract {
     private final int id;
 
     public Friend_Consent(int id) {
@@ -25,7 +26,7 @@ public class Friend_Consent extends CommandAb{
     }
 
     @Override
-    public void execute() {
+    public IProtostuff execute() {
         Friends friends = player().entity().friends();
         friends.add(id);
         CorePlayer corePlayer = PersistPlayer.getById(id);
@@ -42,5 +43,6 @@ public class Friend_Consent extends CommandAb{
         friends1.add(player().getId());
         friends.update();
         friends1.update();
+        return null;
     }
 }

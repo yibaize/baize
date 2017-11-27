@@ -1,7 +1,8 @@
 package org.baize.logic.outline;
 
 import org.baize.logic.room.RoomFactory;
-import org.baize.server.message.CommandAb;
+import org.baize.server.message.IProtostuff;
+import org.baize.server.message.OperateCommandAbstract;
 import org.baize.utils.assemblybean.annon.Protocol;
 
 /**
@@ -10,9 +11,10 @@ import org.baize.utils.assemblybean.annon.Protocol;
  * 描述：
  */
 @Protocol(id = "14")
-public class Out_line extends CommandAb{
+public class Out_line extends OperateCommandAbstract {
     @Override
-    public void execute() {
+    public IProtostuff execute() {
         RoomFactory.getInstance().notifyOfferLine(player());
+        return null;
     }
 }

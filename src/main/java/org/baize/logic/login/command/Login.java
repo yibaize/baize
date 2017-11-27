@@ -3,7 +3,7 @@ package org.baize.logic.login.command;
 import org.baize.EnumType.LoginType;
 import org.baize.dao.model.PersistPlayer;
 import org.baize.logic.login.manager.LoginManager;
-import org.baize.server.message.CommandAb;
+import org.baize.server.message.OperateCommandAbstract;
 import org.baize.server.message.IProtostuff;
 import org.baize.utils.assemblybean.annon.Protocol;
 
@@ -13,7 +13,7 @@ import org.baize.utils.assemblybean.annon.Protocol;
  * 描述：
  */
 @Protocol(id = "1")
-public class Login extends CommandAb{
+public class Login extends OperateCommandAbstract {
     private final int loginType;
     private final String account;
     private final String password;
@@ -25,7 +25,7 @@ public class Login extends CommandAb{
     }
 
     @Override
-    public void execute() {
+    public IProtostuff execute() {
         LoginManager manager = LoginManager.getInstace();
         IProtostuff dto = null;
         if(loginType != LoginType.Account.id())
@@ -33,6 +33,6 @@ public class Login extends CommandAb{
         else
             dto = manager.rest(loginType,this.getCtx(),account);
         this.setCorePlayer(PersistPlayer.getByCtx(this.getCtx()));
-       this.responce(dto);
+       return (dto);
     }
 }

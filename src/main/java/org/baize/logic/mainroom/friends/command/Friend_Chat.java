@@ -1,6 +1,7 @@
 package org.baize.logic.mainroom.friends.command;
 
-import org.baize.server.message.CommandAb;
+import org.baize.server.message.IProtostuff;
+import org.baize.server.message.OperateCommandAbstract;
 import org.baize.utils.assemblybean.annon.Protocol;
 
 /**
@@ -9,7 +10,7 @@ import org.baize.utils.assemblybean.annon.Protocol;
  * 描述：
  */
 @Protocol(id = "6")
-public class Friend_Chat extends CommandAb {
+public class Friend_Chat extends OperateCommandAbstract {
     private final int id;
     private final String msg;
 
@@ -19,7 +20,7 @@ public class Friend_Chat extends CommandAb {
     }
 
     @Override
-    public void execute() {
-
+    public IProtostuff execute() {
+        return null;
     }
 }

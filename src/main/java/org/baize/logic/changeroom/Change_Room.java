@@ -1,12 +1,7 @@
 package org.baize.logic.changeroom;
 
-import org.baize.dao.model.CorePlayer;
-import org.baize.error.AppErrorCode;
-import org.baize.error.Error;
-import org.baize.logic.mainroom.friends.Dto.OtherInfoDto;
-import org.baize.logic.mainroom.rank.manaer.RankManager;
-import org.baize.logic.room.RoomFactory;
-import org.baize.server.message.CommandAb;
+import org.baize.server.message.IProtostuff;
+import org.baize.server.message.OperateCommandAbstract;
 import org.baize.utils.assemblybean.annon.Protocol;
 
 /**
@@ -15,7 +10,7 @@ import org.baize.utils.assemblybean.annon.Protocol;
  * 描述：
  */
 @Protocol(id = "13")
-public class Change_Room extends CommandAb{
+public class Change_Room extends OperateCommandAbstract {
     private final int id;
 
     public Change_Room(int id) {
@@ -23,7 +18,7 @@ public class Change_Room extends CommandAb{
     }
 
     @Override
-    public void execute() {
+    public IProtostuff execute() {
 //        IRoom room = RoomFactory.getInstance().getBean(id);
 //        this.player().setRoom(room);
 //        if(room == null)
@@ -38,5 +33,6 @@ public class Change_Room extends CommandAb{
 //        dto.setBanker(bankerInfo);
 //        this.responce(dto);
 //        room.into(this.player());
+        return null;
     }
 }

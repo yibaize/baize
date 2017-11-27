@@ -1,6 +1,6 @@
 package org.baize.worktask;
 
-import org.baize.server.message.ICommand;
+import org.baize.server.message.IOperateCommand;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
@@ -43,11 +43,11 @@ public abstract class TaskPoolManagerAbstract {
         public void run() {
             while (true) {
                 lock.getLock().writeLock().lock();
-                ICommand msg = null;
+                IOperateCommand msg = null;
                 OK:
                 {
                     try {
-                        msg = (ICommand) getQueue().poll();
+                        msg = (IOperateCommand) getQueue().poll();
                         if (msg != null)
                             break OK;
                         taskCompleted.compareAndSet(false, true);

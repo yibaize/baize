@@ -1,6 +1,7 @@
 package org.baize.logic.bottom;
 
-import org.baize.server.message.CommandAb;
+import org.baize.server.message.IProtostuff;
+import org.baize.server.message.OperateCommandAbstract;
 import org.baize.utils.assemblybean.annon.Protocol;
 
 /**
@@ -9,7 +10,7 @@ import org.baize.utils.assemblybean.annon.Protocol;
  * 描述：
  */
 @Protocol(id = "12")
-public class PlayerBottom extends CommandAb {
+public class PlayerBottom extends OperateCommandAbstract {
     private final int id;
     private final int count;
 
@@ -19,10 +20,11 @@ public class PlayerBottom extends CommandAb {
     }
 
     @Override
-    public void execute() {
+    public IProtostuff execute() {
 //        IRoom room = this.player().getRoom();
 //        room.bottom(id,count,this.player());
 //        PlayerBottomDto dto = new PlayerBottomDto(id,count);
 //        this.responce(dto);
+        return null;
     }
 }

@@ -4,7 +4,8 @@ import org.baize.dao.model.Weath;
 import org.baize.error.AppErrorCode;
 import org.baize.error.Error;
 import org.baize.logic.mainroom.moneyTree.data.MoneyTreeDataTable;
-import org.baize.server.message.CommandAb;
+import org.baize.server.message.IProtostuff;
+import org.baize.server.message.OperateCommandAbstract;
 import org.baize.utils.DateUtils;
 import org.baize.utils.assemblybean.annon.Protocol;
 
@@ -14,9 +15,9 @@ import org.baize.utils.assemblybean.annon.Protocol;
  * 描述：
  */
 @Protocol(id = "11")
-public class Tree_Draw extends CommandAb {
+public class Tree_Draw extends OperateCommandAbstract {
     @Override
-    public void execute() {
+    public IProtostuff execute() {
         Weath weath = player().entity().weath();
         long currentTime = DateUtils.currentTime();
         long lastTime = weath.getLastDrawTime();
@@ -28,5 +29,6 @@ public class Tree_Draw extends CommandAb {
         MoneyTreeDataTable dataTable = MoneyTreeDataTable.get((int) distanceTime);
         weath.increaseGold(dataTable.getDrawNum());
         weath.update();
+        return null;
     }
 }

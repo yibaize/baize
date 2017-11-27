@@ -1,7 +1,8 @@
 package org.baize.logic.mainroom.info;
 
 import org.baize.dao.model.PlayerInfo;
-import org.baize.server.message.CommandAb;
+import org.baize.server.message.IProtostuff;
+import org.baize.server.message.OperateCommandAbstract;
 import org.baize.utils.assemblybean.annon.Protocol;
 
 /**
@@ -10,7 +11,7 @@ import org.baize.utils.assemblybean.annon.Protocol;
  * 描述：
  */
 @Protocol(id = "2")
-public class Info_Reset extends CommandAb{
+public class Info_Reset extends OperateCommandAbstract {
     private final String name;
     private final String password;
     private final String describe;
@@ -26,7 +27,7 @@ public class Info_Reset extends CommandAb{
     }
 
     @Override
-    public void execute() {
+    public IProtostuff execute() {
         PlayerInfo info = this.player().entity().playerInfo();
         info.setName(name);
         info.setPassword(password);
@@ -34,5 +35,6 @@ public class Info_Reset extends CommandAb{
         info.setDiscibe(describe);
         info.setPhon(phon);
         info.update();
+        return null;
     }
 }
