@@ -1,6 +1,6 @@
 package org.baize.logic.outline;
 
-import org.baize.logic.room.RoomFactory;
+import org.baize.room.RoomFactory;
 import org.baize.server.message.IProtostuff;
 import org.baize.server.message.OperateCommandAbstract;
 import org.baize.utils.assemblybean.annon.Protocol;
@@ -14,7 +14,7 @@ import org.baize.utils.assemblybean.annon.Protocol;
 public class Out_line extends OperateCommandAbstract {
     @Override
     public IProtostuff execute() {
-        RoomFactory.getInstance().notifyOfferLine(player());
+        //RoomFactory.getInstance().notifyOfferLine(player());
         return null;
     }
 }

@@ -1,18 +1,12 @@
-package org.baize.logic.room;
+package org.baize.room;
 
 import org.apache.log4j.Logger;
-import org.baize.dao.model.CorePlayer;
-import org.baize.dao.model.PersistPlayer;
 import org.baize.logic.IFactory;
 import org.baize.utils.SpringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.PostConstruct;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 作者： 白泽
@@ -20,7 +14,7 @@ import java.util.Set;
  * 描述：
  */
 @Service
-public class RoomFactory implements IFactory<RoomAbstract>{
+public class RoomFactory implements IFactory<RoomAbstract> {
     public static RoomFactory getInstance(){
         return SpringUtils.getBean(RoomFactory.class);
     }
@@ -54,16 +48,11 @@ public class RoomFactory implements IFactory<RoomAbstract>{
         set.clear();
     }
 
-    /**
-     * 下线通知
-     * @param corePlayer
-     */
-    public void notifyOfferLine(CorePlayer corePlayer){
-        for (Map.Entry<Integer,RoomAbstract> e:room.entrySet()){
-            e.getValue().leaveRoom(corePlayer);
-            PersistPlayer.removePlayer(corePlayer);
-            //添加下线列表
-            PersistPlayer.putOffLinePlayer(corePlayer);
+    public List<RoomAbstract> allRoom(){
+        List<RoomAbstract> a = new ArrayList<>(5);
+        for (Map.Entry<Integer,RoomAbstract> r:room.entrySet()){
+            a.add(r.getValue());
         }
+        return  a;
     }
 }

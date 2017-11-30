@@ -101,11 +101,10 @@ public class SelectAnnotationClass {
         String clazz = "";
         switch (ae){
             case Protocol:
-                clazz = "public class "+o.getClass().getSimpleName()+" : ICommandComand {\n";
+                clazz = "public class "+o.getClass().getSimpleName()+" : IOperateCommand {\n";
                 break;
             case DataTable:
                 sb.add("namespace "+StringUtils.substringBeforeLast(beanName,".")+"{\n");
-                impl = "DataTableMessage";
                 clazz = "\tpublic class "+o.getClass().getSimpleName()+" : DataTableMessage {\n";
                 break;
             case Protostuff:
@@ -115,7 +114,7 @@ public class SelectAnnotationClass {
         if(ae == AnnonEnum.DataTable) {
             sb.add("\t\tpublic int id(){\n\t\t\treturn Id;\n\t\t}\n");
             sb.add("\t\tpublic static "+o.getClass().getSimpleName()+" get(int id){\n" +
-            "\t\t\treturn StaticConfigMessage.getInstance().get("+o.getClass().getSimpleName()+".class,id);\n\t\t}\n");
+            "\t\t\treturn StaticConfigMessage.Instance.get<"+o.getClass().getSimpleName()+">(typeof("+o.getClass().getSimpleName()+"),id);\n\t\t}\n");
         }
         for (int i = 0;i< fields.length;i++){
             Type isType = fields[i].getGenericType();
@@ -141,12 +140,13 @@ public class SelectAnnotationClass {
             field = StringUtils.capitalize(field);
             String s = "";
             if(ae == AnnonEnum.DataTable)
-                s = "\t\tpublic "+typestr+" "+field+"{get;}"+"\n";
+                s = "\t\tpublic readonly "+typestr+" "+field+";"+"\n";
             else
                 s = "\tpublic "+typestr+" "+field+"{get;set;}"+"\n";
             sb.add(s);
         }
         if(ae == AnnonEnum.DataTable){
+            sb.add("\t\tpublic void AfterInit(){}\n");
             sb.add("\t}\n");
             sb.add("}");
         }else

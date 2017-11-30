@@ -1,15 +1,12 @@
 package org.baize.logic.login.manager;
 
 import io.netty.channel.Channel;
-import org.baize.EnumType.ScenesType;
 import org.baize.dao.dto.PlayerDto;
 import org.baize.dao.manager.PersistPlayerMapper;
 import org.baize.dao.model.*;
 import org.baize.dao.sqlmapper.PlayerMapper;
 import org.baize.error.AppErrorCode;
 import org.baize.error.Error;
-import org.baize.logic.IFactory;
-import org.baize.logic.room.RoomFactory;
 import org.baize.server.message.IProtostuff;
 import org.baize.utils.LoggerUtils;
 import org.baize.utils.createid.CreateIdUtils;

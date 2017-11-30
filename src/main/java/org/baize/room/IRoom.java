@@ -14,7 +14,7 @@ public interface IRoom {
      * 进入房间
      * @param player
      */
-    default void intoRoom(Player player){
+    default void intoRoom(RoomPlayer player){
         if(!roomPlayer().contains(player)){
             roomPlayer().add(player);
         }
@@ -29,7 +29,7 @@ public interface IRoom {
             roomPlayer().remove(player);
         }
     }
-    Set<Player> roomPlayer();
+    Set<RoomPlayer> roomPlayer();
     default int playerOnline(){
         if(roomPlayer() != null)
             return roomPlayer().size();

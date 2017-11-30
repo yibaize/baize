@@ -8,4 +8,5 @@ package org.baize.room;
 public interface IPlay {
     void start();
     void end();
+    void settleAccounts();
 }

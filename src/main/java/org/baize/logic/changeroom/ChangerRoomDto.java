@@ -15,6 +15,7 @@ import java.util.List;
 public class ChangerRoomDto implements IProtostuff{
     private int timer;
     private int online;
+    private boolean battle;
     private OtherInfoDto banker;
     public OtherInfoDto getBanker() {
         return banker;
@@ -38,5 +39,13 @@ public class ChangerRoomDto implements IProtostuff{
 
     public void setOnline(int online) {
         this.online = online;
+    }
+
+    public boolean isBattle() {
+        return battle;
+    }
+
+    public void setBattle(boolean battle) {
+        this.battle = battle;
     }
 }

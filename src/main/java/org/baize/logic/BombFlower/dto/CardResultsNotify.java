@@ -11,21 +11,21 @@ import java.util.List;
  * 描述：
  */
 @Protostuff
-public class CardResultsDto implements IProtostuff {
-    List<CardResultDto> cardResultDtos;
+public class CardResultsNotify implements IProtostuff {
+    List<CardResultNotify> cardResultDtos;
 
-    public CardResultsDto() {
+    public CardResultsNotify() {
     }
 
-    public CardResultsDto(List<CardResultDto> cardResultDtos) {
+    public CardResultsNotify(List<CardResultNotify> cardResultDtos) {
         this.cardResultDtos = cardResultDtos;
     }
 
-    public List<CardResultDto> getCardResultDtos() {
+    public List<CardResultNotify> getCardResultDtos() {
         return cardResultDtos;
     }
 
-    public void setCardResultDtos(List<CardResultDto> cardResultDtos) {
+    public void setCardResultDtos(List<CardResultNotify> cardResultDtos) {
         this.cardResultDtos = cardResultDtos;
     }
 }

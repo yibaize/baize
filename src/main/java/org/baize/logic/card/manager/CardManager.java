@@ -4,9 +4,7 @@ import org.baize.logic.card.data.Card;
 import org.baize.logic.card.data.PersistCard;
 import org.baize.utils.excel.StaticConfigMessage;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 作者： 白泽
@@ -45,5 +43,21 @@ public class CardManager {
         card.setCardIds(cardId);
         card.setCardTypes(types);
         return card;
+    }
+    private List<PersistCard> shuffle(){
+        List<PersistCard> cards = cardPool;
+        Collections.shuffle(cards);
+        return cards;
+    }
+    /**
+     * 发牌
+     */
+    public Set<Card> perflop(int count){
+        List<PersistCard> list = shuffle();
+        Set<Card> cards = new HashSet<>(count);
+        for (int i = 0;i<count;i++){
+            cards.add(CardManager.getInstance().initCard(list,i));
+        }
+        return cards;
     }
 }

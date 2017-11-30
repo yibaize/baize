@@ -1,5 +1,7 @@
 package org.baize.logic.bottom;
 
+import org.baize.room.RoomAbstract;
+import org.baize.room.RoomPlayer;
 import org.baize.server.message.IProtostuff;
 import org.baize.server.message.OperateCommandAbstract;
 import org.baize.utils.assemblybean.annon.Protocol;
@@ -21,10 +23,9 @@ public class PlayerBottom extends OperateCommandAbstract {
 
     @Override
     public IProtostuff execute() {
-//        IRoom room = this.player().getRoom();
-//        room.bottom(id,count,this.player());
-//        PlayerBottomDto dto = new PlayerBottomDto(id,count);
-//        this.responce(dto);
-        return null;
+        RoomPlayer p = this.roomPlayer;
+        p.bottom(id,count);
+        PlayerBottomDto dto = new PlayerBottomDto(id,count);
+        return dto;
     }
 }

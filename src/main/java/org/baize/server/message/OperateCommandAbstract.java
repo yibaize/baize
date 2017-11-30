@@ -2,6 +2,9 @@ package org.baize.server.message;
 
 import io.netty.channel.Channel;
 import org.baize.dao.model.CorePlayer;
+import org.baize.room.RoomPlayer;
+import org.baize.server.manager.Response;
+import org.baize.utils.ProtostuffUtils;
 
 /**
  * 作者： 白泽
@@ -13,6 +16,7 @@ public abstract class OperateCommandAbstract implements IOperateCommand {
     private Channel ctx;
     private CorePlayer corePlayer;
     private boolean hasSend = false;
+    protected RoomPlayer roomPlayer;
     public OperateCommandAbstract() {
     }
 
@@ -49,17 +53,17 @@ public abstract class OperateCommandAbstract implements IOperateCommand {
     public CorePlayer player(){
         return this.corePlayer;
     }
+
+    @Override
     public void run() {
-        this.execute();
-        this.sendSucceed();
-    }
-    protected void responce(IProtostuff pro){
-        corePlayer.respones(cmdId,pro);
-        hasSend = true;
-    }
-    private void sendSucceed(){
-        if(hasSend) return;
-        corePlayer.respones((short) 10,null);
-        hasSend = false;
+        IProtostuff pro = execute();
+        byte[] buf = null;
+        if(pro != null)
+            buf = ProtostuffUtils.serializer(pro);
+        Response response = new Response();
+        response.setId(cmdId);
+        response.setData(buf);
+        ctx.writeAndFlush(response);
+        broadcast();
     }
 }

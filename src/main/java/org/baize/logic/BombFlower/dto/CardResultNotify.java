@@ -9,7 +9,7 @@ import org.baize.utils.assemblybean.annon.Protostuff;
  * 描述：
  */
 @Protostuff
-public class CardResultDto implements IProtostuff {
+public class CardResultNotify implements IProtostuff {
     private int id;//牌堆
     private int result;//输赢
     private int type;//散、对、顺子...
