@@ -20,6 +20,9 @@ public class RequestDecoderManager extends ByteToMessageDecoder {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) throws Exception {
+        //防止socket大量数据攻击
+        if(buffer.readableBytes() > 2048)
+            buffer.skipBytes(buffer.readableBytes());
         if (buffer.readableBytes() >= BASE_LENGTH) {
             //第一个可读数据包的起始位
             int beginIndex;
@@ -30,6 +33,12 @@ public class RequestDecoderManager extends ByteToMessageDecoder {
                 buffer.markReaderIndex();
                 if (buffer.readInt() == -777888) {//如果是包头
                     break;//一直循环直到读取到包头为止跳出循环执行下一个语句
+                }
+                buffer.resetReaderIndex();
+                buffer.readByte();
+                //不满足
+                if(buffer.readableBytes() < BASE_LENGTH){
+                    return ;
                 }
             }
             //读取数据长度

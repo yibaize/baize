@@ -5,6 +5,9 @@ import org.baize.utils.SpringUtils;
 import org.baize.utils.excel.ExcelUtils;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Hello world!
  *
@@ -12,7 +15,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class App 
 {
     public static void main( String[] args ) {
-       SpringUtils.ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+
+        SpringUtils.ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 //        PlayerMapper mapper = SpringUtils.getBean(PlayerMapper.class);
 //        PersistPlayerMapper playerMapper = new PersistPlayerMapper();
 //        playerMapper.setId(221);
@@ -24,6 +28,6 @@ public class App
 //        playerMapper.setFriends(JSON.toJSONString(new Friends()));
 //        mapper.insert(playerMapper);
         ExcelUtils.init();
-       GameServer.start();
+        GameServer.start();
     }
 }

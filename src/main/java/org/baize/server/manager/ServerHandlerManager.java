@@ -3,6 +3,8 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.baize.server.message.TcpHandler;
+import org.baize.server.session.ISession;
+import org.baize.server.session.SessionImpl;
 import org.baize.utils.ProtostuffUtils;
 import org.baize.utils.SpringUtils;
 
@@ -31,6 +33,10 @@ public class ServerHandlerManager extends SimpleChannelInboundHandler<Request>{
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, Request request) throws Exception {
 		//将消息发送到消息分发
+		handlerMessage(new SessionImpl(ctx.channel()),request);
 		process(ctx.channel(), request);
+	}
+	private void handlerMessage(ISession session,Request request){
+
 	}
 }
