@@ -1,5 +1,7 @@
 package org.baize.server.session;
 
+import org.baize.server.manager.Response;
+
 /**
  * 作者： 白泽
  * 时间： 2017/12/1.
@@ -26,9 +28,9 @@ public interface ISession {
 
     /**
      * 向会话中写入消息
-     * @param message
+     * @param response
      */
-    void write(Object message);
+    void write(Response response);
 
     /**
      * 判断会话是否在连接中

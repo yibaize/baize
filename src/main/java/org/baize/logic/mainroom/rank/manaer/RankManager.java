@@ -7,6 +7,10 @@ import org.baize.dao.model.PlayerEntity;
 import org.baize.dao.sqlmapper.PlayerMapper;
 import org.baize.logic.mainroom.friends.Dto.OtherInfoDto;
 import org.baize.logic.mainroom.rank.dto.RankDto;
+import org.baize.server.manager.Response;
+import org.baize.server.session.ISession;
+import org.baize.server.session.SessionManager;
+import org.baize.utils.ProtostuffUtils;
 import org.baize.utils.SpringUtils;
 import org.baize.worktask.IDailyTimer;
 import org.springframework.stereotype.Service;
@@ -14,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 作者： 白泽
@@ -59,9 +64,7 @@ public class RankManager implements IDailyTimer{
     }
     private void notifyAllx(){
         RankDto rankDto = new RankDto(ranks);
-        for (CorePlayer player: PersistPlayer.ctxPlayer()){
-            player.respones((short)107,rankDto);
-        }
+        SessionManager.notifyAllx((short)107,rankDto);
     }
     @Override
     public void executor() {

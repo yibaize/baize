@@ -1,8 +1,14 @@
 package org.baize.logic.login.command;
 
 import org.baize.EnumType.LoginType;
+import org.baize.EnumType.ScenesType;
 import org.baize.dao.model.PersistPlayer;
+import org.baize.error.AppErrorCode;
+import org.baize.error.GenaryAppError;
+import org.baize.logic.IFactory;
 import org.baize.logic.login.manager.LoginManager;
+import org.baize.room.IRoom;
+import org.baize.room.RoomFactory;
 import org.baize.server.message.OperateCommandAbstract;
 import org.baize.server.message.IProtostuff;
 import org.baize.utils.assemblybean.annon.Protocol;
@@ -16,23 +22,26 @@ import org.baize.utils.assemblybean.annon.Protocol;
 public class Login extends OperateCommandAbstract {
     private final int loginType;
     private final String account;
-    private final String password;
 
-    public Login(int loginType, String account, String password) {
+    public Login(int loginType, String account) {
         this.loginType = loginType;
         this.account = account;
-        this.password = password;
     }
 
     @Override
     public IProtostuff execute() {
+        if(getSession().getAttachment() != null)
+            new GenaryAppError(AppErrorCode.LOGIN_ERR);
         LoginManager manager = LoginManager.getInstace();
         IProtostuff dto = null;
-        if(loginType != LoginType.Account.id())
-            dto = manager.account( this.getCtx(),account,password);
-        else
-            dto = manager.rest(loginType,this.getCtx(),account);
-        this.setCorePlayer(PersistPlayer.getByCtx(this.getCtx()));
-       return (dto);
+        dto = manager.rest(loginType,getSession(),account);
+
+        IFactory factory = RoomFactory.getInstance();
+        IRoom room = (IRoom) factory.getBean(ScenesType.Mian.id());
+        if(room == null)
+            new GenaryAppError(AppErrorCode.DATA_ERR);
+
+
+        return (dto);
     }
 }

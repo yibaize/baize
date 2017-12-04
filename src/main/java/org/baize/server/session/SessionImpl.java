@@ -2,6 +2,7 @@ package org.baize.server.session;
 
 import io.netty.channel.Channel;
 import io.netty.util.AttributeKey;
+import org.baize.server.manager.Response;
 
 /**
  * 作者： 白泽
@@ -32,8 +33,8 @@ public class SessionImpl implements ISession {
     }
 
     @Override
-    public void write(Object message) {
-        channel.writeAndFlush(message);
+    public void write(Response response) {
+        channel.writeAndFlush(response);
     }
 
     @Override

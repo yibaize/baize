@@ -6,6 +6,7 @@ import org.baize.dao.model.PersistPlayer;
 import org.baize.dao.sqlmapper.PlayerMapper;
 import org.baize.error.AppErrorCode;
 import org.baize.error.Error;
+import org.baize.error.GenaryAppError;
 import org.baize.logic.mainroom.friends.module.Friends;
 import org.baize.server.message.IProtostuff;
 import org.baize.server.message.OperateCommandAbstract;
@@ -39,7 +40,7 @@ public class Friend_Consent extends OperateCommandAbstract {
             friends1 = (Friends) playerMapper.persist(friends1);
         }
         if(friends1 == null)
-            new Error(getCtx()).err(AppErrorCode.DATA_ERR);
+            new GenaryAppError(AppErrorCode.DATA_ERR);
         friends1.add(player().getId());
         friends.update();
         friends1.update();

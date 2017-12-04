@@ -58,19 +58,4 @@ public final class GameServer {
             LoggerUtils.getLogicLog().error("---------------服务器关闭------------------");
         }
     }
-    public static void notifyAllx(Set<CorePlayer> players, short id, IProtostuff msg){
-        Iterator<CorePlayer> iterator = players.iterator();
-        while (iterator.hasNext()){
-            iterator.next().respones(id,msg);
-        }
-    }
-    public static void response(Channel ctx, short poroId, IProtostuff o){
-        Response response = new Response();
-        response.setId(poroId);
-        byte[] buf = null;
-        if(o != null)
-            buf = ProtostuffUtils.serializer(o);
-        response.setData(buf);
-        ctx.writeAndFlush(response);
-    }
 }

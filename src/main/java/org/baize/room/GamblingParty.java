@@ -6,6 +6,7 @@ import org.baize.logic.BombFlower.dto.CardResultsNotify;
 import org.baize.logic.card.data.Card;
 import org.baize.logic.card.manager.CardManager;
 import org.baize.server.manager.Response;
+import org.baize.server.session.SessionManager;
 import org.baize.utils.DateUtils;
 import org.baize.utils.ProtostuffUtils;
 
@@ -100,11 +101,6 @@ public class GamblingParty implements  IPlay{
     }
     private void stateNotify(short id,byte[] buf){
         Set<RoomPlayer> players = room.roomPlayer();
-        Response response = new Response();
-        response.setId(id);
-        response.setData(buf);
-        for (RoomPlayer p:players){
-            p.getCtx().writeAndFlush(response);
-        }
+        SessionManager.notifyAllx(id,buf);
     }
 }

@@ -1,6 +1,9 @@
 package org.baize.dao.model;
 
 import org.baize.dao.dto.WeathDto;
+import org.baize.server.manager.Response;
+import org.baize.server.session.SessionManager;
+import org.baize.utils.ProtostuffUtils;
 
 /**
  * 作者： 白泽
@@ -71,9 +74,8 @@ public class Weath extends Persist {
     @Override
     public void update() {
         super.update();
-        CorePlayer corePlayer = PersistPlayer.getById(getId());
-        if(corePlayer == null)
+        if(!SessionManager.isOnlinePlayer(getId()))
             return;
-        corePlayer.respones((short)100,new WeathDto(gold,diamond));
+        SessionManager.sendMessage(getId(),(short) 100,new WeathDto(gold,diamond));
     }
 }

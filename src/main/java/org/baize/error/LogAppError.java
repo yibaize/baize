@@ -11,5 +11,6 @@ public class LogAppError extends IError {
     }
     public LogAppError(String msg) {
         super(msg);
+        throw this;
     }
 }

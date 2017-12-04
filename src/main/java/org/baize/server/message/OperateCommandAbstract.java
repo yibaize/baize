@@ -4,6 +4,7 @@ import io.netty.channel.Channel;
 import org.baize.dao.model.CorePlayer;
 import org.baize.room.RoomPlayer;
 import org.baize.server.manager.Response;
+import org.baize.server.session.ISession;
 import org.baize.utils.ProtostuffUtils;
 
 /**
@@ -13,20 +14,25 @@ import org.baize.utils.ProtostuffUtils;
  */
 public abstract class OperateCommandAbstract implements IOperateCommand {
     private short cmdId;
-    private Channel ctx;
     private CorePlayer corePlayer;
-    private boolean hasSend = false;
     protected RoomPlayer roomPlayer;
+    private ISession session;
     public OperateCommandAbstract() {
     }
 
-    public OperateCommandAbstract(short cmdId, Channel ctx, CorePlayer corePlayer) {
+    public OperateCommandAbstract(short cmdId, CorePlayer corePlayer) {
         this.cmdId = cmdId;
-        this.ctx = ctx;
         this.corePlayer = corePlayer;
     }
 
 
+    public ISession getSession() {
+        return session;
+    }
+
+    public void setSession(ISession session) {
+        this.session = session;
+    }
 
     public CorePlayer getCorePlayer() {
         return corePlayer;
@@ -44,12 +50,6 @@ public abstract class OperateCommandAbstract implements IOperateCommand {
         this.cmdId = cmdId;
     }
 
-    public Channel getCtx() {
-        return ctx;
-    }
-    public void setCtx(Channel ctx) {
-        this.ctx = ctx;
-    }
     public CorePlayer player(){
         return this.corePlayer;
     }
@@ -63,7 +63,7 @@ public abstract class OperateCommandAbstract implements IOperateCommand {
         Response response = new Response();
         response.setId(cmdId);
         response.setData(buf);
-        ctx.writeAndFlush(response);
+        session.write(response);
         broadcast();
     }
 }

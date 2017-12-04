@@ -20,7 +20,6 @@ public class PersistPlayer {
     private static ConcurrentMap<String,CorePlayer> offLineAccountPlayer = new ConcurrentHashMap<>();
     public static void putPlayer(CorePlayer corePlayer){
         idPlayer.put(corePlayer.getId(),corePlayer);
-        ctxPlayer.put(corePlayer.getCtx(),corePlayer);
         accountPlayer.put(corePlayer.entity().playerInfo().getAccount(),corePlayer);
     }
     public static CorePlayer getByCtx(Channel ctx){
@@ -42,8 +41,6 @@ public class PersistPlayer {
         return null;
     }
     public static void removePlayer(CorePlayer corePlayer){
-        if(ctxPlayer.containsKey(corePlayer.getCtx()))
-            ctxPlayer.remove(corePlayer.getCtx());
         if(idPlayer.containsKey(corePlayer.getId()))
             idPlayer.remove(corePlayer.getId());
         if(accountPlayer.containsKey(corePlayer.entity().playerInfo().getAccount()))

@@ -11,7 +11,6 @@ import org.baize.server.message.IProtostuff;
  */
 public class CorePlayer {
     private int id;
-    private Channel ctx;
     private int scenesId;
     private PlayerEntity entity;
     public int getId() {
@@ -22,13 +21,7 @@ public class CorePlayer {
         this.id = id;
     }
 
-    public Channel getCtx() {
-        return ctx;
-    }
 
-    public void setCtx(Channel ctx) {
-        this.ctx = ctx;
-    }
     public int getScenesId() {
         return scenesId;
     }
@@ -45,8 +38,5 @@ public class CorePlayer {
     }
     public void setEntity(PlayerEntity entity) {
         this.entity = entity;
-    }
-    public void respones(short poroId,IProtostuff o){
-        GameServer.response(ctx,poroId,o);
     }
 }

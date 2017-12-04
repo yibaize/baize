@@ -8,5 +8,6 @@ package org.baize.error;
 public class GenaryAppError extends IError {
     public GenaryAppError(int errorCode) {
         super(errorCode);
+        throw this;
     }
 }

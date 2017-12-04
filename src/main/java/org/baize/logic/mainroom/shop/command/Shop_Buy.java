@@ -2,6 +2,7 @@ package org.baize.logic.mainroom.shop.command;
 
 import org.baize.error.AppErrorCode;
 import org.baize.error.Error;
+import org.baize.error.GenaryAppError;
 import org.baize.logic.mainroom.shop.data.ShopDataTable;
 import org.baize.server.message.IProtostuff;
 import org.baize.server.message.OperateCommandAbstract;
@@ -28,7 +29,7 @@ public class Shop_Buy extends OperateCommandAbstract {
     public IProtostuff execute() {
         ShopDataTable dataTable = ShopDataTable.get(goodsId);
         if(dataTable == null)
-            new Error(this.getCtx()).err(AppErrorCode.DATA_ERR);
+            new GenaryAppError(AppErrorCode.DATA_ERR);
         return null;
     }
 }

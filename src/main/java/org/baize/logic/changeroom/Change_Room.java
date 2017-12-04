@@ -32,7 +32,6 @@ public class Change_Room extends OperateCommandAbstract {
     public IProtostuff execute() {
         RoomAbstract room = RoomFactory.getInstance().getBean(id);
         RoomPlayer player = new RoomPlayer(this.player().entity());
-        player.setCtx(this.getCtx());
         player.setRoom(room);
         this.roomPlayer = player;
         room.intoRoom(player);
@@ -55,7 +54,7 @@ public class Change_Room extends OperateCommandAbstract {
         byte[] buf = ProtostuffUtils.serializer(room.playerOnline());
         response.setData(buf);
         for (RoomPlayer r:players){
-            r.getCtx().writeAndFlush(response);
+            //r.getCtx().writeAndFlush(response);
         }
     }
 }

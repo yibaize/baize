@@ -17,33 +17,35 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class TcpHandler {
-    public static void messageRecieve(Channel cxt, Request request){
+    public static void messageRecieve(ISession session,Request request){
         try {
-            int id = request.getId();
+            short id = request.getId();
             OperateCommandAbstract msg = OperateCommandRecive.getInstance().recieve(id,request.getData());
-            if(msg == null){
-                throw new LogAppError("数据接收错误");
-            }
-            msg.setCtx(cxt);
-            msg.setCmdId((short) id);
-            if(PersistPlayer.getByCtx(cxt) != null)
-                msg.setCorePlayer(PersistPlayer.getByCtx(cxt));
-            //用户量少不用业务线程
+            if(msg == null)
+                new LogAppError("数据接收错误");
+            msg.setCmdId( id);
+            msg.setSession(session);
             msg.run();
-            //WorkTaskPoolManager.getInstance().submit(msg);
-        }catch (GenaryAppError e){
+        }catch (Exception e){
             //下发客户端
-            Response response = new Response();
-            response.setId((short) 404);
-            byte[] buf = ProtostuffUtils.serializer(e.getErrorCode());
-            cxt.writeAndFlush(response);
-            LoggerUtils.getLogicLog().debug("数据接收错误",e);
-        }catch (LogAppError e){
-            //添加日志
-            LoggerUtils.getLogicLog().debug(e.getMessage(),e);
+            if(e instanceof GenaryAppError) {
+                GenaryAppError error = (GenaryAppError)e;
+                Response response = new Response();
+                response.setId((short) 404);
+                byte[] buf = ProtostuffUtils.serializer(error.getErrorCode());
+                response.setData(buf);
+                session.write(response);
+                LoggerUtils.getLogicLog().debug("数据接收错误", error);
+            }else if(e instanceof LogAppError) {
+                LoggerUtils.getLogicLog().error(e.getMessage(), e);
+            }else {
+                LoggerUtils.getLogicLog().error(e);
+            }
         }
     }
-    public static void messageRecieve(ISession session,Request request){
 
+    public static void main(String[] args) {
+        GenaryAppError a = new GenaryAppError(1);
+        System.out.println(a instanceof GenaryAppError);
     }
 }

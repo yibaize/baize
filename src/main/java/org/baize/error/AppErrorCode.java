@@ -26,5 +26,9 @@ public final class AppErrorCode{
     public final static int SIGNIN_ERR = 5;
     @ExcelValue(value = "密码错误")
     public final static int PASSWORD_ERR = 6;
+    @ExcelValue(value = "账号已经登录")
+    public final static int LOGIN_ERR = 7;
+    @ExcelValue(value = "登录失败")
+    public final static int LOGIN_FAIL = 8;
 
 }

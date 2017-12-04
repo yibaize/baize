@@ -4,6 +4,7 @@ import org.baize.dao.model.CorePlayer;
 import org.baize.dao.model.Weath;
 import org.baize.error.AppErrorCode;
 import org.baize.error.Error;
+import org.baize.error.GenaryAppError;
 import org.baize.logic.mainroom.shop.data.ShopDataTable;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public class Buy_3 extends ShopImpAdapter{
     public void buy(CorePlayer corePlayer, ShopDataTable dataTable, int count) {
         Weath weath = corePlayer.entity().weath();
         if(weath.isHasTree())
-            new Error(corePlayer.getCtx()).err(AppErrorCode.TREE_NOT);
+            new GenaryAppError(AppErrorCode.TREE_NOT);
         weath.setHasTree(true);
         weath.update();
     }

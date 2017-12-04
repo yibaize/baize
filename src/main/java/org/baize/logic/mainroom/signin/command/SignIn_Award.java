@@ -2,6 +2,7 @@ package org.baize.logic.mainroom.signin.command;
 
 import org.baize.error.AppErrorCode;
 import org.baize.error.Error;
+import org.baize.error.GenaryAppError;
 import org.baize.logic.mainroom.signin.dto.SignInDto;
 import org.baize.logic.mainroom.signin.module.SignIn;
 import org.baize.server.message.IProtostuff;
@@ -20,7 +21,7 @@ public class SignIn_Award extends OperateCommandAbstract {
         SignIn signIn = player().entity().signIn();
         boolean draw = signIn.draw();
         if(!draw)
-            new Error(this.getCtx()).err(AppErrorCode.SIGNIN_ERR);
+            new GenaryAppError(AppErrorCode.SIGNIN_ERR);
         return (new SignInDto(draw));
     }
 }

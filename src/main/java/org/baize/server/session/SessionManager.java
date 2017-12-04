@@ -2,8 +2,11 @@ package org.baize.server.session;
 
 import org.baize.server.manager.Response;
 import org.baize.server.message.IProtostuff;
+import org.baize.utils.ProtostuffUtils;
+import org.baize.utils.assemblybean.annon.Protostuff;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,25 +26,13 @@ public class SessionManager {
     public static ISession removeSession(int playerId){
         return onlineSessions.remove(playerId);
     }
-    /**
-     * 发送消息[protoBuf协议]
-     * @param <T>
-     * @param playerId
-     * @param message
-     */
-    public static <T extends IProtostuff> void sendMessage(long playerId, short module, short cmd, T message){
-        ISession session = onlineSessions.get(playerId);
-        if (session != null && session.isConnected()) {
-            Response response = new Response();
-            session.write(response);
-        }
-    }
+
     /**
      * 是否在线
      * @param playerId
      * @return
      */
-    public static boolean isOnlinePlayer(long playerId){
+    public static boolean isOnlinePlayer(int playerId){
         return onlineSessions.containsKey(playerId);
     }
 
@@ -51,5 +42,52 @@ public class SessionManager {
      */
     public static Set<Integer> getOnlinePlayers() {
         return Collections.unmodifiableSet(onlineSessions.keySet());
+    }
+    public static Map<Integer,ISession> map(){
+        return onlineSessions;
+    }
+    public static void notifyAllx(short id,IProtostuff msg){
+        Response response = msg(id,msg);
+        for (Map.Entry<Integer,ISession> e: SessionManager.map().entrySet()){
+            e.getValue().write(response);
+        }
+    }
+    public static void notifyAllNotSelf(short id,IProtostuff msg){
+        Response response = msg(id,msg);
+        for (Map.Entry<Integer,ISession> e: SessionManager.map().entrySet()){
+            if (id != e.getKey())
+                e.getValue().write(response);
+        }
+    }
+    /**
+     * 发送消息[protoBuf协议]
+     * @param <T>
+     * @param playerId
+     * @param
+     */
+    public static <T extends IProtostuff> void sendMessage(int playerId,short id,IProtostuff msg){
+        Response response = msg(id,msg);
+        ISession session = onlineSessions.get(playerId);
+        if (session != null && session.isConnected()) {
+            session.write(response);
+        }
+    }
+    private static Response msg(short id,IProtostuff msg){
+        Response response = new Response();
+        response.setId(id);
+        byte[] buf = null;
+        if(msg != null)
+            buf = ProtostuffUtils.serializer(msg);
+        response.setData(buf);
+        return response;
+    }
+    public static void notifyAllx(short id,byte[] buf){
+        Response response = new Response();
+        response.setId(id);
+        response.setData(buf);
+        for (Map.Entry<Integer,ISession> e: SessionManager.map().entrySet()){
+            if (id != e.getKey())
+                e.getValue().write(response);
+        }
     }
 }

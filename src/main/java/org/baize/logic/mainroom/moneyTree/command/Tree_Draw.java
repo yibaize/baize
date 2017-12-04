@@ -3,6 +3,7 @@ package org.baize.logic.mainroom.moneyTree.command;
 import org.baize.dao.model.Weath;
 import org.baize.error.AppErrorCode;
 import org.baize.error.Error;
+import org.baize.error.GenaryAppError;
 import org.baize.logic.mainroom.moneyTree.data.MoneyTreeDataTable;
 import org.baize.server.message.IProtostuff;
 import org.baize.server.message.OperateCommandAbstract;
@@ -24,7 +25,7 @@ public class Tree_Draw extends OperateCommandAbstract {
         long distanceTime = currentTime - lastTime;
         distanceTime = distanceTime/3600000;
         if(distanceTime<=0)
-            new Error(this.getCtx()).err(AppErrorCode.TIMER_ERR);
+            new GenaryAppError(AppErrorCode.TIMER_ERR);
         distanceTime = distanceTime > 24 ? 24 : distanceTime;
         MoneyTreeDataTable dataTable = MoneyTreeDataTable.get((int) distanceTime);
         weath.increaseGold(dataTable.getDrawNum());

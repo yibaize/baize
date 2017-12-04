@@ -15,7 +15,6 @@ import java.util.Set;
  * 描述：
  */
 public class RoomPlayer extends Player {
-    private Channel ctx;
     private RoomAbstract room;
     /**玩家下注哪个位置，下注多少*/
     private Map<Integer,Integer> bottomPosition;
@@ -40,14 +39,6 @@ public class RoomPlayer extends Player {
         if(money == 0) return;
         entity().weath().increaseGold(money * (multiple + 1));
         entity().weath().update();
-    }
-
-    public Channel getCtx() {
-        return ctx;
-    }
-
-    public void setCtx(Channel ctx) {
-        this.ctx = ctx;
     }
 
     public RoomAbstract getRoom() {
