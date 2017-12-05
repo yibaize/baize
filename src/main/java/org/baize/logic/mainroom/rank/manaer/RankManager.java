@@ -1,16 +1,11 @@
 package org.baize.logic.mainroom.rank.manaer;
 
 import org.baize.dao.manager.PersistPlayerMapper;
-import org.baize.dao.model.CorePlayer;
-import org.baize.dao.model.PersistPlayer;
 import org.baize.dao.model.PlayerEntity;
 import org.baize.dao.sqlmapper.PlayerMapper;
 import org.baize.logic.mainroom.friends.Dto.OtherInfoDto;
 import org.baize.logic.mainroom.rank.dto.RankDto;
-import org.baize.server.manager.Response;
-import org.baize.server.session.ISession;
 import org.baize.server.session.SessionManager;
-import org.baize.utils.ProtostuffUtils;
 import org.baize.utils.SpringUtils;
 import org.baize.worktask.IDailyTimer;
 import org.springframework.stereotype.Service;
@@ -18,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 作者： 白泽

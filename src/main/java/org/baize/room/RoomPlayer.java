@@ -3,7 +3,10 @@ package org.baize.room;
 import io.netty.channel.Channel;
 import org.baize.dao.model.PlayerEntity;
 import org.baize.logic.card.data.Card;
+import org.baize.logic.mainroom.friends.Dto.OtherInfoDto;
+import org.baize.logic.mainroom.rank.manaer.RankManager;
 import org.baize.player.Player;
+import org.baize.server.session.ISession;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +18,7 @@ import java.util.Set;
  * 描述：
  */
 public class RoomPlayer extends Player {
+    private ISession session;
     private RoomAbstract room;
     /**玩家下注哪个位置，下注多少*/
     private Map<Integer,Integer> bottomPosition;
@@ -47,5 +51,16 @@ public class RoomPlayer extends Player {
 
     public void setRoom(RoomAbstract room) {
         this.room = room;
+    }
+
+    public ISession getSession() {
+        return session;
+    }
+
+    public void setSession(ISession session) {
+        this.session = session;
+    }
+    public OtherInfoDto playerInfo(){
+        return RankManager.getInstance().assembly(entity());
     }
 }

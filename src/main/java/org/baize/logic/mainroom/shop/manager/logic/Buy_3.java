@@ -1,11 +1,10 @@
 package org.baize.logic.mainroom.shop.manager.logic;
 
-import org.baize.dao.model.CorePlayer;
 import org.baize.dao.model.Weath;
 import org.baize.error.AppErrorCode;
-import org.baize.error.Error;
 import org.baize.error.GenaryAppError;
 import org.baize.logic.mainroom.shop.data.ShopDataTable;
+import org.baize.room.RoomPlayer;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,8 +15,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class Buy_3 extends ShopImpAdapter{
     @Override
-    public void buy(CorePlayer corePlayer, ShopDataTable dataTable, int count) {
-        Weath weath = corePlayer.entity().weath();
+    public void buy(RoomPlayer roomPlayer, ShopDataTable dataTable, int count) {
+        Weath weath = roomPlayer.entity().weath();
         if(weath.isHasTree())
             new GenaryAppError(AppErrorCode.TREE_NOT);
         weath.setHasTree(true);

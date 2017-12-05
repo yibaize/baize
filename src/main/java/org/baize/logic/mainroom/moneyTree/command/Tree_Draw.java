@@ -19,7 +19,7 @@ import org.baize.utils.assemblybean.annon.Protocol;
 public class Tree_Draw extends OperateCommandAbstract {
     @Override
     public IProtostuff execute() {
-        Weath weath = player().entity().weath();
+        Weath weath = roomPlayer.entity().weath();
         long currentTime = DateUtils.currentTime();
         long lastTime = weath.getLastDrawTime();
         long distanceTime = currentTime - lastTime;

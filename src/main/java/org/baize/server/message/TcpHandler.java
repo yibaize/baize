@@ -1,6 +1,4 @@
 package org.baize.server.message;
-import io.netty.channel.Channel;
-import org.baize.dao.model.PersistPlayer;
 import org.baize.error.GenaryAppError;
 import org.baize.error.LogAppError;
 import org.baize.server.manager.Request;

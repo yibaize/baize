@@ -1,8 +1,6 @@
 package org.baize.logic.linestart;
 
 import io.netty.channel.Channel;
-import org.baize.dao.model.CorePlayer;
-import org.baize.dao.model.PersistPlayer;
 import org.baize.server.manager.Response;
 import org.baize.server.message.IProtostuff;
 import org.baize.utils.ProtostuffUtils;
@@ -14,12 +12,12 @@ import org.baize.utils.ProtostuffUtils;
  */
 public class LineStateManager {
     public static void offLine(Channel ctx){
-        CorePlayer corePlayer = PersistPlayer.getByCtx(ctx);
-        if(corePlayer != null){
-            PersistPlayer.putOffLinePlayer(corePlayer);
-            PersistPlayer.removePlayer(corePlayer);
-            notifyx(ctx,401,null);
-        }
+//        CorePlayer corePlayer = PersistPlayer.getByCtx(ctx);
+//        if(corePlayer != null){
+//            PersistPlayer.putOffLinePlayer(corePlayer);
+//            PersistPlayer.removePlayer(corePlayer);
+//            notifyx(ctx,401,null);
+//        }
     }
     private static void notifyx(Channel ctx, int id, IProtostuff pro){
         Response response = new Response();
@@ -33,10 +31,10 @@ public class LineStateManager {
         ctx.closeFuture();
     }
     public static void onLine(int id){
-        CorePlayer corePlayer = PersistPlayer.getOffLinePlayer(id);
-        if(corePlayer != null){
-            PersistPlayer.putPlayer(corePlayer);
-            PersistPlayer.removeOffLinePlayer(corePlayer);
-        }
+//        CorePlayer corePlayer = PersistPlayer.getOffLinePlayer(id);
+//        if(corePlayer != null){
+//            PersistPlayer.putPlayer(corePlayer);
+//            PersistPlayer.removeOffLinePlayer(corePlayer);
+//        }
     }
 }

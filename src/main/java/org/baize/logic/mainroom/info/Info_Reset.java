@@ -28,7 +28,7 @@ public class Info_Reset extends OperateCommandAbstract {
 
     @Override
     public IProtostuff execute() {
-        PlayerInfo info = this.player().entity().playerInfo();
+        PlayerInfo info = roomPlayer.entity().playerInfo();
         info.setName(name);
         info.setPassword(password);
         info.setHead(head);

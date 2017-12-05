@@ -31,12 +31,10 @@ public class Change_Room extends OperateCommandAbstract {
     @Override
     public IProtostuff execute() {
         RoomAbstract room = RoomFactory.getInstance().getBean(id);
-        RoomPlayer player = new RoomPlayer(this.player().entity());
-        player.setRoom(room);
-        this.roomPlayer = player;
-        room.intoRoom(player);
+        roomPlayer.setRoom(room);
+        room.intoRoom(roomPlayer);
         ChangerRoomDto dto = new ChangerRoomDto();
-        OtherInfoDto other = RankManager.getInstance().assembly(((BombRoom)room).getBanker().entity());
+        OtherInfoDto other = ((BombRoom)room).getBanker().playerInfo();
         dto.setBanker(other);
         dto.setOnline(room.playerOnline());
         dto.setBattle(room.getGamblingParty().isStartBattle());
@@ -54,7 +52,7 @@ public class Change_Room extends OperateCommandAbstract {
         byte[] buf = ProtostuffUtils.serializer(room.playerOnline());
         response.setData(buf);
         for (RoomPlayer r:players){
-            //r.getCtx().writeAndFlush(response);
+            r.getSession().write(response);
         }
     }
 }

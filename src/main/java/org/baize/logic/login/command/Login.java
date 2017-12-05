@@ -1,8 +1,6 @@
 package org.baize.logic.login.command;
 
-import org.baize.EnumType.LoginType;
 import org.baize.EnumType.ScenesType;
-import org.baize.dao.model.PersistPlayer;
 import org.baize.error.AppErrorCode;
 import org.baize.error.GenaryAppError;
 import org.baize.logic.IFactory;

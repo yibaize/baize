@@ -20,8 +20,8 @@ public class Friend_Remove extends OperateCommandAbstract {
 
     @Override
     public IProtostuff execute() {
-        Friends friends = player().entity().friends();
-        friends.remove(id);
+//        Friends friends = player().entity().friends();
+//        friends.remove(id);
         return null;
     }
 }

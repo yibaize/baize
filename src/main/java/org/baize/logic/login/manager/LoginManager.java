@@ -10,7 +10,9 @@ import org.baize.error.GenaryAppError;
 import org.baize.error.LogAppError;
 import org.baize.logic.IFactory;
 import org.baize.room.IRoom;
+import org.baize.room.RoomAbstract;
 import org.baize.room.RoomFactory;
+import org.baize.room.RoomPlayer;
 import org.baize.server.message.IProtostuff;
 import org.baize.server.session.ISession;
 import org.baize.server.session.SessionManager;
@@ -50,11 +52,10 @@ public class LoginManager {
         }else {
             entity = playerMapper.playerEntity();
         }
-        CorePlayer loginPlayer = PersistPlayer.getById(entity.getId());
         //是否登录过
         if(SessionManager.isOnlinePlayer(entity.getId())){
             ISession oldSession = SessionManager.removeSession(Integer.parseInt(account));
-            CorePlayer c = (CorePlayer) oldSession.getAttachment();
+            RoomPlayer c = (RoomPlayer) oldSession.getAttachment();
             entity = c.entity();
             oldSession.removeAttachment();
             oldSession.close();
@@ -63,13 +64,11 @@ public class LoginManager {
         return dto(entity);
     }
     private void putCache(ISession session,PlayerEntity entity){
-        CorePlayer corePlayer = new CorePlayer();
-        corePlayer.setEntity(entity);
-        corePlayer.setId(entity.getId());
-
-        corePlayer.setScenesId(ScenesType.Mian.id());
+        RoomPlayer roomPlayer = new RoomPlayer(entity);
+        RoomAbstract room = RoomFactory.getInstance().getBean(ScenesType.Mian.id());
+        roomPlayer.setRoom(room);
         if(SessionManager.putSession(entity.getId(),session)){
-            session.setAttachment(corePlayer);
+            session.setAttachment(roomPlayer);
         }else {
             new GenaryAppError(AppErrorCode.LOGIN_FAIL);
         }

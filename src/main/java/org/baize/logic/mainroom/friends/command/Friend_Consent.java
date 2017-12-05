@@ -1,11 +1,8 @@
 package org.baize.logic.mainroom.friends.command;
 
 import org.baize.dao.manager.PersistPlayerMapper;
-import org.baize.dao.model.CorePlayer;
-import org.baize.dao.model.PersistPlayer;
 import org.baize.dao.sqlmapper.PlayerMapper;
 import org.baize.error.AppErrorCode;
-import org.baize.error.Error;
 import org.baize.error.GenaryAppError;
 import org.baize.logic.mainroom.friends.module.Friends;
 import org.baize.server.message.IProtostuff;
@@ -28,22 +25,22 @@ public class Friend_Consent extends OperateCommandAbstract {
 
     @Override
     public IProtostuff execute() {
-        Friends friends = player().entity().friends();
-        friends.add(id);
-        CorePlayer corePlayer = PersistPlayer.getById(id);
-        Friends friends1 = null;
-        if(corePlayer != null){
-            friends1 = corePlayer.entity().friends();
-        }else {
-            PlayerMapper mapper = SpringUtils.getBean(PlayerMapper.class);
-            PersistPlayerMapper playerMapper = mapper.selectOneForId(id);
-            friends1 = (Friends) playerMapper.persist(friends1);
-        }
-        if(friends1 == null)
-            new GenaryAppError(AppErrorCode.DATA_ERR);
-        friends1.add(player().getId());
-        friends.update();
-        friends1.update();
+//        Friends friends = player().entity().friends();
+//        friends.add(id);
+//        CorePlayer corePlayer = PersistPlayer.getById(id);
+//        Friends friends1 = null;
+//        if(corePlayer != null){
+//            friends1 = corePlayer.entity().friends();
+//        }else {
+//            PlayerMapper mapper = SpringUtils.getBean(PlayerMapper.class);
+//            PersistPlayerMapper playerMapper = mapper.selectOneForId(id);
+//            friends1 = (Friends) playerMapper.persist(friends1);
+//        }
+//        if(friends1 == null)
+//            new GenaryAppError(AppErrorCode.DATA_ERR);
+//        friends1.add(player().getId());
+//        friends.update();
+//        friends1.update();
         return null;
     }
 }

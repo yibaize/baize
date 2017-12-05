@@ -1,15 +1,15 @@
 package org.baize.logic.mainroom.friends.command;
 
 import org.baize.dao.manager.PersistPlayerMapper;
-import org.baize.dao.model.CorePlayer;
-import org.baize.dao.model.PersistPlayer;
+import org.baize.dao.model.PlayerEntity;
 import org.baize.dao.sqlmapper.PlayerMapper;
 import org.baize.error.AppErrorCode;
-import org.baize.error.Error;
 import org.baize.error.GenaryAppError;
 import org.baize.logic.mainroom.friends.module.Friends;
+import org.baize.room.RoomPlayer;
 import org.baize.server.message.IProtostuff;
 import org.baize.server.message.OperateCommandAbstract;
+import org.baize.server.session.SessionManager;
 import org.baize.utils.SpringUtils;
 import org.baize.utils.assemblybean.annon.Protocol;
 
@@ -27,19 +27,20 @@ public class Friend_Add extends OperateCommandAbstract {
 
     @Override
     public IProtostuff execute() {
-        CorePlayer corePlayer = PersistPlayer.getById(id);
-        Friends friends1 = null;
-        if(corePlayer != null){
-            friends1 = corePlayer.entity().friends();
-        } else {
-            PlayerMapper mapper = SpringUtils.getBean(PlayerMapper.class);
-            PersistPlayerMapper playerMapper = mapper.selectOneForId(id);
-            friends1 = (Friends) playerMapper.persist(friends1);
-        }
-        if (friends1 == null)
-            new GenaryAppError(AppErrorCode.DATA_ERR);
-        friends1.apply(this.player().getId());
-        friends1.update();
+        PlayerEntity entity = roomPlayer.entity();
+//        CorePlayer corePlayer = PersistPlayer.getById(id);
+//        Friends friends1 = null;
+//        if(corePlayer != null){
+//            friends1 = corePlayer.entity().friends();
+//        } else {
+//            PlayerMapper mapper = SpringUtils.getBean(PlayerMapper.class);
+//            PersistPlayerMapper playerMapper = mapper.selectOneForId(id);
+//            friends1 = (Friends) playerMapper.persist(friends1);
+//        }
+//        if (friends1 == null)
+//            new GenaryAppError(AppErrorCode.DATA_ERR);
+//        friends1.apply(this.roomPlayer.getId());
+//        friends1.update();
         return null;
     }
 }
