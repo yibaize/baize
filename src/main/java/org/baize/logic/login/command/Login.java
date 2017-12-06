@@ -34,12 +34,6 @@ public class Login extends OperateCommandAbstract {
         IProtostuff dto = null;
         dto = manager.rest(loginType,getSession(),account);
 
-        IFactory factory = RoomFactory.getInstance();
-        IRoom room = (IRoom) factory.getBean(ScenesType.Mian.id());
-        if(room == null)
-            new GenaryAppError(AppErrorCode.DATA_ERR);
-
-
         return (dto);
     }
 }

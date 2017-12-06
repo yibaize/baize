@@ -8,7 +8,15 @@ public class Response {
 	 * 数据
 	 */
 	private byte[] data;
-	
+
+	public Response() {
+	}
+
+	public Response(short id, byte[] data) {
+		this.id = id;
+		this.data = data;
+	}
+
 	public short getId() {
 		return id;
 	}

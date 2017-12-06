@@ -1,8 +1,8 @@
 package org.baize.logic.changeroom;
 
+import org.baize.EnumType.ScenesType;
 import org.baize.logic.BombFlower.manager.BombRoom;
 import org.baize.logic.mainroom.friends.Dto.OtherInfoDto;
-import org.baize.logic.mainroom.rank.manaer.RankManager;
 import org.baize.room.RoomAbstract;
 import org.baize.room.RoomFactory;
 import org.baize.room.RoomPlayer;
@@ -31,28 +31,24 @@ public class Change_Room extends OperateCommandAbstract {
     @Override
     public IProtostuff execute() {
         RoomAbstract room = RoomFactory.getInstance().getBean(id);
-        roomPlayer.setRoom(room);
-        room.intoRoom(roomPlayer);
+        roomPlayer().getRoom().laeveRoom(roomPlayer());
+        roomPlayer().setRoom(room);
+        room.intoRoom(roomPlayer());
         ChangerRoomDto dto = new ChangerRoomDto();
-        OtherInfoDto other = ((BombRoom)room).getBanker().playerInfo();
+        //TODO 不一定有庄家，不一定是BombRoom场景
+        OtherInfoDto other = null;
+
+        if(id == ScenesType.Mian.id())
+            other = null;
+        else if(id == ScenesType.Bomb.id())
+            other = ((BombRoom)room).getBanker().playerInfo();
+
+        dto.setRoomId(id);
         dto.setBanker(other);
         dto.setOnline(room.playerOnline());
         dto.setBattle(room.getGamblingParty().isStartBattle());
         int time = (int)((room.getGamblingParty().getEndTime() - DateUtils.currentTime())/1000);
         dto.setTimer(time);
         return dto;
-    }
-
-    @Override
-    public void broadcast() {
-        RoomAbstract room = RoomFactory.getInstance().getBean(id);
-        Set<RoomPlayer> players = room.roomPlayer();
-        Response response = new Response();
-        response.setId((short) 1);
-        byte[] buf = ProtostuffUtils.serializer(room.playerOnline());
-        response.setData(buf);
-        for (RoomPlayer r:players){
-            r.getSession().write(response);
-        }
     }
 }

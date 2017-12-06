@@ -1,7 +1,6 @@
 package org.baize.room;
-
-import org.baize.dao.model.Player;
-
+import org.baize.server.manager.Response;
+import org.baize.utils.ProtostuffUtils;
 import java.util.Set;
 
 /**
@@ -17,6 +16,13 @@ public interface IRoom {
     default void intoRoom(RoomPlayer player){
         if(!roomPlayer().contains(player)){
             roomPlayer().add(player);
+
+            byte[] buf = ProtostuffUtils.serializer(playerOnline());
+            Response response = new Response((short) 101,buf);
+
+            for (RoomPlayer r:roomPlayer()){
+                r.getSession().write(response);
+            }
         }
     }
 
@@ -24,11 +30,7 @@ public interface IRoom {
      * 离开房间
      * @param player
      */
-    default void laeveRoom(Player player){
-        if(roomPlayer().contains(player)){
-            roomPlayer().remove(player);
-        }
-    }
+    void laeveRoom(RoomPlayer player);
     Set<RoomPlayer> roomPlayer();
     default int playerOnline(){
         if(roomPlayer() != null)

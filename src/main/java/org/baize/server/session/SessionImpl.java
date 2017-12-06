@@ -11,7 +11,7 @@ import org.baize.server.manager.Response;
  */
 public class SessionImpl implements ISession {
     private static AttributeKey<Object> ATTACHMENT_KEY = AttributeKey.valueOf("ATTACHMENT_KEY");
-    private Channel channel;
+    private final Channel channel;
 
     public SessionImpl(Channel channel) {
         this.channel = channel;

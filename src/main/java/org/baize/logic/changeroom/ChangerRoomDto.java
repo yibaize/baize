@@ -13,6 +13,7 @@ import java.util.List;
  */
 @Protostuff
 public class ChangerRoomDto implements IProtostuff{
+    private int roomId;
     private int timer;
     private int online;
     private boolean battle;
@@ -47,5 +48,13 @@ public class ChangerRoomDto implements IProtostuff{
 
     public void setBattle(boolean battle) {
         this.battle = battle;
+    }
+
+    public int getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
     }
 }

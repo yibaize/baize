@@ -1,6 +1,8 @@
 package org.baize.room;
 
-import org.baize.dao.model.Player;
+import org.baize.player.Player;
+import org.baize.server.manager.Response;
+import org.baize.utils.ProtostuffUtils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -46,5 +48,20 @@ public abstract class RoomAbstract implements IRoom{
 
     public void setGamblingParty(GamblingParty gamblingParty) {
         this.gamblingParty = gamblingParty;
+    }
+
+    @Override
+    public void laeveRoom(RoomPlayer player) {
+        if(roomPlayer().contains(player)){
+            roomPlayer().remove(player);
+        }
+        if(gamblingParty != null)
+            gamblingParty.getBottomPosition().leave(player);
+
+        byte[] buf = ProtostuffUtils.serializer(playerOnline());
+        Response response = new Response((short) 102,buf);
+        for (RoomPlayer r:roomPlayer){
+            r.getSession().write(response);
+        }
     }
 }

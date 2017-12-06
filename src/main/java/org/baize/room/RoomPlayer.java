@@ -63,4 +63,7 @@ public class RoomPlayer extends Player {
     public OtherInfoDto playerInfo(){
         return RankManager.getInstance().assembly(entity());
     }
+    public void clearBottom(){
+        bottomPosition.clear();
+    }
 }

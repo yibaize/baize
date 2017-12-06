@@ -12,7 +12,7 @@ import org.baize.utils.ProtostuffUtils;
  */
 public abstract class OperateCommandAbstract implements IOperateCommand {
     private short cmdId;
-    protected RoomPlayer roomPlayer;
+    private RoomPlayer roomPlayer;
     private ISession session;
     public OperateCommandAbstract() {
     }
@@ -33,6 +33,12 @@ public abstract class OperateCommandAbstract implements IOperateCommand {
 
     public void setCmdId(short cmdId) {
         this.cmdId = cmdId;
+    }
+    protected RoomPlayer roomPlayer(){
+        return roomPlayer;
+    }
+    protected void roomPlayer(RoomPlayer roomPlayer){
+        this.roomPlayer = roomPlayer;
     }
     @Override
     public void run() {

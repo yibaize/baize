@@ -102,11 +102,9 @@ public class GamblingParty implements  IPlay{
     }
     private void stateNotify(short id,byte[] buf){
         Set<RoomPlayer> players = room.roomPlayer();
+        Response response = new Response(id,buf);
         for (RoomPlayer p:players){
-            if(SessionManager.isOnlinePlayer(p.entity().getId())){
-                //ISession session = SessionManager.;
-            }
+            p.getSession().write(response);
         }
-        SessionManager.notifyAllx(id,buf);
     }
 }

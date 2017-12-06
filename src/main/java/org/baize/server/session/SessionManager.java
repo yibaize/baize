@@ -1,14 +1,14 @@
 package org.baize.server.session;
 
+import io.netty.channel.Channel;
 import org.baize.server.manager.Response;
 import org.baize.server.message.IProtostuff;
 import org.baize.utils.ProtostuffUtils;
-import org.baize.utils.assemblybean.annon.Protostuff;
-
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * 作者： 白泽

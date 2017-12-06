@@ -1,9 +1,11 @@
 package org.baize.server.message;
 import org.baize.error.GenaryAppError;
 import org.baize.error.LogAppError;
+import org.baize.room.RoomPlayer;
 import org.baize.server.manager.Request;
 import org.baize.server.manager.Response;
 import org.baize.server.session.ISession;
+import org.baize.server.session.SessionManager;
 import org.baize.utils.LoggerUtils;
 import org.baize.utils.ProtostuffUtils;
 import org.springframework.stereotype.Component;
@@ -21,8 +23,11 @@ public class TcpHandler {
             OperateCommandAbstract msg = OperateCommandRecive.getInstance().recieve(id,request.getData());
             if(msg == null)
                 new LogAppError("数据接收错误");
-            msg.setCmdId( id);
+            msg.setCmdId(id);
             msg.setSession(session);
+            RoomPlayer roomPlayer = (RoomPlayer) session.getAttachment();
+            if(roomPlayer != null)
+                msg.roomPlayer(roomPlayer);
             msg.run();
         }catch (Exception e){
             //下发客户端

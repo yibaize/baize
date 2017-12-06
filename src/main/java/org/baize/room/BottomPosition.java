@@ -57,4 +57,13 @@ public class BottomPosition {
             p.settleAccounts(position,multiple);
         }
     }
+    public void leave(RoomPlayer roomPlayer){
+        for (Map.Entry<Integer,Set<RoomPlayer>> e:playerMap.entrySet()){
+            for (RoomPlayer r:e.getValue()){
+                if(roomPlayer.id() == r.id())
+                    e.getValue().remove(roomPlayer);
+            }
+        }
+        roomPlayer.clearBottom();
+    }
 }
