@@ -187,6 +187,7 @@ public class BomFlower {
             otherOne = otherCard[0];
         else
             otherOne = otherCard[2];
+
         if(otherBoth > bankerBoth)
             return true;
         if(otherBoth == bankerBoth) {
@@ -210,20 +211,15 @@ public class BomFlower {
         int[] otherCard = other.getCardIds();
         Arrays.sort(bankerCard);
         Arrays.sort(otherCard);
-
-        if(otherCard[otherCard.length-1] > bankerCard[bankerCard.length-1])
-            return true;
-        if(otherCard[otherCard.length-1] == bankerCard[bankerCard.length-1]){
-            if(otherCard[otherCard.length-2] > bankerCard[bankerCard.length-2])
-                return true;
-            else if(otherCard[otherCard.length-2] == bankerCard[bankerCard.length-2]){
-                if(otherCard[otherCard.length-3] > bankerCard[bankerCard.length-3])
-                    return true;
-                else if(otherCard[otherCard.length-3] == bankerCard[bankerCard.length-3])
-                    if(other.getTypeById(otherCard[otherCard.length-1]) < banker.getTypeById(bankerCard[bankerCard.length-1]))
-                        return true;
+        for (int i = 0;i<otherCard.length;i++){
+            int k = otherCard[i] - bankerCard[i];
+            if(k != 0){
+                return k > 0;
             }
         }
+        //都相同 比花色
+        if(other.getTypeById(otherCard[otherCard.length-1]) < banker.getTypeById(bankerCard[bankerCard.length-1]))
+            return true;
         return false;
     }
     public static void handler(Set<Card> cards){

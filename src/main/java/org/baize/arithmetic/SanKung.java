@@ -62,13 +62,11 @@ public class SanKung {
     public static boolean checkSize(Card bankers, Card others){
         int bankerSize = checkType(bankers.getCardIds());
         int otherSize = checkType(others.getCardIds());
-        if(otherSize == 0 && bankerSize != 0)
-            return true;
-        if(otherSize != 0 && bankerSize == 0)
-            return false;
+        if(bankerSize != otherSize)
+            return otherSize > bankerSize;
         if(otherSize == bankerSize)
             return BomFlower.scatteredSize(bankers,others);
-        return false;
+        return otherSize > bankerSize;
     }
     public static void main(String[] args) {
         int[] i = new int[]{10, 10, 10};
