@@ -2,6 +2,7 @@ package org.baize.server.manager;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import org.baize.server.message.CommandCode;
 import org.baize.server.message.TcpHandler;
 import org.baize.server.session.ISession;
 import org.baize.server.session.SessionImpl;
@@ -17,13 +18,14 @@ public class ServerHandlerManager extends SimpleChannelInboundHandler<Request>{
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-		ctx.channel().close();
+		System.out.println("用户下线"+ctx.channel().remoteAddress());
+		outLine(ctx.channel());
 	}
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 		System.err.println("用户下线"+ctx.channel().remoteAddress());
-		ctx.channel().close();
+		outLine(ctx.channel());
 	}
 
 	@Override
@@ -35,5 +37,10 @@ public class ServerHandlerManager extends SimpleChannelInboundHandler<Request>{
 	private void handlerMessage(Channel channel, Request request){
 		ISession session = new SessionImpl(channel);
 		TcpHandler.messageRecieve(session,request);
+	}
+	private void outLine(Channel channel){
+		ISession session = new SessionImpl(channel);
+		Request r = new Request((short) CommandCode.Out_line,new Msg(""));
+		TcpHandler.messageRecieve(session,r);
 	}
 }

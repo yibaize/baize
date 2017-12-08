@@ -1,4 +1,5 @@
 package org.baize.arithmetic;
+import org.apache.commons.lang3.ArrayUtils;
 import org.baize.EnumType.CardType;
 import org.baize.EnumType.ResultType;
 import org.baize.logic.card.data.Card;
@@ -34,7 +35,7 @@ public class BomFlower {
      * @return
      */
     private static boolean checkAaa(Card card){
-        if(checkAaa(card)){
+        if(checkBomb(card)){
             if(card.getCardIds()[0] == 1)
                 return true;
         }
@@ -62,9 +63,9 @@ public class BomFlower {
      * @return
      */
     private static boolean checkAlikeColorAndStaright(Card card){
-        if(!checkAlikeColor(card) && !checkStraight(card))
-            return false;
-        return true;
+        if(checkAlikeColor(card) && checkStraight(card))
+            return true;
+        return false;
     }
     /**
      * 同花
@@ -82,11 +83,17 @@ public class BomFlower {
     /**
      * 顺子
      */
+    private final static int[] QKA = new int[]{1,12,13};
+    private final static int[] qka = new int[]{12,13,14};
     private static boolean checkStraight(Card card){
         int[] cardNum = card.getCardIds();
         Arrays.sort(cardNum);
+        if(ArrayUtils.isEquals(cardNum,QKA))
+            cardNum = qka;
         for (int i= 0;i<cardNum.length-1;i++){
-            if(cardNum[i] != (cardNum[i+1]+1))
+            int f = cardNum[i];
+            int l = cardNum[i+1]-1;
+            if(f != l)
                 return false;
         }
         return true;
@@ -211,8 +218,8 @@ public class BomFlower {
         int[] otherCard = other.getCardIds();
         Arrays.sort(bankerCard);
         Arrays.sort(otherCard);
-        for (int i = 0;i<otherCard.length;i++){
-            int k = otherCard[i] - bankerCard[i];
+        for (int i = otherCard.length;i>0;i--){
+            int k = otherCard[i-1] - bankerCard[i-1];
             if(k != 0){
                 return k > 0;
             }

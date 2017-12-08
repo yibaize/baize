@@ -27,7 +27,7 @@ public class Friend_Add extends OperateCommandAbstract {
 
     @Override
     public IProtostuff execute() {
-        PlayerEntity entity = roomPlayer.entity();
+        PlayerEntity entity = roomPlayer().entity();
 //        CorePlayer corePlayer = PersistPlayer.getById(id);
 //        Friends friends1 = null;
 //        if(corePlayer != null){

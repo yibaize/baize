@@ -5,15 +5,10 @@ import org.baize.logic.BombFlower.manager.BombRoom;
 import org.baize.logic.mainroom.friends.Dto.OtherInfoDto;
 import org.baize.room.RoomAbstract;
 import org.baize.room.RoomFactory;
-import org.baize.room.RoomPlayer;
-import org.baize.server.manager.Response;
 import org.baize.server.message.IProtostuff;
 import org.baize.server.message.OperateCommandAbstract;
 import org.baize.utils.DateUtils;
-import org.baize.utils.ProtostuffUtils;
 import org.baize.utils.assemblybean.annon.Protocol;
-
-import java.util.Set;
 
 /**
  * 作者： 白泽
@@ -31,7 +26,7 @@ public class Change_Room extends OperateCommandAbstract {
     @Override
     public IProtostuff execute() {
         RoomAbstract room = RoomFactory.getInstance().getBean(id);
-        roomPlayer().getRoom().laeveRoom(roomPlayer());
+        roomPlayer().getRoom().leaveRoom(roomPlayer());
         roomPlayer().setRoom(room);
         room.intoRoom(roomPlayer());
         ChangerRoomDto dto = new ChangerRoomDto();

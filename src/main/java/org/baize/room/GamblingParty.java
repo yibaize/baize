@@ -28,18 +28,21 @@ public class GamblingParty implements  IPlay{
     private Set<Card> holdCard;
     /**发牌总个数*/
     private int cardNum;
-
-    public GamblingParty(int cardNum) {
+    /**每堆牌个数*/
+    private int cardHoldCount;
+    public GamblingParty(int cardNum,int cardHoldCount) {
         this.cardNum = cardNum;
+        this.cardHoldCount = cardHoldCount;
     }
 
     @Override
     public void start() {
         endTime = DateUtils.getFutureTimeMillis();
         isStartBattle = true;
-        holdCard = CardManager.getInstance().perflop(cardNum);
+        holdCard = CardManager.getInstance().perflop(cardNum,cardHoldCount);
         byte[] buf = ProtostuffUtils.serializer(1);
         stateNotify((short)105,buf);
+        room.compare();//比较牌面
     }
 
     @Override
@@ -106,5 +109,8 @@ public class GamblingParty implements  IPlay{
         for (RoomPlayer p:players){
             p.getSession().write(response);
         }
+    }
+    public Set<Card> holdCard(){
+        return holdCard;
     }
 }

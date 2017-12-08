@@ -47,13 +47,12 @@ public final class Submit implements ISecondTimer{
 
     @Override
     public void executor() {
+        if(taskQueue.size() <=0 )return;
+        if(submitCount.get() <= 0) return;
         lock.writeLock().lock();
-        if(submitCount.get() <= 3) return;
         try {
-            if(taskQueue.size() <=0 )return;
             System.err.println("会儿答复");
-            List<Map<Integer,Persist>> queue = new ArrayList<>();
-            queue = (List<Map<Integer, Persist>>) taskQueue.values();
+            List<Map<Integer,Persist>> queue = new ArrayList<>(taskQueue.values());
             for (int i = 0;i<queue.size();i++){
                 for (Map.Entry<Integer,Persist> e:queue.get(i).entrySet()){
                     e.getValue().submit();

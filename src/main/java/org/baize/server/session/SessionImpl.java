@@ -44,6 +44,6 @@ public class SessionImpl implements ISession {
 
     @Override
     public void close() {
-        channel.closeFuture();
+        channel.close();
     }
 }

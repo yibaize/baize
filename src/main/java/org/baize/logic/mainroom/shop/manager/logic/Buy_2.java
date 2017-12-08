@@ -6,12 +6,14 @@ import org.baize.error.GenaryAppError;
 import org.baize.logic.mainroom.shop.data.ExChangeDataTable;
 import org.baize.logic.mainroom.shop.data.ShopDataTable;
 import org.baize.room.RoomPlayer;
+import org.springframework.stereotype.Service;
 
 /**
  * 作者： 白泽
  * 时间： 2017/11/9.
  * 描述：diamond - gold
  */
+@Service
 public class Buy_2 extends ShopImpAdapter {
     @Override
     public void buy(RoomPlayer roomPlayer, ShopDataTable dataTable, int count) {

@@ -23,7 +23,7 @@ public class PlayerBottom extends OperateCommandAbstract {
 
     @Override
     public IProtostuff execute() {
-        RoomPlayer p = this.roomPlayer;
+        RoomPlayer p = this.roomPlayer();
         p.bottom(id,count);
         PlayerBottomDto dto = new PlayerBottomDto(id,count);
         return dto;

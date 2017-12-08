@@ -16,7 +16,7 @@ public class RequestDecoderManager extends ByteToMessageDecoder {
      * 数据包的基本长度：包头+id+数据长度
      * 每个协议都是�?个int类型的基本数据占4个字�?
      */
-    public static int BASE_LENGTH = 4 + 2;
+    public static int BASE_LENGTH = 4 + 2 + 2;
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) throws Exception {
@@ -41,6 +41,7 @@ public class RequestDecoderManager extends ByteToMessageDecoder {
                     return ;
                 }
             }
+            short id = buffer.readShort();
             //读取数据长度
             short length = buffer.readShort();
             if (length < 0) {
@@ -54,11 +55,10 @@ public class RequestDecoderManager extends ByteToMessageDecoder {
             }
             byte[] data = new byte[length];
             buffer.readBytes(data);
-            String msg = ProtostuffUtils.deserializer(data,String.class);
-            if(StringUtils.isEmpty(msg))
-                LoggerUtils.getLogicLog().debug("解决粘包分包时数据异常");
-            String[] m = StringUtils.split(msg,",");
-            Request message = new Request(m);
+            Msg msg = null;
+            if(data.length > 0)
+                msg = ProtostuffUtils.deserializer(data,Msg.class);
+            Request message = new Request(id,msg);
             out.add(message);
         }
         //数据不完整，等待完整的数据包
@@ -66,10 +66,6 @@ public class RequestDecoderManager extends ByteToMessageDecoder {
     }
 
     public static void main(String[] args) {
-        String str = "1,1,3133213,645645?";
-        if(StringUtils.isEmpty(str))
-            System.err.println("解决粘包分包时数据异常");
-        String[] s = StringUtils.split(str);
-        System.out.println(Arrays.toString(s));
+
     }
 }

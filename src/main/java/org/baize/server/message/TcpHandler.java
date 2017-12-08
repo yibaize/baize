@@ -1,4 +1,5 @@
 package org.baize.server.message;
+import org.apache.commons.lang3.StringUtils;
 import org.baize.error.GenaryAppError;
 import org.baize.error.LogAppError;
 import org.baize.room.RoomPlayer;
@@ -20,7 +21,9 @@ public class TcpHandler {
     public static void messageRecieve(ISession session,Request request){
         try {
             short id = request.getId();
-            OperateCommandAbstract msg = OperateCommandRecive.getInstance().recieve(id,request.getData());
+            String[] s = StringUtils.split(request.getData().getMsg(),",");
+            OperateCommandAbstract msg = OperateCommandRecive.getInstance().recieve(id,s);
+
             if(msg == null)
                 new LogAppError("数据接收错误");
             msg.setCmdId(id);
@@ -38,7 +41,7 @@ public class TcpHandler {
                 byte[] buf = ProtostuffUtils.serializer(error.getErrorCode());
                 response.setData(buf);
                 session.write(response);
-                LoggerUtils.getLogicLog().debug("数据接收错误", error);
+                LoggerUtils.getLogicLog().debug(e.getMessage(), e);
             }else if(e instanceof LogAppError) {
                 LoggerUtils.getLogicLog().error(e.getMessage(), e);
             }else {

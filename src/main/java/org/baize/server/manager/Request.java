@@ -5,13 +5,13 @@ public class Request {
 	/**
 	 * 数据
 	 */
-	private String[] data;
+	private Msg data;
 
 	public Request() {
 	}
 
-	public Request(String[] data) {
-
+	public Request(short id, Msg data) {
+		this.id = id;
 		this.data = data;
 	}
 
@@ -23,11 +23,11 @@ public class Request {
 		this.id = id;
 	}
 
-	public String[] getData() {
+	public Msg getData() {
 		return data;
 	}
 
-	public void setData(String[] data) {
+	public void setData(Msg data) {
 		this.data = data;
 	}
 }

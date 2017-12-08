@@ -30,11 +30,16 @@ public interface IRoom {
      * 离开房间
      * @param player
      */
-    void laeveRoom(RoomPlayer player);
+    void leaveRoom(RoomPlayer player);
     Set<RoomPlayer> roomPlayer();
     default int playerOnline(){
         if(roomPlayer() != null)
             return roomPlayer().size();
         return 0;
     }
+
+    /**
+     * 比牌
+     */
+    void compare();
 }

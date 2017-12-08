@@ -24,6 +24,7 @@ public class SessionManager {
         return success;
     }
     public static ISession removeSession(int playerId){
+        if(!onlineSessions.containsKey(playerId)) return null;
         return onlineSessions.remove(playerId);
     }
 
@@ -40,8 +41,11 @@ public class SessionManager {
      * 获取所有在线玩家
      * @return
      */
-    public static Set<Integer> getOnlinePlayers() {
+    public static Set<Integer> onlinePlayers() {
         return Collections.unmodifiableSet(onlineSessions.keySet());
+    }
+    public static int onLinePlayerNum(){
+        return onlineSessions == null ? 0 : onlineSessions.size();
     }
     public static Map<Integer,ISession> map(){
         return onlineSessions;

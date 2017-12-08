@@ -29,19 +29,23 @@ public class CardManager {
     public List<PersistCard> getCardPool() {
         return cardPool;
     }
-    public Card initCard(List<PersistCard> list, int i){
+    public Card initCard(List<PersistCard> list, int i,int holdCount){
         Card card = new Card();
         card.setPosition(i+1);
-        int[] types = new int[3];
-        int[] cardId = new int[3];
+        int[] types = new int[holdCount];
+        int[] cardId = new int[holdCount];
+        int[] ids = new int[holdCount];
         List<PersistCard> cardlist = list.subList(i*3,i*3+3);
-        for(int j = 0;j<3;j++) {
-            types[j] = cardlist.get(j).getCardType();
-            cardId[j] = cardlist.get(j).getCardNum();
+        for(int j = 0;j<holdCount;j++) {
+            PersistCard c = cardlist.get(j);
+            types[j] = c.getCardType();
+            cardId[j] = c.getCardNum();
+            ids[j] = c.getId();
         }
         card.setPersistCards(cardlist);
         card.setCardIds(cardId);
         card.setCardTypes(types);
+        card.setId(ids);
         return card;
     }
     private List<PersistCard> shuffle(){
@@ -52,11 +56,11 @@ public class CardManager {
     /**
      * 发牌
      */
-    public Set<Card> perflop(int count){
+    public Set<Card> perflop(int count,int holdCount){
         List<PersistCard> list = shuffle();
         Set<Card> cards = new HashSet<>(count);
         for (int i = 0;i<count;i++){
-            cards.add(CardManager.getInstance().initCard(list,i));
+            cards.add(CardManager.getInstance().initCard(list,i,holdCount));
         }
         return cards;
     }

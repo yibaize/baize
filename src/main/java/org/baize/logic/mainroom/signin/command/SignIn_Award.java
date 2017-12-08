@@ -18,7 +18,7 @@ import org.baize.utils.assemblybean.annon.Protocol;
 public class SignIn_Award extends OperateCommandAbstract {
     @Override
     public IProtostuff execute() {
-        SignIn signIn = roomPlayer.entity().signIn();
+        SignIn signIn = roomPlayer().entity().signIn();
         boolean draw = signIn.draw();
         if(!draw)
             new GenaryAppError(AppErrorCode.SIGNIN_ERR);

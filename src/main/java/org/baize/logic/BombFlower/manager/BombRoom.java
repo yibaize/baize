@@ -2,6 +2,7 @@ package org.baize.logic.BombFlower.manager;
 
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.baize.EnumType.ScenesType;
+import org.baize.arithmetic.BomFlower;
 import org.baize.room.BottomPosition;
 import org.baize.room.GamblingParty;
 import org.baize.room.RoomAbstract;
@@ -24,7 +25,7 @@ public class BombRoom extends RoomAbstract{
     public BombRoom() {
         super(ScenesType.Bomb.id());
         bankerList = new LinkedList<>();
-        GamblingParty party = new GamblingParty(5);
+        GamblingParty party = new GamblingParty(5,3);
         BottomPosition position = new BottomPosition(4);
         party.setBottomPosition(position);
         party.setRoom(this);
@@ -54,5 +55,10 @@ public class BombRoom extends RoomAbstract{
 
     public LinkedList<RoomPlayer> getBankerList() {
         return bankerList;
+    }
+
+    @Override
+    public void compare() {
+        BomFlower.handler(getGamblingParty().holdCard());
     }
 }

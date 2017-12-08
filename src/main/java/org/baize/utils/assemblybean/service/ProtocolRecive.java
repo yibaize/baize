@@ -109,7 +109,6 @@ public class ProtocolRecive {
             sb.append("\tprivate OperateCommandAbstract get"+StringUtils.substringAfterLast(module.getClazzName(),".")+"(String[] params){\n");
             int i = 0;
             for (String str:module.getField()){
-                i++;
                 String type = CheckType.checkProtocolType(str,module.getClazzName());
                 if(type.equals("String")){
                     sb.append("\t\t"+type+" value"+i+" = params["+i+"];\n");
@@ -118,13 +117,14 @@ public class ProtocolRecive {
                 }else {
                     sb.append("\t\t"+str+" value"+i+" = "+type+"(params["+i+"]);\n");
                 }
+                i++;
             }
             sb.append("\t\treturn new "+StringUtils.substringAfterLast(module.getClazzName(),".")+"(");
            for (int j = 0;j<module.getField().size();j++){
                if(j<=module.getField().size()-2)
-                sb.append("value"+(j+1)+",");
+                    sb.append("value"+(j)+",");
                else
-                   sb.append("value"+(j+1));
+                   sb.append("value"+(j));
             }
             sb.append(");\n");
             sb.append("\t}\n");

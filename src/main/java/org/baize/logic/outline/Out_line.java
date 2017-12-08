@@ -1,8 +1,10 @@
 package org.baize.logic.outline;
 
-import org.baize.room.RoomFactory;
+import org.baize.server.manager.Response;
+import org.baize.server.message.CommandCode;
 import org.baize.server.message.IProtostuff;
 import org.baize.server.message.OperateCommandAbstract;
+import org.baize.server.session.SessionManager;
 import org.baize.utils.assemblybean.annon.Protocol;
 
 /**
@@ -14,7 +16,15 @@ import org.baize.utils.assemblybean.annon.Protocol;
 public class Out_line extends OperateCommandAbstract {
     @Override
     public IProtostuff execute() {
-        //RoomFactory.getInstance().notifyOfferLine(player());
+        if(roomPlayer() != null) {
+            SessionManager.removeSession(roomPlayer().id());
+            Response response = new Response(getCmdId(), null);
+            getSession().write(response);
+            if(roomPlayer().getRoom() != null) {
+                roomPlayer().getRoom().leaveRoom(roomPlayer());
+            }
+        }
+        getSession().close();
         return null;
     }
 }

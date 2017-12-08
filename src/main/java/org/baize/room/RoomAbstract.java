@@ -51,7 +51,7 @@ public abstract class RoomAbstract implements IRoom{
     }
 
     @Override
-    public void laeveRoom(RoomPlayer player) {
+    public void leaveRoom(RoomPlayer player) {
         if(roomPlayer().contains(player)){
             roomPlayer().remove(player);
         }

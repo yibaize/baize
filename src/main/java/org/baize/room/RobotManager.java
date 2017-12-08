@@ -1,6 +1,7 @@
 package org.baize.room;
 
 import org.baize.server.GameServer;
+import org.baize.server.session.SessionManager;
 import org.baize.worktask.ISecondTimer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,12 +22,13 @@ public class RobotManager implements ISecondTimer {
     private int timer;
     @Override
     public void executor() {
-        System.out.println(timer);
+        System.out.println(timer+":"+ SessionManager.onLinePlayerNum());
         if(gamblingParty == null) {
             gamblingParty = new ArrayList<>(5);
             List<RoomAbstract> rooms = RoomFactory.getInstance().allRoom();
             for (RoomAbstract r : rooms) {
-                gamblingParty.add(r.getGamblingParty());
+                if(r.getGamblingParty() != null)
+                    gamblingParty.add(r.getGamblingParty());
             }
         }
         if(timer == 2){

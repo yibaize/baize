@@ -5,9 +5,6 @@ import org.baize.utils.SpringUtils;
 import org.baize.utils.excel.ExcelUtils;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Hello world!
  *
@@ -29,5 +26,13 @@ public class App
 //        mapper.insert(playerMapper);
         ExcelUtils.init();
         GameServer.start();
+    }
+
+    /**
+     * 作者： 白泽
+     * 时间： 2017/12/7.
+     * 描述：
+     */
+    public static class Test {
     }
 }

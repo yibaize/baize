@@ -12,13 +12,20 @@ import java.util.List;
  * 描述：
  */
 public class Card implements Comparable<Card>{
+    /**牌堆位置*/
     private int position;
+    /**静态数据*/
     private List<PersistCard> persistCards;
+    /**牌面id ，1-13*/
     private int[] cardIds;
+    /**牌面类型*/
     private int[] cardTypes;
+    /**静态数据id*/
     private int[] id;//牌对应excel的id
-    private ResultType result;
-    private CardType cardType;
+    /**输，赢，和*/
+    private ResultType result = ResultType.Default;
+    /**炸，同花顺。。。。*/
+    private CardType cardType = CardType.Default;
     public Card() {
     }
 

@@ -46,9 +46,7 @@ public abstract class OperateCommandAbstract implements IOperateCommand {
         byte[] buf = null;
         if(pro != null)
             buf = ProtostuffUtils.serializer(pro);
-        Response response = new Response();
-        response.setId(cmdId);
-        response.setData(buf);
+        Response response = new Response(cmdId,buf);
         session.write(response);
         broadcast();
     }

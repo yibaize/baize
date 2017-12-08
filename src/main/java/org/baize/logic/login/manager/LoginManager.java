@@ -13,6 +13,8 @@ import org.baize.room.IRoom;
 import org.baize.room.RoomAbstract;
 import org.baize.room.RoomFactory;
 import org.baize.room.RoomPlayer;
+import org.baize.server.manager.Response;
+import org.baize.server.message.CommandCode;
 import org.baize.server.message.IProtostuff;
 import org.baize.server.session.ISession;
 import org.baize.server.session.SessionManager;
@@ -38,7 +40,7 @@ public class LoginManager {
         PlayerEntity entity = null;
         if(playerMapper == null){
             //注册
-            entity = entity(type);
+            entity = entity(type,account);
             if(entity == null)
                 new GenaryAppError(AppErrorCode.DATA_ERR);
             playerMapper = new PersistPlayerMapper(entity);
@@ -54,11 +56,13 @@ public class LoginManager {
         }
         //是否登录过
         if(SessionManager.isOnlinePlayer(entity.getId())){
-            ISession oldSession = SessionManager.removeSession(Integer.parseInt(account));
-            RoomPlayer c = (RoomPlayer) oldSession.getAttachment();
-            entity = c.entity();
-            oldSession.removeAttachment();
-            oldSession.close();
+            ISession oldSession = SessionManager.removeSession(entity.getId());
+            if(oldSession != null) {
+                RoomPlayer c = (RoomPlayer) oldSession.getAttachment();
+                entity = c.entity();
+                oldSession.removeAttachment();
+                oldSession.close();
+            }
         }
         putCache(is,entity);
         return dto(entity);
@@ -84,13 +88,14 @@ public class LoginManager {
         dto.setSignIn(entity.signIn().hasDraw());
         return dto;
     }
-    public PlayerEntity entity(int type){
+    public PlayerEntity entity(int type,String account){
         PlayerInfo info = new PlayerInfo();
         PlayerDataTable dataTable = PlayerDataTable.get(1);
         if(dataTable == null)
             return null;
         BeanUtils.copyProperties(dataTable,info);
         info.setLoginType(type);
+        info.setAccount(account);
         Weath weath = new Weath();
         BeanUtils.copyProperties(dataTable,weath);
         int id = CreateIdUtils.id();

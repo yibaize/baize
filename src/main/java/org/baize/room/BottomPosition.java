@@ -1,15 +1,19 @@
 package org.baize.room;
+import org.baize.dao.model.Weath;
 import org.baize.worktask.LockUtils;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 /**
  * 作者： 白泽
  * 时间： 2017/11/27.
  * 描述：
  */
 public class BottomPosition {
+    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private Map<Integer,Set<RoomPlayer>> playerMap;
     private Map<Integer,Long> bottomPosition;
     private long allMoney;
@@ -20,7 +24,7 @@ public class BottomPosition {
     }
 
     public void bottom(RoomPlayer player, int count, int position){
-        LockUtils.getInstance().getLock().writeLock().lock();
+        lock.writeLock().lock();
         try {
             allMoney += count;
             if(bottomPosition.containsKey(position)){
@@ -38,9 +42,11 @@ public class BottomPosition {
                 Set<RoomPlayer> set = new HashSet<>();
                 set.add(player);
             }
-            player.entity().weath().decreaseGold(count);
+            Weath weath = player.entity().weath();
+            weath.decreaseGold(count);
+            weath.update();
         }finally {
-            LockUtils.getInstance().getLock().writeLock().unlock();
+            lock.writeLock().unlock();
         }
     }
     public long getAllMoney(){return allMoney;}

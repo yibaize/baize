@@ -4,8 +4,11 @@ import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.baize.dao.manager.Submit;
 import org.baize.dao.sqlmapper.PlayerMapper;
+import org.baize.error.AppErrorCode;
 import org.baize.error.Error;
+import org.baize.error.GenaryAppError;
 import org.baize.utils.LoggerUtils;
+import org.baize.utils.SpringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +20,11 @@ import java.util.Map;
  */
 public abstract class Persist{
     private transient int id;
-    private PlayerMapper mapper;
+    private final PlayerMapper mapper;
+
+    public Persist() {
+        mapper = SpringUtils.getBean(PlayerMapper.class);
+    }
 
     public int getId() {
         return id;
@@ -25,14 +32,6 @@ public abstract class Persist{
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public PlayerMapper getMapper() {
-        return mapper;
-    }
-
-    public void setMapper(PlayerMapper mapper) {
-        this.mapper = mapper;
     }
 
     public void update(){
@@ -49,6 +48,8 @@ public abstract class Persist{
         map.put("k",this.getClass().getSimpleName());
         map.put("v",sql);
         map.put("id",id+"");
+        if(mapper == null)
+            new GenaryAppError(AppErrorCode.DATA_ERR);
         mapper.updateField(map);
     }
 }
