@@ -3,6 +3,8 @@ package org.baize.logic.BombFlower.manager;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.baize.EnumType.ScenesType;
 import org.baize.arithmetic.BomFlower;
+import org.baize.logic.mainroom.friends.Dto.OtherInfoDto;
+import org.baize.logic.mainroom.rank.manaer.RankManager;
 import org.baize.room.BottomPosition;
 import org.baize.room.GamblingParty;
 import org.baize.room.RoomAbstract;
@@ -32,21 +34,24 @@ public class BombRoom extends RoomAbstract{
         setGamblingParty(party);
 
     }
-    public void bankerUp(RoomPlayer player){
+    public boolean bankerUp(RoomPlayer player){
         if(bankerList.contains(player))
-            return;
+            return false;
         bankerList.offer(player);
         up();
+        return true;
     }
     private void up(){
         if(banker != null) return;
         if(bankerList.size() <=0 ) return;
         banker = bankerList.poll();
+        OtherInfoDto bankerDto = RankManager.getInstance().assembly(banker.entity());
     }
-    public void downBanker(RoomPlayer player){
-        if(!banker.equals(player)) return;
+    public boolean downBanker(RoomPlayer player){
+        if(!banker.equals(player)) return false;
         banker = null;
         up();
+        return true;
     }
 
     public RoomPlayer getBanker() {

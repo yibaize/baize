@@ -1,7 +1,11 @@
 package org.baize.room;
 
+import com.sun.xml.internal.stream.util.BufferAllocator;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.PooledByteBufAllocator;
 import org.baize.player.Player;
 import org.baize.server.manager.Response;
+import org.baize.server.message.IProtostuff;
 import org.baize.utils.ProtostuffUtils;
 
 import java.util.HashSet;
@@ -57,9 +61,13 @@ public abstract class RoomAbstract implements IRoom{
         }
         if(gamblingParty != null)
             gamblingParty.getBottomPosition().leave(player);
-
-        byte[] buf = ProtostuffUtils.serializer(playerOnline());
-        Response response = new Response((short) 102,buf);
+        ByteBuf byteBuf = PooledByteBufAllocator.DEFAULT.heapBuffer();
+        //byte[] buf = byteBuf.writeInt(playerOnline());
+//        Response response = new Response((short) 102,buf);
+//        notifyAllx((short)102,buf);
+    }
+    protected void notifyAllx(short id, byte[] buf){
+        Response response = new Response(id,buf);
         for (RoomPlayer r:roomPlayer){
             r.getSession().write(response);
         }
