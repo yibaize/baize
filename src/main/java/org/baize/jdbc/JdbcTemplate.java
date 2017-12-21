@@ -11,14 +11,22 @@ public class JdbcTemplate {
     // 数据库的用户名与密码，需要根据自己的设置
     static final String USER = "root";
     static final String PASS = "123";
-    public static void insert(){
+    private final JdbcConnectionPools jdbcConnectionPools;
+    private static JdbcTemplate instance;
+    public static JdbcTemplate getInstance(){
+        if(instance == null)
+            instance = new JdbcTemplate();
+        return instance;
+    }
+    public JdbcTemplate() {
+        jdbcConnectionPools = new JdbcConnectionPools(5,10,DB_URL,USER,PASS);
+    }
+
+    public void insert(){
         Connection ct = null;
         PreparedStatement ps = null;
         try {
-            Class.forName(JDBC_DRIVER);
-            System.out.print("连接数据库...");
-            ct = DriverManager.getConnection(DB_URL,USER,PASS);
-            System.out.println("实例化Statement对...");
+            ct = jdbcConnectionPools.getConnection();
 
             String sql;
             sql = "insert into t_student (id,username) values (?,?)";
@@ -26,37 +34,23 @@ public class JdbcTemplate {
             ps.setInt(1,1);
             ps.setString(2,"name");
 
-            System.out.println("插入一条数据...");
-
             ps.executeUpdate();//插入，更新,删除一般用这个
             //ps.executeQuery();//查询，返回结果一般用这个
-            ps.close();
-            ct.close();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
-            if(ps != null) try {
-                ps.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if(ct != null) try {
-                ct.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            close(ps,null);
+            jdbcConnectionPools.close(ct);
         }
         System.out.println("GoodBye!");
     }
-    public static void select(){
+    public void select(){
         Connection ct = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            Class.forName(JDBC_DRIVER);
-            System.out.print("连接数据库...");
-            ct = DriverManager.getConnection(DB_URL,USER,PASS);
-            System.out.println("实例化Statement对...");
+
+            ct = jdbcConnectionPools.getConnection();
 
             String sql;
             sql = "SELECT id,username,password FROM t_student WHERE id > ?";
@@ -72,30 +66,56 @@ public class JdbcTemplate {
                  */
                 System.out.println(rs.getInt(1)+" "+rs.getString(2)+"---"+rs.getString(3));
             }
-            ps.close();
-            ct.close();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
             //后开先关
-            try {
-                if(rs != null)
-                    rs.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            try {
-                if(ps != null)
-                    ps.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } try {
-                if(ct != null)
-                    ct.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            close(ps,rs);
+            jdbcConnectionPools.close(ct);
         }
         System.out.println("GoodBye!");
+    }
+
+    /**
+     * 尽量避免使用PreparedStatement而使用Statement
+     */
+    public void batch(){
+        Connection ct = null;
+        Statement st = null;
+        ResultSet rs = null;
+        try {
+            ct = jdbcConnectionPools.getConnection();
+
+            ct.setAutoCommit(false);//不自动提交
+            System.out.println("实例化Statement对...");
+            st = ct.createStatement();
+            for(int i = 0;i<20000;i++){
+                st.addBatch("insert into t_student (id,username) values (?,?)");
+            }
+            st.executeBatch();//批量提交
+            ct.commit();//手动提交
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+           close(st,rs);
+            jdbcConnectionPools.close(ct);
+        }
+        System.out.println("GoodBye!");
+    }
+    private static void close(Statement st,ResultSet rs){
+        //后开先关
+        try {
+            if(rs != null)
+                rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try {
+            if(st != null)
+                st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
