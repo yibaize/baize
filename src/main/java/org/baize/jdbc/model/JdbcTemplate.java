@@ -7,8 +7,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 作者： 白泽
@@ -76,7 +74,7 @@ public class JdbcTemplate {
             ps = ct.prepareStatement(SqlJiont.selectOne(model.getClass()));
             rs = ps.executeQuery();//查询，返回结果一般用这个
             ResultSetMetaData rsmd = rs.getMetaData() ;
-            String resut = rs.getString(1);
+            String resut = rs.getString(SqlJiont.fieldName(model.getClass()));
             model = JSON.parseObject(resut,model.getClass());
             return model;
         }catch (Exception e){

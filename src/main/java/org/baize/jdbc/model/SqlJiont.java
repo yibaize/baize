@@ -64,7 +64,11 @@ public class SqlJiont {
         }
         return "";
     }
-
+    public static String fieldName(Class<?> clazz){
+        if(!fieldMap.containsKey(clazz))
+            throw new UnsupportedOperationException("没有为"+clazz+"对应的字段");
+        return fieldMap.get(clazz);
+    }
     /**
      * 赋值
      * @return
