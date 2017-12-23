@@ -14,25 +14,29 @@ import java.util.Map;
  * 描述：sql语句拼装
  */
 public class SqlJiont {
-    private static Map<String,Integer> map = new HashMap<>();
-    private static Map<Class<?>,String> fieldMap = new HashMap<>();
-    private static Map<Class<?>,Integer> fieldIndex = new HashMap<>();
+    private Map<Class<?>,String> fieldMap = new HashMap<>();
+    private Map<Class<?>,Integer> fieldIndex = new HashMap<>();
+    private String insertTable;
+    private String tableName;
+    public SqlJiont(JdbcModel jdbcModel) {
+        insertTable = jiontTableInsertSql(jdbcModel.getClass());
+    }
+
     /**
      * 拼接大的对象的sql插入语句
      * @param
      * @return
      */
-    public static String jiontTableInsertSql(Class<?> clazz){
+    public String jiontTableInsertSql(Class<?> clazz){
         StringBuffer sb = new StringBuffer();
-
-        sb.append("INSERT INTO "+tableName(clazz)+" ");
+        tableName = tableName(clazz);
+        sb.append("INSERT INTO "+tableName+" ");
         String key = "";
         String value = "";
         try {
             Field[] fields = clazz.getDeclaredFields();
             for(int i = 0;i<fields.length;i++){
                 String v = fields[i].getName();
-                map.put(v,i+1);
                 fieldIndex.put(fields[i].getType(),i+1);
                 fieldMap.put(fields[i].getType(),v);
                 if(i == 0){
@@ -53,76 +57,95 @@ public class SqlJiont {
         }
         return "";
     }
-    private static String tableName(Class<?> clazz){
+    private String tableName(Class<?> clazz){
         Annotation ann = clazz.getAnnotation(TableName.class);
         if(ann instanceof TableName){
             TableName value = (TableName) ann;
-            String tableName = value.value();
-            if(tableName == null || tableName.equals(""))
+            String tableNameTemp = value.value();
+            if(tableNameTemp == null || tableNameTemp.equals(""))
                 throw new UnsupportedOperationException("没有为"+clazz+"的TableName注解的tableName赋值");
-            return tableName;
+            return tableNameTemp;
         }
         return "";
     }
-    public static String fieldName(Class<?> clazz){
-        if(!fieldMap.containsKey(clazz))
-            throw new UnsupportedOperationException("没有为"+clazz+"对应的字段");
-        return fieldMap.get(clazz);
+
+    public Map<Class<?>, String> getFieldMap() {
+        return fieldMap;
     }
-    /**
-     * 赋值
-     * @return
-     */
-    public static PreparedStatement valuation(Connection conn,PreparedStatement ps,JdbcModel model){
-        Field[] fields = model.getClass().getDeclaredFields();
-        for(Field f:fields){
-            f.setAccessible(true);
-        }
-        try {
-            ResultSetMetaData rsmd = resultSetMetaData(conn);
-            int length = rsmd.getColumnCount();
-            for (int i = 0;i<length;i++){
-                String name = rsmd.getColumnName(i+1);
-                if(map.containsKey(name)){
-                    String value = "{}";
-                    for(Field f:fields){
-                        if(f.getName().equals(name));{
-                            value = JSON.toJSONString(f.get(model));//转json字段存储
-                            break;
-                        }
-                    }
-                    ps.setObject(map.get(name),value);
-                }
-            }
-            return ps;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+
+    public Map<Class<?>, Integer> getFieldIndex() {
+        return fieldIndex;
     }
-    private static ResultSetMetaData resultSetMetaData(Connection conn){
-        try {
-            DatabaseMetaData databaseMetaData = conn.getMetaData();
-            ResultSet rs = databaseMetaData.getColumns("",null,"","%");
-            if(!rs.next())
-                return null;
-            return rs.getMetaData();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+
+    public String getInsertTable() {
+        return insertTable;
     }
-    public static String oneField(Class<?> clazz){
+
+    public String getTableName() {
+        return tableName;
+    }
+
+//    /**
+//     * 赋值
+//     * @return
+//     */
+//    public PreparedStatement valuation(Connection conn, PreparedStatement ps, JdbcModel model){
+//        Field[] fields = model.getClass().getDeclaredFields();
+//        for(Field f:fields){
+//            f.setAccessible(true);
+//        }
+//        try {
+//            ResultSetMetaData rsmd = resultSetMetaData(conn);
+//            int length = rsmd.getColumnCount();
+//            for (int i = 0;i<length;i++){
+//                String name = rsmd.getColumnName(i+1);
+//                if(map.containsKey(name)){
+//                    String value = "{}";
+//                    for(Field f:fields){
+//                        if(f.getName().equals(name));{
+//                            value = JSON.toJSONString(f.get(model));//转json字段存储
+//                            break;
+//                        }
+//                    }
+//                    ps.setObject(map.get(name),value);
+//                }
+//            }
+//            return ps;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+//    private ResultSetMetaData resultSetMetaData(Connection conn){
+//        try {
+//            DatabaseMetaData databaseMetaData = conn.getMetaData();
+//            ResultSet rs = databaseMetaData.getColumns("",null,"","%");
+//            if(!rs.next())
+//                return null;
+//            return rs.getMetaData();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+    public String oneField(Class<?> clazz,String tableName){
         StringBuffer sb = new StringBuffer();
-        sb.append("INSERT INTO player "+fieldMap.get(clazz)+" VALUES (?) WHERE id = ?;");
+        sb.append("INSERT INTO "+tableName+" ("+fieldMap.get(clazz)+") VALUES (?) WHERE id = ?;");
         return sb.toString();
     }
-    public static int fieldIndex(Class<?> clazz){
-        return fieldIndex.getOrDefault(clazz,0);
-    }
-    public static String selectOne(Class<?> clazz){
+    public String selectOneField(Class<?> clazz,String tableName){
         StringBuffer sb = new StringBuffer();
-        sb.append("SELECT "+fieldMap.get(clazz)+" FROM"+"tableName"+"WHERE id = ?;");
+        sb.append("SELECT "+fieldMap.get(clazz)+" FROM "+tableName+" WHERE id = ?;");
+        return sb.toString();
+    }
+    public String updateOne(Class<?> clazz,String tableName){
+        StringBuffer sb = new StringBuffer();
+        sb.append("UPDATE "+tableName+" SET "+fieldMap.get(clazz)+" = ? WHERE id = ?;");
+        return sb.toString();
+    }
+    public String delete(Class<?> clazz,String tableName){
+        StringBuffer sb = new StringBuffer();
+        sb.append("DELETE FROM "+tableName+" WHERE id = ?;");
         return sb.toString();
     }
 }
