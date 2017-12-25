@@ -3,7 +3,9 @@ package org.baize.jdbc.model;
 import com.alibaba.fastjson.JSON;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.sql.*;
+import java.util.List;
 
 /**
  * 作者： 白泽
@@ -79,29 +81,44 @@ public class SqlModel {
      * @return
      */
     public int insert(Connection conn, JdbcModel model){
-        return update(conn,model,insert);
-    }
-    public String select(Connection conn, JdbcModel model){
+        PreparedStatement ps = null;
         try {
-            PreparedStatement ps = conn.prepareStatement(select);
-            ResultSet rs = ps.executeQuery();
-            return rs.getString(field);
+            String value = JSON.toJSONString(model);//转json字段存储
+            String s = value;
+            ps = conn.prepareStatement(insert);
+            ps.setObject(1,value);
+            int i = ps.executeUpdate();
+            return i;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    public JdbcModel select(Connection conn, JdbcModel model){
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            ps = conn.prepareStatement(select);
+            ps.setObject(1,model.id());
+            rs = ps.executeQuery();
+            String s = "{}";
+            while (rs.next()){
+                s = rs.getString(field);
+            }
+            model = JSON.parseObject(s,model.getClass());
+            return model;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return "{}";
+        return null;
     }
     public int update(Connection conn, JdbcModel model){
-        return update(conn,model,update);
-    }
-    public int delete(Connection conn, JdbcModel model){
-        return update(conn,model,delete);
-    }
-    private int update(Connection conn, JdbcModel model,String sql){
+        PreparedStatement ps = null;
         try {
-            PreparedStatement ps = conn.prepareStatement(sql);
+            ps = conn.prepareStatement(update);
             String value = JSON.toJSONString(model);//转json字段存储
-            ps.setObject(index,value);
+            ps.setObject(1,value);
+            ps.setObject(2,model.id());
             int i = ps.executeUpdate();
             return i;
         } catch (Exception e) {
@@ -109,5 +126,34 @@ public class SqlModel {
         }
         return -1;
     }
-
+    public int delete(Connection conn, JdbcModel model){
+        PreparedStatement ps = null;
+        try {
+            ps = conn.prepareStatement(delete);
+            ps.setObject(1,model.id());
+            int i = ps.executeUpdate();
+            return i;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+    public void updateBatch(Connection conn,List<JdbcModel> models){
+        PreparedStatement ps = null;
+        try {
+            conn.setAutoCommit(false);
+            ps = conn.prepareStatement(update);
+            for(int i = 0;i<models.size();i++) {
+                JdbcModel model = models.get(i);
+                String value = JSON.toJSONString(model);//转json字段存储
+                ps.setObject(1,value);
+                ps.setObject(2,model.id());
+                ps.addBatch();
+            }
+            ps.executeBatch();
+            conn.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -6,4 +6,5 @@ package org.baize.jdbc.model;
  * 描述：
  */
 public interface JdbcModel {
+    int id();
 }
